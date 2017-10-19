@@ -19,7 +19,7 @@ public class UserController extends BaseController {
   private UserService userService;
 
   /**
-   * 新增用户
+   * 新增用户.
    */
   @PostMapping(value = "/users")
   public ResponseEntity<ResultInfo> addUser(@RequestBody AddUserDTO userDTO) {

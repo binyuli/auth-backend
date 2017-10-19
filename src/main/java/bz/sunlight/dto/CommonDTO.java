@@ -3,7 +3,7 @@ package bz.sunlight.dto;
 import java.util.Date;
 
 /**
- * 此处属性名称与数据库Entity保持一致
+ * 此处属性名称与数据库Entity保持一致.
  */
 public class CommonDTO {
   private Date createTime;
