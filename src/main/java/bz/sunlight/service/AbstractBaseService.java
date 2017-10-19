@@ -5,6 +5,12 @@ import bz.sunlight.dto.CommonDTO;
 import java.util.Date;
 
 public abstract class AbstractBaseService {
+  /**
+   * 带参构建通用对象.
+   * @param creator.
+   * @param enterpriseId.
+   * @return CommonDTO
+   */
   //TODO 此处当前登录用户后期调整系统框架获得
   public CommonDTO createCommonDTO(String creator, String enterpriseId) {
     CommonDTO commonDTO = new CommonDTO();
@@ -15,6 +21,10 @@ public abstract class AbstractBaseService {
     return commonDTO;
   }
 
+  /**
+   * 无参构建通用对象.
+   * @return CommonDTO
+   */
   public CommonDTO createCommonDTO() {
     CommonDTO commonDTO = new CommonDTO();
     commonDTO.setCreateTime(new Date());

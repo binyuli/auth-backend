@@ -14,6 +14,10 @@ public class PageController extends BaseController {
   @Autowired
   PageMapper pageMapper;
 
+  /**
+   * 获取当前用户可访问的菜单项.
+   * @return string
+   */
   @RequestMapping("/users/me/pages")
   public String getPagesByUser() {
     List<Page> pages = pageMapper.selectByExample(null);
