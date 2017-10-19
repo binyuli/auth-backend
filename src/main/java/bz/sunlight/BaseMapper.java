@@ -5,12 +5,12 @@ import org.apache.ibatis.annotations.Param;
 import java.io.Serializable;
 import java.util.List;
 
-public interface BaseMapper<T, E, PK extends Serializable> {
+public interface BaseMapper<T, E, PrimaryKeyT extends Serializable> {
   long countByExample(E example);
 
   int deleteByExample(E example);
 
-  int deleteByPrimaryKey(PK pk);
+  int deleteByPrimaryKey(PrimaryKeyT pk);
 
   int insert(T record);
 
@@ -18,7 +18,7 @@ public interface BaseMapper<T, E, PK extends Serializable> {
 
   List<T> selectByExample(E example);
 
-  T selectByPrimaryKey(PK pk);
+  T selectByPrimaryKey(PrimaryKeyT pk);
 
   int updateByExampleSelective(@Param("record") T record, @Param("example") E example);
 
