@@ -1,8 +1,8 @@
 package bz.sunlight.service;
 
-import java.util.Date;
-
 import bz.sunlight.dto.CommonDTO;
+
+import java.util.Date;
 
 public abstract class AbstractBaseService {
   //TODO 此处当前登录用户后期调整系统框架获得
@@ -14,6 +14,7 @@ public abstract class AbstractBaseService {
     commonDTO.setModifyTime(new Date());
     return commonDTO;
   }
+
   public CommonDTO createCommonDTO() {
     CommonDTO commonDTO = new CommonDTO();
     commonDTO.setCreateTime(new Date());

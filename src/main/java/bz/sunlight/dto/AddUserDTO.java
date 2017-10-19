@@ -42,11 +42,11 @@ public class AddUserDTO {
 
   @Override
   public String toString() {
-    return "AddUserDTO{" +
-        "name='" + name + '\'' +
-        ", username='" + username + '\'' +
-        ", password='" + password + '\'' +
-        ", roles=" + roles +
-        '}';
+    return "AddUserDTO{"
+        + "name='" + name + '\''
+        + ", username='" + username + '\''
+        + ", password='" + password + '\''
+        + ", roles=" + roles
+        + '}';
   }
 }

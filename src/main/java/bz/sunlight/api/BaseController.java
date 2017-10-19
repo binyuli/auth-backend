@@ -1,14 +1,15 @@
 package bz.sunlight.api;
 
 public class BaseController {
-  protected ResultInfo buildResultInfo(String message,Object payload){
-    return  new ResultInfo(message,payload);
+  protected ResultInfo buildResultInfo(String message, Object payload) {
+    return new ResultInfo(message, payload);
   }
-  protected class ResultInfo{
+
+  protected class ResultInfo {
     private String message = null;
     private Object payload = null;
 
-    public ResultInfo(String message,Object payload) {
+    public ResultInfo(String message, Object payload) {
       this.message = message;
       this.payload = payload;
     }

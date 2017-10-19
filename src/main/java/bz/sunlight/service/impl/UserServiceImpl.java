@@ -1,8 +1,5 @@
 package bz.sunlight.service.impl;
 
-import java.util.List;
-import java.util.UUID;
-
 import bz.sunlight.dao.UserMapper;
 import bz.sunlight.dao.UserRoleMapper;
 import bz.sunlight.dto.AddUserDTO;
@@ -17,6 +14,9 @@ import bz.sunlight.utils.BeanUtilsHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.UUID;
 
 @Service
 public class UserServiceImpl extends AbstractBaseService implements UserService {
