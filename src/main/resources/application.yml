@@ -1,0 +1,19 @@
+spring:
+  profiles:
+    active: @profileActive@
+  tomcat:
+      min-idle: 2
+      test-while-idle: true
+      test-on-borrow: true
+      validation-query: SELECT 1
+      time-between-eviction-runs-millis: 30000
+  jackson:
+      default-property-inclusion: non_null
+      time-zone: Asia/Shanghai
+      serialization:
+        write-dates-as-timestamps: false
+
+mybatis:
+  mapper-locations: classpath*:mybatis/mapper/*.xml
+  type-aliases-package: bz.sunlight.entity
+

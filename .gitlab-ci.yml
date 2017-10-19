@@ -1,0 +1,102 @@
+image: maven:3.3-jdk-8-alpine
+
+cache:
+  key: "$CI_PROJECT_NAMESPACE/$CI_PROJECT_NAME"
+  paths:
+    - .m2/
+
+before_script:
+  - mkdir -p $HOME/.m2/
+  - echo '<settings xmlns="http://maven.apache.org/SETTINGS/1.0.0"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0
+                          https://maven.apache.org/xsd/settings-1.0.0.xsd">
+            <localRepository>'$PWD'/.m2</localRepository>
+            <servers>
+              <server>
+                <id>corp-maven</id>
+                <username>${MAVEN_USER}</username>
+                <password>${MAVEN_PASS}</password>
+              </server>
+            </servers>
+            <profiles>
+              <profile>
+                <id>corp-default</id>
+                <repositories>
+                  <repository>
+                    <id>corp-snapshots</id>
+                    <url>https://repo.sdtdev.net/repository/maven-snapshots/</url>
+                    <releases>
+                        <enabled>false</enabled>
+                    </releases>
+                    <snapshots>
+                        <enabled>true</enabled>
+                    </snapshots>
+                  </repository>
+                  <repository>
+                    <id>corp-releases</id>
+                    <url>https://repo.sdtdev.net/repository/maven-releases/</url>
+                    <releases>
+                        <enabled>true</enabled>
+                    </releases>
+                    <snapshots>
+                        <enabled>false</enabled>
+                    </snapshots>
+                  </repository>
+                </repositories>
+              </profile>
+            </profiles>
+            <activeProfiles>
+              <activeProfile>corp-default</activeProfile>
+            </activeProfiles>             
+            <mirrors>
+              <mirror>
+                <id>corp-maven</id>
+                <url>https://repo.sdtdev.net/repository/maven-public/</url>
+                <mirrorOf>*</mirrorOf>
+              </mirror>
+            </mirrors>
+          </settings>' > $HOME/.m2/settings.xml
+
+stages:
+  - test
+  - build
+  - deploy
+
+unit_test:
+  stage: test
+  script:
+    - mvn clean test -B
+
+check_style:
+  stage: test
+  script:
+    - mvn clean checkstyle:check -B
+
+.build: &build_template
+  stage: build
+  script:
+    - mvn package -B
+
+master_build:
+  <<: *build_template
+  only:
+    - master
+    - tags
+  artifacts:
+    expire_in: 1 month
+    paths:
+      - target/*.jar
+
+build_image:
+  stage: deploy
+  image: docker:latest
+  only:
+    - tags
+  script:    
+    - mkdir -p target/docker/
+    - cp src/main/docker/* target/docker/
+    - unzip -oq target/*.jar -d target/docker/
+    - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN $CI_REGISTRY
+    - docker build -t $CI_REGISTRY_IMAGE:$CI_BUILD_TAG target/docker/
+    - docker push $CI_REGISTRY_IMAGE:$CI_BUILD_TAG
