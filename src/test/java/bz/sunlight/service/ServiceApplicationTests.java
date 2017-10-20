@@ -14,15 +14,10 @@ import org.springframework.test.context.junit4.SpringRunner;
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class ServiceApplicationTests {
-  @Autowired
-  PageMapper pageMapper;
 
   @Test
   public void contextLoads() {
-    List<Page> pages = pageMapper.selectByExample(null);
-    for (int i = 0; i < pages.size(); i++) {
-      System.out.println("a = " + pages.get(i).getName());
-    }
+
   }
 
 }
