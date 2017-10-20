@@ -6,4 +6,5 @@ import java.util.List;
 
 public interface RoleService {
   public List<RoleDTO> getRoles();
+  public void abandon(String id);
 }
