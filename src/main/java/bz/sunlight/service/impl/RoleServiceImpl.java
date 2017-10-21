@@ -31,7 +31,7 @@ public class RoleServiceImpl implements RoleService {
   @Override
   public void abandon(String id) {
     Role role = new Role();
-    role.setStatus(BaseConstant.BASEDATA_STATUS_ABANDON);
+    role.setStatus(BaseConstant.BASEDATA_STATUS_INVALID);
     RoleExample roleExample = new RoleExample();
     roleExample.createCriteria().andIdEqualTo(id);
     roleMapper.updateByExampleSelective(role, roleExample);

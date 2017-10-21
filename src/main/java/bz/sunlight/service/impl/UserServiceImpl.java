@@ -1,5 +1,6 @@
 package bz.sunlight.service.impl;
 
+import bz.sunlight.constant.BaseConstant;
 import bz.sunlight.dao.UserMapper;
 import bz.sunlight.dao.UserRoleMapper;
 import bz.sunlight.dto.AddUserDTO;
@@ -37,7 +38,7 @@ public class UserServiceImpl extends AbstractBaseService implements UserService 
     List<User> users = userMapper.selectByExample(userExample);
     if (users != null && users.size() > 0) {
       //TODO 异常的错误码待整理调整
-      throw new BusinessException("F01","用户名已经存在");
+      throw new BusinessException("F01", "用户名已经存在");
     }
     User user = null;
     if (userDTO != null) {
@@ -46,7 +47,7 @@ public class UserServiceImpl extends AbstractBaseService implements UserService 
     //填充公共信息 e.g 创建时间 创建人等
     BeanUtilsHelper.copyPropertiesWithRuntimeException(user, createCommonDTO());
     user.setId(UUID.randomUUID().toString());
-    user.setStatus(0);
+    user.setStatus(BaseConstant.BASEDATA_STATUS_VALID);
     userMapper.insert(user);
     List<String> roles = userDTO.getRoles();
     for (String roleId : roles) {
