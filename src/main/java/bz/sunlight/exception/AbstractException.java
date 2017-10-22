@@ -5,14 +5,12 @@ public abstract class AbstractException extends RuntimeException {
 
   private String code;
 
-  public AbstractException(String code) {
-    super(code);
-    this.code = code;
+  public AbstractException(String message) {
+    super(message);
   }
 
-  public AbstractException(String code, Throwable cause) {
-    super(code, cause);
-    this.code = code;
+  public AbstractException(String message, Throwable cause) {
+    super(message, cause);
   }
 
   public AbstractException(String code, String message) {

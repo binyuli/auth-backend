@@ -3,12 +3,12 @@ package bz.sunlight.exception;
 public class BusinessException extends AbstractException {
   private static final long serialVersionUID = 2234207247629828430L;
 
-  public BusinessException(String code) {
-    super(code);
+  public BusinessException(String message) {
+    super(message);
   }
 
-  public BusinessException(String code, Throwable cause) {
-    super(code, cause);
+  public BusinessException(String message, Throwable cause) {
+    super(message, cause);
   }
 
   public BusinessException(String code, String message) {
