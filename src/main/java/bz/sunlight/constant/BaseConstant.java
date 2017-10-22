@@ -13,4 +13,8 @@ public class BaseConstant {
   //角色的操作
   public static final String ROLE_OPTION_EDITABLE = "editable"; // 可编辑
   public static final String ROLE_OPTION_ABANDONABLE = "abandonable"; //可作废
+
+  //权限类型
+  public static final int PERMISSION_TYPE_PAGE = 1; //页面
+  public static final int PERMISSION_TYPE_OPERATION = 2; //业务操作
 }

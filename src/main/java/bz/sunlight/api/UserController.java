@@ -1,6 +1,6 @@
 package bz.sunlight.api;
 
-import bz.sunlight.dto.AddUserDTO;
+import bz.sunlight.dto.SaveUserDTO;
 import bz.sunlight.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping(value = "/api/v1")
-public class UserController extends BaseController {
+public class UserController extends BaseContext {
 
   @Autowired
   private UserService userService;
@@ -21,8 +21,8 @@ public class UserController extends BaseController {
    * 新增用户.
    */
   @PostMapping(value = "/users")
-  public ResponseEntity<ResultInfo> addUser(@RequestBody AddUserDTO userDTO) {
-    userService.save(userDTO);
+  public ResponseEntity<ResultInfo> add(@RequestBody SaveUserDTO userDTO) {
+    userService.save(userDTO,createCommonDTO());
     return ResponseEntity.status(HttpStatus.CREATED).build();
   }
 }

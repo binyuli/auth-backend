@@ -1,6 +1,7 @@
 package bz.sunlight.api;
 
 import bz.sunlight.dto.RoleDTO;
+import bz.sunlight.dto.SaveRoleDTO;
 import bz.sunlight.mapstruct.RoleMapStruct;
 import bz.sunlight.service.RoleService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,7 +20,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping(value = "/api/v1")
-public class RoleController extends BaseController {
+public class RoleController extends BaseContext {
   @Autowired
   private RoleService roleService;
   @Autowired
@@ -33,6 +35,31 @@ public class RoleController extends BaseController {
   public ResponseEntity<ResultInfo> getRoles() {
     List<RoleDTO> roles = roleService.getRoles();
     return ResponseEntity.status(HttpStatus.OK).body(buildResultInfo(null, roleMapStruct.dtoToVO(roles)));
+  }
+
+  /**
+   * 新增角色.
+   *
+   * @param saveRoleDTO.
+   * @return void
+   */
+  @PostMapping(value = "/roles")
+  public ResponseEntity<Void> add(@RequestBody SaveRoleDTO saveRoleDTO) {
+    roleService.save(saveRoleDTO, createCommonDTO());
+    return ResponseEntity.status(HttpStatus.CREATED).build();
+  }
+
+  /**
+   * 修改角色.
+   *
+   * @param id.
+   * @param editRoleDTO.
+   * @return void
+   */
+  @PutMapping(value = "/roles/{id}")
+  public ResponseEntity<Void> edit(@PathVariable String id, @RequestBody SaveRoleDTO editRoleDTO) {
+    roleService.edit(id, editRoleDTO);
+    return ResponseEntity.status(HttpStatus.OK).build();
   }
 
   /**
@@ -59,4 +86,5 @@ public class RoleController extends BaseController {
     roleService.editRoleInfo(id, map.get("name").toString());
     return new ResponseEntity<Void>(HttpStatus.OK);
   }
+
 }

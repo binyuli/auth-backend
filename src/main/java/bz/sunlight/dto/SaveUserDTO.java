@@ -2,7 +2,7 @@ package bz.sunlight.dto;
 
 import java.util.List;
 
-public class AddUserDTO {
+public class SaveUserDTO {
   private String name;
   private String username;
   private String password;
@@ -42,7 +42,7 @@ public class AddUserDTO {
 
   @Override
   public String toString() {
-    return "AddUserDTO{"
+    return "SaveUserDTO{"
         + "name='" + name + '\''
         + ", username='" + username + '\''
         + ", password='" + password + '\''
