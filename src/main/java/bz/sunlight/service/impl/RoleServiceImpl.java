@@ -51,11 +51,16 @@ public class RoleServiceImpl implements RoleService {
   @Transactional
   @Override
   public void editRoleInfo(String id, String name) {
-    Role role = new Role();
-    role.setName(name);
-    RoleExample roleExample = new RoleExample();
-    roleExample.createCriteria().andIdEqualTo(id);
-    roleMapper.updateByExampleSelective(role, roleExample);
+    Role roleOrig = roleMapper.selectByPrimaryKey(id);
+    if (!roleOrig.getName().equals(name)) {
+      //角色名称 有变化则 检查重复并更新数据, 无变化则不做处理
+      checkDuplicateRoleName(name);
+      Role role = new Role();
+      role.setName(name);
+      RoleExample roleExample = new RoleExample();
+      roleExample.createCriteria().andIdEqualTo(id);
+      roleMapper.updateByExampleSelective(role, roleExample);
+    }
   }
 
   @Transactional
