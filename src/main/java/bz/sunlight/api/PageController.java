@@ -1,7 +1,7 @@
 package bz.sunlight.api;
 
-import bz.sunlight.dto.PageMenuDTO;
-import bz.sunlight.entity.Page;
+import bz.sunlight.dto.PageDTO;
+import bz.sunlight.mapstruct.PageMapStruct;
 import bz.sunlight.service.PageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,6 +18,8 @@ import java.util.List;
 public class PageController extends BaseContext {
   @Autowired
   private PageService pageService;
+  @Autowired
+  private PageMapStruct pageMapStruct;
 
   /**
    * 获取当前用户可访问的菜单项.
@@ -26,8 +28,8 @@ public class PageController extends BaseContext {
    */
   @RequestMapping("/users/me/pages")
   public ResponseEntity<ResultInfo> getMenuByUser() {
-    List<PageMenuDTO> pages = pageService.getMenuByByExample(getLoginUser().getId(), getLoginUser().getEnterpriseId());
-    return ResponseEntity.status(HttpStatus.OK).body(buildResultInfo(null, pages));
+    List<PageDTO> pages = pageService.getMenuByByExample(getLoginUser().getId(), getLoginUser().getEnterpriseId());
+    return ResponseEntity.status(HttpStatus.OK).body(buildResultInfo(null, pageMapStruct.pageDTOToMenu(pages)));
   }
 
   /**

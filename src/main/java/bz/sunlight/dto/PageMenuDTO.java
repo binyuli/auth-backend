@@ -8,19 +8,18 @@ public class PageMenuDTO {
   private String icon;
   private String title;
   private String url;
-  private Integer level;
-  private List<PageMenuDTO> items = new ArrayList<>();
+  private List<PageMenuDTO> items;
 
+  /**
+   * 添加节点集合.
+   *
+   * @param pageDTO.
+   */
   public void add(PageMenuDTO pageMenuDTO) {
+    if (items == null) {
+      items = new ArrayList<>();
+    }
     items.add(pageMenuDTO);
-  }
-
-  public Integer getLevel() {
-    return level;
-  }
-
-  public void setLevel(Integer level) {
-    this.level = level;
   }
 
   public String getId() {

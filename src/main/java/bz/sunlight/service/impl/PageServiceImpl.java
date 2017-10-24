@@ -2,6 +2,7 @@ package bz.sunlight.service.impl;
 
 import bz.sunlight.dao.OperationMapper;
 import bz.sunlight.dao.PageMapper;
+import bz.sunlight.dto.PageDTO;
 import bz.sunlight.dto.PageMenuDTO;
 import bz.sunlight.entity.Operation;
 import bz.sunlight.entity.OperationExample;
@@ -13,7 +14,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StopWatch;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -35,10 +35,10 @@ public class PageServiceImpl implements PageService {
   }
 
   @Override
-  public List<PageMenuDTO> getMenuByByExample(String userId, String enterpriseId) {
+  public List<PageDTO> getMenuByByExample(String userId, String enterpriseId) {
     StopWatch stopWatch = new StopWatch();
     stopWatch.start();
-    //TODO 后续加缓存
+    //TODO 加载所有页面 后续加缓存
     List<Page> pages = pageMapper.getMenuByByExample(userId, enterpriseId);
     stopWatch.stop();
     stopWatch.start("java 8 stream");
@@ -47,30 +47,42 @@ public class PageServiceImpl implements PageService {
     pagesRoot.sort((p1, p2) -> p1.getWeight().compareTo(p2.getWeight()));
     stopWatch.stop();
     System.out.println(stopWatch.prettyPrint());
+    //TODO 加载所有业务操作 后续加缓存
+    OperationExample operationExample = new OperationExample();
+    operationExample.createCriteria().andEnterpriseIdEqualTo(enterpriseId);
+    List<Operation> operationsOrig = operationMapper.selectByExample(operationExample);
     pagesRoot.forEach(p -> System.out.println(p.getWeight() + " " + p.getName()));
-    List<PageMenuDTO> menus = new ArrayList<PageMenuDTO>();
-    buildMenuTree(pagesRoot, pages, menus);
+
+    return buildMenuTree(pagesRoot, pages, operationsOrig, true);
+  }
+
+  private List<PageDTO> buildMenuTree(List<Page> pagesRoot, List<Page> pages,
+                                      List<Operation> operationsOrig, boolean isOperations) {
+    List<PageDTO> menus = new ArrayList<PageDTO>();
+    for (Page page : pagesRoot) {
+      PageDTO menu = pageMapStruct.entityToPageDTO(page);
+      recursion(menu, pages, operationsOrig, isOperations);
+      menus.add(menu);
+    }
     return menus;
   }
 
-  private void buildMenuTree(List<Page> pagesRoot, List<Page> pages, List<PageMenuDTO> menus) {
-    for (Page page : pagesRoot) {
-      PageMenuDTO menu = pageMapStruct.entityToMenuDTO(page);
-      recursionSubPage(menu, pages);
-      menus.add(menu);
-    }
-  }
-
-  private void recursionSubPage(PageMenuDTO menu, List<Page> pagesOrig) {
-    List<Page> subPages = getPageByParentId(menu.getId(), pagesOrig);
+  private void recursion(PageDTO currentPage, List<Page> pagesOrig,
+                         List<Operation> operationsOrig, boolean isOperations) {
+    List<Page> subPages = getPageByParentId(currentPage.getId(), pagesOrig);
     if (subPages != null && subPages.size() > 0) {
       subPages.forEach(p -> {
-        PageMenuDTO pageMenuDTO = pageMapStruct.entityToMenuDTO(p);
-        menu.add(pageMenuDTO);
-        recursionSubPage(pageMenuDTO, pagesOrig);
+        PageDTO pageDTO = pageMapStruct.entityToPageDTO(p);
+        currentPage.add(pageDTO);
+        recursion(pageDTO, pagesOrig, operationsOrig, isOperations);
       });
     } else {
-      menu.setItems(null);
+      currentPage.setItems(null);
+      if (isOperations) {
+        List<Operation> operations = operationsOrig.stream()
+            .filter(o -> o.getPageId().equals(currentPage.getId())).collect(Collectors.toList());
+        currentPage.setOperations(pageMapStruct.entityToOperationDTOList(operations));
+      }
     }
   }
 
@@ -90,7 +102,6 @@ public class PageServiceImpl implements PageService {
       result.sort((p1, p2) -> p1.getWeight().compareTo(p2.getWeight()));
     }
     stopWatch.stop();
-    System.out.println(stopWatch.prettyPrint());
     return result;
   }
 }
