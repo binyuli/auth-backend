@@ -295,4 +295,12 @@
         Status = #{status,jdbcType=INTEGER}
         where Id = #{id,jdbcType=VARCHAR}
     </update>
+
+    <select id="selectByUserId" resultMap="BaseResultMap" parameterType="java.lang.String">
+        SELECT r.* FROM role r,user_role ur
+        WHERE ur.Role_Id = r.Id
+        <if test="userId != null">
+          AND ur.User_Id = #{userId}
+        </if>
+    </select>
 </mapper>

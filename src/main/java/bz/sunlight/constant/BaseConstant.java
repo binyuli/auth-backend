@@ -11,6 +11,10 @@ public class BaseConstant {
   public static final int USER_STATUS_DISABLE = 2;// 冻结
   public static final int USER_STATUS_ENABLE = 0;// 解冻
 
+  // 用户的操作
+  public static final String USER_OPTION_EDITABLE = "editable";               // 是否可编辑
+  public static final String USER_OPTION_DISABLEORENABLE = "disableOrEnable"; // 是否可冻结或解冻
+
   //角色的操作
   public static final String ROLE_OPTION_EDITABLE = "editable"; // 可编辑
   public static final String ROLE_OPTION_ABANDONABLE = "abandonable"; //可作废

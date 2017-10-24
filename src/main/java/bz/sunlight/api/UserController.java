@@ -2,16 +2,22 @@ package bz.sunlight.api;
 
 import bz.sunlight.dto.SaveUserDTO;
 import bz.sunlight.mapstruct.UserMapStruct;
+import bz.sunlight.dto.UserSearchDTO;
 import bz.sunlight.service.UserService;
+import bz.sunlight.vo.ResultWithPagination;
+import bz.sunlight.vo.UserVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 @RestController
 @RequestMapping(value = "/api/v1")
@@ -66,4 +72,13 @@ public class UserController extends BaseContext {
     return ResponseEntity.status(HttpStatus.OK).build();
   }
 
+  /**
+   * 根据条件查询用户信息.
+   * @return userVO list.
+   */
+  @GetMapping(value = "/users")
+  public ResponseEntity<ResultInfo> getUsers(UserSearchDTO userSearchDTO) {
+    ResultWithPagination<UserVO> usersResult = userService.getUsers(userSearchDTO);
+    return ResponseEntity.status(HttpStatus.OK).body(buildResultInfo(null, usersResult));
+  }
 }

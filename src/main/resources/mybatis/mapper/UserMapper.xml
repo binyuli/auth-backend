@@ -325,4 +325,58 @@
         Status = #{status,jdbcType=INTEGER}
         where Id = #{id,jdbcType=VARCHAR}
     </update>
+
+    <select id="countByRoles" parameterType="bz.sunlight.dto.UserSearchDTO" resultType="java.lang.Integer">
+        SELECT COUNT(u.Id) FROM `user` u
+        LEFT JOIN user_role ur ON u.Id = ur.User_Id
+        LEFT JOIN role r ON ur.Role_Id = r.Id
+        <where>
+            <if test="name != null and name != ''">
+                u.`Name` LIKE '%${name}%'
+            </if>
+            <if test="status != null">
+                AND u.Status = #{status}
+            </if>
+            <if test="roleId != null">
+                AND r.Id IN
+                <foreach item="item" collection="roleId" separator="," open="(" close=")" index="">
+                    #{item, jdbcType=VARCHAR}
+                </foreach>
+            </if>
+        </where>
+    </select>
+
+    <select id="selectByPagination" resultMap="BaseResultMap" parameterType="bz.sunlight.dto.UserSearchDTO">
+        SELECT u.* FROM `user` u
+        LEFT JOIN user_role ur ON u.Id = ur.User_Id
+        LEFT JOIN role r ON ur.Role_Id = r.Id
+        <where>
+            <if test="name != null and name != ''">
+                u.`Name` LIKE '%${name}%'
+            </if>
+            <if test="status != null">
+                AND u.Status = #{status}
+            </if>
+            <if test="roleId != null">
+                AND r.Id IN
+                <foreach item="item" collection="roleId" separator="," open="(" close=")" index="">
+                    #{item, jdbcType=VARCHAR}
+                </foreach>
+            </if>
+        </where>
+        ORDER BY
+        <choose>
+            <when test="isDesc"> ${sortField} DESC </when>
+            <otherwise> ${sortField} </otherwise>
+        </choose>
+        <if test="pageSize != null">
+            <if test="offset != null">
+                limit ${offset}, ${pageSize}
+            </if>
+            <if test="offset == null">
+                limit ${pageSize}
+            </if>
+        </if>
+    </select>
+
 </mapper>

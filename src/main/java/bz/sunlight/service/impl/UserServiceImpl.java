@@ -1,23 +1,33 @@
 package bz.sunlight.service.impl;
 
 import bz.sunlight.constant.BaseConstant;
+import bz.sunlight.dao.RoleMapper;
 import bz.sunlight.dao.UserMapper;
 import bz.sunlight.dao.UserRoleMapper;
 import bz.sunlight.dto.CommonDTO;
 import bz.sunlight.dto.SaveUserDTO;
+import bz.sunlight.dto.UserDTO;
+import bz.sunlight.dto.UserSearchDTO;
+import bz.sunlight.entity.Role;
 import bz.sunlight.entity.User;
 import bz.sunlight.entity.UserExample;
 import bz.sunlight.entity.UserRole;
 import bz.sunlight.entity.UserRoleExample;
 import bz.sunlight.exception.BusinessException;
+import bz.sunlight.handler.PageHelper;
 import bz.sunlight.mapstruct.UserMapStruct;
 import bz.sunlight.service.UserService;
 import bz.sunlight.utils.BeanUtilsHelper;
+import bz.sunlight.vo.ResultWithPagination;
+import bz.sunlight.vo.UserVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 @Service
@@ -28,7 +38,8 @@ public class UserServiceImpl implements UserService {
   private UserRoleMapper userRoleMapper;
   @Autowired
   private UserMapStruct userMapStruct;
-
+  @Autowired
+  private RoleMapper roleMapper;
 
   @Transactional
   @Override
@@ -103,6 +114,42 @@ public class UserServiceImpl implements UserService {
         userRoleMapper.insert(userRole);
       }
     }
+  }
+
+  @Override
+  public ResultWithPagination<UserVO> getUsers(UserSearchDTO userSearchDTO) {
+    ResultWithPagination usersResult = new ResultWithPagination();
+    usersResult.setPageIndex(userSearchDTO.getPageIndex());
+    usersResult.setPageSize(userSearchDTO.getPageSize());
+    if (userSearchDTO.getIsDesc() != null && userSearchDTO.getIsDesc()) {
+      usersResult.setSort("DESC");
+    } else {
+      usersResult.setSort("ASC");
+    }
+
+    Integer totalElements = userMapper.countByRoles(userSearchDTO);
+    Integer totalPages = PageHelper.getTotalPage(totalElements, userSearchDTO.getPageSize());
+    usersResult.setTotalElements(totalElements);
+    usersResult.setTotalPages(totalPages);
+
+    userSearchDTO.setOffset(PageHelper.toOffset(userSearchDTO.getPageIndex(),userSearchDTO.getPageSize()));
+    List<User> users = userMapper.selectByPagination(userSearchDTO);
+    List<UserDTO> userDTOList = userMapStruct.entityToDTO(users);
+    List<UserVO> userVOList = userMapStruct.dtoToVO(userDTOList);
+    for (UserVO userVO : userVOList) {
+      List<Map<String, String>> roleMapList = new ArrayList<>();
+      List<Role> roleList = roleMapper.selectByUserId(userVO.getId());
+      for (Role role : roleList) {
+        Map<String, String> roleMap = new HashMap<>();
+        roleMap.put("Id", role.getId());
+        roleMap.put("name", role.getName());
+        roleMapList.add(roleMap);
+      }
+      userVO.setRoles(roleMapList);
+    }
+    usersResult.setContent(userVOList);
+
+    return usersResult;
   }
 
 }
