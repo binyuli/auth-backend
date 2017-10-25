@@ -6,6 +6,7 @@ import bz.sunlight.dto.PageMenuDTO;
 import bz.sunlight.dto.PageRoleDTO;
 import bz.sunlight.entity.Operation;
 import bz.sunlight.entity.Page;
+import bz.sunlight.vo.PageDetailsVO;
 import bz.sunlight.vo.PageVO;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -29,4 +30,6 @@ public interface PageMapStruct {
   List<PageRoleDTO> pageDTOToRolePage(List<PageDTO> pageDTOList);
 
   List<PageVO> dtoToPageVOList(List<PageDTO> pageDTOList);
+
+  List<PageDetailsVO> dtoToPageDetailsVOList(List<PageDTO> pageDTOList);
 }

@@ -1,8 +1,10 @@
 package bz.sunlight.api;
 
 import bz.sunlight.dto.PageDTO;
+import bz.sunlight.entity.Page;
 import bz.sunlight.mapstruct.PageMapStruct;
 import bz.sunlight.service.PageService;
+import bz.sunlight.vo.PageDetailsVO;
 import bz.sunlight.vo.PageVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -60,5 +62,18 @@ public class PageController extends BaseContext {
     List<PageDTO> pagesDTO = pageService.getPagesByMaxLevel(maxLevel, getLoginUser().getEnterpriseId());
     List<PageVO> pagesVO = pageMapStruct.dtoToPageVOList(pagesDTO);
     return ResponseEntity.status(HttpStatus.OK).body(buildResultInfo(null, pagesVO));
+  }
+
+  /**
+   * 获取page详情.
+   *
+   * @param id.
+   * @return ResultInfo
+   */
+  @GetMapping(value = "/pages/{id}")
+  public ResponseEntity<ResultInfo> getPages(@PathVariable String id) {
+    List<PageDTO> pagesDTO = pageService.getPageDetailsByPageId(id,getLoginUser().getEnterpriseId());
+    List<PageDetailsVO> pagesDetailsVO = pageMapStruct.dtoToPageDetailsVOList(pagesDTO);
+    return ResponseEntity.status(HttpStatus.OK).body(buildResultInfo(null, pagesDetailsVO));
   }
 }

@@ -26,6 +26,8 @@ public class PageServiceImpl implements PageService {
   @Autowired
   private PageMapStruct pageMapStruct;
 
+  private static final Integer rootLevel = 0;
+
   @Override
   public List<String> getOperationsByPage(String pageId) {
     OperationExample operationExample = new OperationExample();
@@ -44,7 +46,10 @@ public class PageServiceImpl implements PageService {
 
   @Override
   public List<PageDTO> getPageDetailsByPageId(String pageId, String enterpriseId) {
-    return null;
+    Page page = pageMapper.selectByPrimaryKey(pageId);
+    List<Page> pages = getAllPages(enterpriseId);
+    List<Operation> operations = getAllOperations(enterpriseId);
+    return buildPageTree(pages, operations, true, null, page);
   }
 
   @Override
@@ -56,27 +61,26 @@ public class PageServiceImpl implements PageService {
 
   @Override
   public List<PageDTO> getMenuByByExample(String userId, String enterpriseId) {
-    StopWatch stopWatch = new StopWatch();
-    stopWatch.start();
     List<Page> pages = getAllPages(userId, enterpriseId);
-
-    stopWatch.stop();
-    stopWatch.start("java 8 stream");
-    //加载第一层数据
-    List<Page> pagesRoot = pages.stream().filter(p -> p.getLevel() == 0).collect(Collectors.toList());
-    pagesRoot.sort((p1, p2) -> p1.getWeight().compareTo(p2.getWeight()));
-    stopWatch.stop();
-    System.out.println(stopWatch.prettyPrint());
     List<Operation> operationsOrig = getAllOperations(enterpriseId);
-
-    pagesRoot.forEach(p -> System.out.println(p.getWeight() + " " + p.getName()));
-
     return buildPageTree(pages, operationsOrig, false, null);
   }
 
   private List<PageDTO> buildPageTree(List<Page> pages,
                                       List<Operation> operationsOrig, boolean isOperations, Integer maxLevel) {
-    List<Page> pagesRoot = pages.stream().filter(p -> p.getLevel() == 0).collect(Collectors.toList());
+    return buildPageTree(pages, operationsOrig, isOperations, maxLevel, null);
+  }
+
+  private List<PageDTO> buildPageTree(List<Page> pages,
+                                      List<Operation> operationsOrig, boolean isOperations,
+                                      Integer maxLevel, Page pageDetails) {
+    List<Page> pagesRoot;
+    if (pageDetails != null) {
+      pagesRoot = pages.stream().filter(p -> p.getId().equals(pageDetails.getId())).collect(Collectors.toList());
+    } else {
+      pagesRoot = pages.stream().filter(p -> p.getLevel() == rootLevel).collect(Collectors.toList());
+    }
+
     List<PageDTO> pageList = new ArrayList<PageDTO>();
     for (Page page : pagesRoot) {
       PageDTO pageDTO = pageMapStruct.entityToPageDTO(page);
@@ -102,6 +106,7 @@ public class PageServiceImpl implements PageService {
    * @param pagesOrig.
    * @param operationsOrig.
    * @param isOperations.
+   * @param maxLevel..
    */
   private void recursion(PageDTO currentPage, List<Page> pagesOrig,
                          List<Operation> operationsOrig, boolean isOperations, Integer maxLevel) {
