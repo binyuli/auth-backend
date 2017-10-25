@@ -329,10 +329,10 @@
         SELECT p.* from user_role ur,permission per,page p
         where ur.Role_Id = per.Role_Id and per.Type = 1 and p.Id = per.Related_Id
         and ur.User_Id = #{userId} and p.Enterprise_Id = #{enterpriseId}
-        order by level,Weight asc;
+        order by level,Weight asc
     </select>
 
     <select id="getPageByRole" resultMap="BaseResultMap">
-      SELECT per.* from permission p,page per where p.Related_Id = per.Id and p.Role_Id = #{roleId}
+      SELECT per.* from permission p,page per where p.Related_Id = per.Id and p.Role_Id = #{roleId} order by per.level,per.Weight asc
     </select>
 </mapper>
