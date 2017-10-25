@@ -20,6 +20,7 @@ import bz.sunlight.service.UserService;
 import bz.sunlight.utils.BeanUtilsHelper;
 import bz.sunlight.vo.ResultWithPagination;
 import bz.sunlight.vo.UserVO;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -119,21 +120,37 @@ public class UserServiceImpl implements UserService {
   @Override
   public ResultWithPagination<UserVO> getUsers(UserSearchDTO userSearchDTO) {
     ResultWithPagination usersResult = new ResultWithPagination();
-    usersResult.setPageIndex(userSearchDTO.getPageIndex());
-    usersResult.setPageSize(userSearchDTO.getPageSize());
-    if (userSearchDTO.getIsDesc() != null && userSearchDTO.getIsDesc()) {
-      usersResult.setSort("DESC");
-    } else {
-      usersResult.setSort("ASC");
+
+    // check page info
+    if (userSearchDTO.getPageSize() != null) {
+      usersResult.setPageSize(userSearchDTO.getPageSize());
+      if (userSearchDTO.getPageIndex() != null && userSearchDTO.getPageIndex() >= 1) {
+        usersResult.setPageIndex(userSearchDTO.getPageIndex());
+      } else {
+        usersResult.setPageIndex(1);
+      }
     }
 
+    // check sort
+    if (StringUtils.isNotBlank(userSearchDTO.getSortField())) {
+      if (userSearchDTO.getIsDesc() != null && userSearchDTO.getIsDesc()) {
+        usersResult.setSort("DESC");
+      } else {
+        usersResult.setSort("ASC");
+      }
+    }
+
+    // get counts
     Integer totalElements = userMapper.countByRoles(userSearchDTO);
     Integer totalPages = PageHelper.getTotalPage(totalElements, userSearchDTO.getPageSize());
     usersResult.setTotalElements(totalElements);
     usersResult.setTotalPages(totalPages);
 
+    // get users
     userSearchDTO.setOffset(PageHelper.toOffset(userSearchDTO.getPageIndex(),userSearchDTO.getPageSize()));
     List<User> users = userMapper.selectByPagination(userSearchDTO);
+
+    // inject roles
     List<UserDTO> userDTOList = userMapStruct.entityToDTO(users);
     List<UserVO> userVOList = userMapStruct.dtoToVO(userDTOList);
     for (UserVO userVO : userVOList) {

@@ -364,11 +364,13 @@
                 </foreach>
             </if>
         </where>
-        ORDER BY
-        <choose>
-            <when test="isDesc"> ${sortField} DESC </when>
-            <otherwise> ${sortField} </otherwise>
-        </choose>
+        <if test="sortField != null and sortField != ''">
+            ORDER BY
+            <choose>
+                <when test="isDesc != null and isDesc"> ${sortField} DESC </when>
+                <otherwise> ${sortField} </otherwise>
+            </choose>
+        </if>
         <if test="pageSize != null">
             <if test="offset != null">
                 limit ${offset}, ${pageSize}
