@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -40,8 +41,8 @@ public class RoleController extends BaseContext {
    * @return resultInfo list
    */
   @GetMapping(value = "/roles")
-  public ResponseEntity<ResultInfo> getRoles() {
-    List<RoleDTO> roles = roleService.getRoles();
+  public ResponseEntity<ResultInfo> getRoles(@RequestParam(value = "status") Integer status) {
+    List<RoleDTO> roles = roleService.getRoles(status);
     return ResponseEntity.status(HttpStatus.OK).body(buildResultInfo(null, roleMapStruct.dtoToVOList(roles)));
   }
 

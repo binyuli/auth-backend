@@ -37,8 +37,10 @@ public class RoleServiceImpl implements RoleService {
   }
 
   @Override
-  public List<RoleDTO> getRoles() {
-    List<Role> roles = roleMapper.selectByExample(null);
+  public List<RoleDTO> getRoles(Integer status) {
+    RoleExample roleExample = new RoleExample();
+    roleExample.createCriteria().andStatusEqualTo(status);
+    List<Role> roles = roleMapper.selectByExample(roleExample);
     List<RoleDTO> rolesDTO = roleMapStruct.entityToDTOList(roles);
     return rolesDTO;
   }
