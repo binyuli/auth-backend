@@ -76,7 +76,7 @@ public class UserServiceImpl implements UserService {
   @Override
   public void disable(String id) {
     User user = new User();
-    user.setStatus(BaseConstant.USER_STATUS_DISABLE);
+    user.setStatus(BaseConstant.BASEDATA_STATUS_INVALID);
     UserExample userExample = new UserExample();
     userExample.createCriteria().andIdEqualTo(id);
     userMapper.updateByExampleSelective(user, userExample);
@@ -86,7 +86,7 @@ public class UserServiceImpl implements UserService {
   @Override
   public void enable(String id) {
     User user = new User();
-    user.setStatus(BaseConstant.USER_STATUS_ENABLE);
+    user.setStatus(BaseConstant.BASEDATA_STATUS_VALID);
     UserExample userExample = new UserExample();
     userExample.createCriteria().andIdEqualTo(id);
     userMapper.updateByExampleSelective(user, userExample);
