@@ -16,4 +16,8 @@ public interface PageService {
    * @return List PageDTO
    */
   public List<PageDTO> getPagesByRoleId(String roleId);
+
+  public List<PageDTO> getPageDetailsByPageId(String pageId, String enterpriseId);
+
+  public List<PageDTO> getPagesByMaxLevel(Integer maxLevel,String enterpriseId);
 }

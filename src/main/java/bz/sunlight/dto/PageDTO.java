@@ -15,9 +15,11 @@ public class PageDTO {
   private String enterpriseId;
   private List<PageDTO> items;
   private List<OperationDTO> operations;
+  private Integer maxLevel; //获取 page 列表 用于控制显示层级
 
   /**
    * 添加节点集合.
+   *
    * @param pageDTO.
    */
   public void add(PageDTO pageDTO) {
@@ -25,6 +27,14 @@ public class PageDTO {
       items = new ArrayList<>();
     }
     items.add(pageDTO);
+  }
+
+  public Integer getMaxLevel() {
+    return maxLevel;
+  }
+
+  public void setMaxLevel(Integer maxLevel) {
+    this.maxLevel = maxLevel;
   }
 
   public String getTitle() {
