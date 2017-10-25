@@ -3,6 +3,7 @@ package bz.sunlight.mapstruct;
 import bz.sunlight.dto.OperationDTO;
 import bz.sunlight.dto.PageDTO;
 import bz.sunlight.dto.PageMenuDTO;
+import bz.sunlight.dto.PageRoleDTO;
 import bz.sunlight.entity.Operation;
 import bz.sunlight.entity.Page;
 import org.mapstruct.Mapper;
@@ -23,4 +24,6 @@ public interface PageMapStruct {
   OperationDTO entityToOperationDTO(Operation operation);
 
   List<OperationDTO> entityToOperationDTOList(List<Operation> operation);
+
+  List<PageRoleDTO> pageDTOToRolePage(List<PageDTO> pageDTOList);
 }

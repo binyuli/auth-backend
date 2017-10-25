@@ -278,4 +278,9 @@
         Enterprise_Id = #{enterpriseId,jdbcType=VARCHAR}
         where Id = #{id,jdbcType=VARCHAR}
     </update>
+
+    <!-- 业务sql -->
+    <select id="getOperationByRole" resultMap="BaseResultMap">
+        SELECT o.* from permission p,operation o where p.Related_Id = o.Id and p.Role_Id = #{roleId}
+    </select>
 </mapper>

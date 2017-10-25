@@ -1,6 +1,7 @@
 package bz.sunlight.vo;
 
 import bz.sunlight.constant.BaseConstant;
+import bz.sunlight.dto.PageRoleDTO;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,6 +11,15 @@ public class RoleVO {
   private String name;
   private List<String> options;
   private int status;
+  private List<PageRoleDTO> permissions;
+
+  public List<PageRoleDTO> getPermissions() {
+    return permissions;
+  }
+
+  public void setPermissions(List<PageRoleDTO> permissions) {
+    this.permissions = permissions;
+  }
 
   public void setStatus(int status) {
     this.status = status;

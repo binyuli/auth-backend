@@ -32,9 +32,14 @@ public class RoleServiceImpl implements RoleService {
   private RoleMapStruct roleMapStruct;
 
   @Override
+  public RoleDTO getRole(String id) {
+    return roleMapStruct.entityToDTO(roleMapper.selectByPrimaryKey(id));
+  }
+
+  @Override
   public List<RoleDTO> getRoles() {
     List<Role> roles = roleMapper.selectByExample(null);
-    List<RoleDTO> rolesDTO = roleMapStruct.entityToDTO(roles);
+    List<RoleDTO> rolesDTO = roleMapStruct.entityToDTOList(roles);
     return rolesDTO;
   }
 

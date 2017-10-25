@@ -15,6 +15,8 @@ public interface RoleService {
 
   public void save(SaveRoleDTO roleDTO, CommonDTO commonDTO);
 
-  public void edit(String id,SaveRoleDTO roleDTO);
+  public void edit(String id, SaveRoleDTO roleDTO);
+
+  public RoleDTO getRole(String id);
 
 }

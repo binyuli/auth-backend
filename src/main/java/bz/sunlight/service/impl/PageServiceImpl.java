@@ -3,7 +3,6 @@ package bz.sunlight.service.impl;
 import bz.sunlight.dao.OperationMapper;
 import bz.sunlight.dao.PageMapper;
 import bz.sunlight.dto.PageDTO;
-import bz.sunlight.dto.PageMenuDTO;
 import bz.sunlight.entity.Operation;
 import bz.sunlight.entity.OperationExample;
 import bz.sunlight.entity.Page;
@@ -35,11 +34,19 @@ public class PageServiceImpl implements PageService {
   }
 
   @Override
+  public List<PageDTO> getPagesByRoleId(String roleId) {
+    //TODO 考虑加缓存
+    List<Operation> operations = operationMapper.getOperationByRole(roleId);
+    List<Page> pages = pageMapper.getPageByRole(roleId);
+    return buildPageTree(pages, operations, true);
+  }
+
+  @Override
   public List<PageDTO> getMenuByByExample(String userId, String enterpriseId) {
     StopWatch stopWatch = new StopWatch();
     stopWatch.start();
-    //TODO 加载所有页面 后续加缓存
-    List<Page> pages = pageMapper.getMenuByByExample(userId, enterpriseId);
+    List<Page> pages = getAllPages(userId, enterpriseId);
+
     stopWatch.stop();
     stopWatch.start("java 8 stream");
     //加载第一层数据
@@ -47,17 +54,16 @@ public class PageServiceImpl implements PageService {
     pagesRoot.sort((p1, p2) -> p1.getWeight().compareTo(p2.getWeight()));
     stopWatch.stop();
     System.out.println(stopWatch.prettyPrint());
-    //TODO 加载所有业务操作 后续加缓存
-    OperationExample operationExample = new OperationExample();
-    operationExample.createCriteria().andEnterpriseIdEqualTo(enterpriseId);
-    List<Operation> operationsOrig = operationMapper.selectByExample(operationExample);
+    List<Operation> operationsOrig = getAllOperations(enterpriseId);
+
     pagesRoot.forEach(p -> System.out.println(p.getWeight() + " " + p.getName()));
 
-    return buildMenuTree(pagesRoot, pages, operationsOrig, true);
+    return buildPageTree(pages, operationsOrig, false);
   }
 
-  private List<PageDTO> buildMenuTree(List<Page> pagesRoot, List<Page> pages,
+  private List<PageDTO> buildPageTree(List<Page> pages,
                                       List<Operation> operationsOrig, boolean isOperations) {
+    List<Page> pagesRoot = pages.stream().filter(p -> p.getLevel() == 0).collect(Collectors.toList());
     List<PageDTO> menus = new ArrayList<PageDTO>();
     for (Page page : pagesRoot) {
       PageDTO menu = pageMapStruct.entityToPageDTO(page);
@@ -67,6 +73,15 @@ public class PageServiceImpl implements PageService {
     return menus;
   }
 
+  /**
+   * 递归查询节点数据到最后一层
+   * 如果isOperations 为 true 则 operationsOrig 不能为空
+   *
+   * @param currentPage.
+   * @param pagesOrig.
+   * @param operationsOrig.
+   * @param isOperations.
+   */
   private void recursion(PageDTO currentPage, List<Page> pagesOrig,
                          List<Operation> operationsOrig, boolean isOperations) {
     List<Page> subPages = getPageByParentId(currentPage.getId(), pagesOrig);
@@ -81,7 +96,9 @@ public class PageServiceImpl implements PageService {
       if (isOperations) {
         List<Operation> operations = operationsOrig.stream()
             .filter(o -> o.getPageId().equals(currentPage.getId())).collect(Collectors.toList());
-        currentPage.setOperations(pageMapStruct.entityToOperationDTOList(operations));
+        if (operations != null && operations.size() > 0) {
+          currentPage.setOperations(pageMapStruct.entityToOperationDTOList(operations));
+        }
       }
     }
   }
@@ -103,5 +120,17 @@ public class PageServiceImpl implements PageService {
     }
     stopWatch.stop();
     return result;
+  }
+
+  private List<Operation> getAllOperations(String enterpriseId) {
+    //TODO 加载所有业务操作 后续加缓存
+    OperationExample operationExample = new OperationExample();
+    operationExample.createCriteria().andEnterpriseIdEqualTo(enterpriseId);
+    return operationMapper.selectByExample(operationExample);
+  }
+
+  private List<Page> getAllPages(String userId, String enterpriseId) {
+    //TODO 加载所有页面 后续加缓存
+    return pageMapper.getMenuByByExample(userId, enterpriseId);
   }
 }

@@ -9,4 +9,6 @@ import java.util.List;
 
 public interface PageMapper extends BaseMapper<Page, PageExample, String> {
   public List<Page> getMenuByByExample(@Param("userId") String userId, @Param("enterpriseId") String enterpriseId);
+
+  public List<Page> getPageByRole(@Param("roleId") String roleId);
 }

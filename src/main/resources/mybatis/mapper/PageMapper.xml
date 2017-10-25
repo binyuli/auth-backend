@@ -331,4 +331,8 @@
         and ur.User_Id = #{userId} and p.Enterprise_Id = #{enterpriseId}
         order by level,Weight asc;
     </select>
+
+    <select id="getPageByRole" resultMap="BaseResultMap">
+      SELECT per.* from permission p,page per where p.Related_Id = per.Id and p.Role_Id = #{roleId}
+    </select>
 </mapper>
