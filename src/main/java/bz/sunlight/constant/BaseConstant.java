@@ -9,6 +9,7 @@ public class BaseConstant {
   public static final int BASEDATA_STATUS_VALID = 0; // 有效
   // 用户数据状态
   public static final int USER_STATUS_DISABLE = 2;// 冻结
+  public static final int USER_STATUS_ENABLE = 0;// 解冻
 
   //角色的操作
   public static final String ROLE_OPTION_EDITABLE = "editable"; // 可编辑

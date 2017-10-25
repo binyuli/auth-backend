@@ -8,6 +8,7 @@ import bz.sunlight.dto.SaveUserDTO;
 import bz.sunlight.entity.User;
 import bz.sunlight.entity.UserExample;
 import bz.sunlight.entity.UserRole;
+import bz.sunlight.entity.UserRoleExample;
 import bz.sunlight.exception.BusinessException;
 import bz.sunlight.mapstruct.UserMapStruct;
 import bz.sunlight.service.UserService;
@@ -27,6 +28,7 @@ public class UserServiceImpl implements UserService {
   private UserRoleMapper userRoleMapper;
   @Autowired
   private UserMapStruct userMapStruct;
+
 
   @Transactional
   @Override
@@ -57,4 +59,50 @@ public class UserServiceImpl implements UserService {
       userRoleMapper.insert(userRole);
     }
   }
+
+  @Transactional
+  @Override
+  public void disable(String id) {
+    User user = new User();
+    user.setStatus(BaseConstant.USER_STATUS_DISABLE);
+    UserExample userExample = new UserExample();
+    userExample.createCriteria().andIdEqualTo(id);
+    userMapper.updateByExampleSelective(user, userExample);
+  }
+
+  @Transactional
+  @Override
+  public void enable(String id) {
+    User user = new User();
+    user.setStatus(BaseConstant.USER_STATUS_ENABLE);
+    UserExample userExample = new UserExample();
+    userExample.createCriteria().andIdEqualTo(id);
+    userMapper.updateByExampleSelective(user, userExample);
+  }
+
+  @Override
+  public void edit(String id, SaveUserDTO userDTO) {
+    User user = userMapStruct.dtoToEntity(userDTO);
+    UserExample userExample = new UserExample();
+    userExample.createCriteria().andIdEqualTo(id);
+    userMapper.updateByExampleSelective(user, userExample);
+
+    UserRoleExample userRoleExample = new UserRoleExample();
+    userRoleExample.createCriteria().andUserIdEqualTo(id);
+    userRoleMapper.deleteByExample(userRoleExample);
+    addeUser(userDTO, id);
+  }
+
+  private void addeUser(SaveUserDTO userDTO, String userId) {
+    List<String> roles = userDTO.getRoles();
+    if (roles != null && roles.size() > 0) {
+      for (String role : roles) {
+        UserRole userRole = new UserRole();
+        userRole.setUserId(userId);
+        userRole.setRoleId(role);
+        userRoleMapper.insert(userRole);
+      }
+    }
+  }
+
 }
