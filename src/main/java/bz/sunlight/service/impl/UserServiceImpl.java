@@ -154,15 +154,8 @@ public class UserServiceImpl implements UserService {
     List<UserDTO> userDTOList = userMapStruct.entityToDTO(users);
     List<UserVO> userVOList = userMapStruct.dtoToVO(userDTOList);
     for (UserVO userVO : userVOList) {
-      List<Map<String, String>> roleMapList = new ArrayList<>();
       List<Role> roleList = roleMapper.selectByUserId(userVO.getId());
-      for (Role role : roleList) {
-        Map<String, String> roleMap = new HashMap<>();
-        roleMap.put("Id", role.getId());
-        roleMap.put("name", role.getName());
-        roleMapList.add(roleMap);
-      }
-      userVO.setRoles(roleMapList);
+      userVO.setRoles(makeRoleMapList(roleList));
     }
     usersResult.setContent(userVOList);
 
@@ -172,20 +165,28 @@ public class UserServiceImpl implements UserService {
   @Override
   public UserVO getUser(String id) {
     UserDTO userDTO = userMapStruct.singleEntityToDTO(userMapper.selectByPrimaryKey(id));
-    UserVO userVO = userMapStruct.singleDtoToVO(userDTO);
+    if (userDTO != null) {
+      UserVO userVO = userMapStruct.singleDtoToVO(userDTO);
 
-    // inject roles
+      // inject roles
+      List<Role> roleList = roleMapper.selectByUserId(userVO.getId());
+      userVO.setRoles(makeRoleMapList(roleList));
+
+      return userVO;
+    } else {
+      return null;
+    }
+  }
+
+  private List<Map<String, String>> makeRoleMapList(List<Role> roleList) {
     List<Map<String, String>> roleMapList = new ArrayList<>();
-    List<Role> roleList = roleMapper.selectByUserId(userVO.getId());
     for (Role role : roleList) {
       Map<String, String> roleMap = new HashMap<>();
       roleMap.put("Id", role.getId());
       roleMap.put("name", role.getName());
       roleMapList.add(roleMap);
     }
-    userVO.setRoles(roleMapList);
-
-    return userVO;
+    return roleMapList;
   }
 
 }
