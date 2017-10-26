@@ -92,6 +92,7 @@ public class UserServiceImpl implements UserService {
     userMapper.updateByExampleSelective(user, userExample);
   }
 
+  @Transactional
   @Override
   public void edit(String id, SaveUserDTO userDTO) {
     User user = userMapStruct.dtoToEntity(userDTO);
