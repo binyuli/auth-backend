@@ -169,4 +169,23 @@ public class UserServiceImpl implements UserService {
     return usersResult;
   }
 
+  @Override
+  public UserVO getUser(String id) {
+    UserDTO userDTO = userMapStruct.singleEntityToDTO(userMapper.selectByPrimaryKey(id));
+    UserVO userVO = userMapStruct.singleDtoToVO(userDTO);
+
+    // inject roles
+    List<Map<String, String>> roleMapList = new ArrayList<>();
+    List<Role> roleList = roleMapper.selectByUserId(userVO.getId());
+    for (Role role : roleList) {
+      Map<String, String> roleMap = new HashMap<>();
+      roleMap.put("Id", role.getId());
+      roleMap.put("name", role.getName());
+      roleMapList.add(roleMap);
+    }
+    userVO.setRoles(roleMapList);
+
+    return userVO;
+  }
+
 }

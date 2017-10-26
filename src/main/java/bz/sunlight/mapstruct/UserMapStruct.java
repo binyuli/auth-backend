@@ -17,4 +17,8 @@ public interface UserMapStruct {
 
   List<UserVO> dtoToVO(List<UserDTO> userDTOList);
 
+  UserVO singleDtoToVO(UserDTO userDTO);
+
+  UserDTO singleEntityToDTO(User user);
+
 }

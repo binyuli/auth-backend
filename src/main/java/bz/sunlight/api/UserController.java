@@ -2,7 +2,6 @@ package bz.sunlight.api;
 
 import bz.sunlight.dto.SaveUserDTO;
 import bz.sunlight.dto.UserSearchDTO;
-import bz.sunlight.mapstruct.UserMapStruct;
 import bz.sunlight.service.UserService;
 import bz.sunlight.vo.ResultWithPagination;
 import bz.sunlight.vo.UserVO;
@@ -23,8 +22,6 @@ public class UserController extends BaseContext {
 
   @Autowired
   private UserService userService;
-  @Autowired
-  private UserMapStruct userMapStruct;
 
   /**
    * 新增用户.
@@ -78,5 +75,17 @@ public class UserController extends BaseContext {
   public ResponseEntity<ResultInfo> getUsers(UserSearchDTO userSearchDTO) {
     ResultWithPagination<UserVO> usersResult = userService.getUsers(userSearchDTO);
     return ResponseEntity.status(HttpStatus.OK).body(buildResultInfo(null, usersResult));
+  }
+
+  /**
+   * 获取用户详细信息.
+   *
+   * @param id.
+   * @return ResultInfo.
+   */
+  @GetMapping(value = "/users/{id}")
+  public ResponseEntity<ResultInfo> getUserDetails(@PathVariable String id) {
+    UserVO userVO = userService.getUser(id);
+    return ResponseEntity.status(HttpStatus.OK).body(buildResultInfo(null,userVO));
   }
 }
