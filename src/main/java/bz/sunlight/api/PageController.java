@@ -54,7 +54,7 @@ public class PageController extends BaseContext {
    * @return resultInfo
    */
   @GetMapping(value = "/pages")
-  public ResponseEntity<ResultInfo> getPages(@RequestParam("maxLevel") Integer maxLevel) {
+  public ResponseEntity<ResultInfo> getPages(@RequestParam(value = "maxLevel", required = false) Integer maxLevel) {
     //方便计算返回结构中的 itemCount 或 operationCount
     if (maxLevel != null) {
       maxLevel += 1;
