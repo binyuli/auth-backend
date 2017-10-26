@@ -1,0 +1,359 @@
+{
+	"variables": [],
+	"info": {
+		"name": "auth",
+		"_postman_id": "251d3923-a2ff-b81b-7984-7487e085121c",
+		"description": "",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "新增用户",
+			"request": {
+				"url": "http://localhost:8080/api/v1/users",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"name\": \"测试人员\",\r\n  \"username\": \"test\",\r\n  \"password\": \"123456\",\r\n  \"roles\": [\r\n    \"ef3c8562-b424-11e7-b9e5-005056af50a8\"\r\n  ]\r\n}"
+				},
+				"description": "新增用户"
+			},
+			"response": []
+		},
+		{
+			"name": " 根据条件查询用户信息",
+			"request": {
+				"url": {
+					"raw": "http://localhost:8080/api/v1/users?name=时孝丛&pageSize=5&pageIndex=1&sortField=Username&isDesc=true&status=2",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"users"
+					],
+					"query": [
+						{
+							"key": "name",
+							"value": "时孝丛",
+							"equals": true,
+							"description": ""
+						},
+						{
+							"key": "pageSize",
+							"value": "5",
+							"equals": true,
+							"description": ""
+						},
+						{
+							"key": "pageIndex",
+							"value": "1",
+							"equals": true,
+							"description": ""
+						},
+						{
+							"key": "sortField",
+							"value": "Username",
+							"equals": true,
+							"description": ""
+						},
+						{
+							"key": "isDesc",
+							"value": "true",
+							"equals": true,
+							"description": ""
+						},
+						{
+							"key": "status",
+							"value": "2",
+							"equals": true,
+							"description": ""
+						}
+					],
+					"variable": []
+				},
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "查询用户信息",
+			"request": {
+				"url": "http://localhost:8080/api/v1/users/786b676f-b424-11e7-b9e5-005056af50a8",
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "修改用户",
+			"request": {
+				"url": "http://localhost:8080/api/v1/users/786b676f-b424-11e7-b9e5-005056af50a8",
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"name\": \"hhhh\",\n  \"roles\": [\n    \"b271a95b-237f-4275-9eb2-474777e99bd8\",\"ef3c8562-b424-11e7-b9e5-005056af50a8\"\n  ]\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "冻结用户",
+			"request": {
+				"url": "http://localhost:8080/api/v1/users/3f8296f6-7efd-4698-a3fa-62554dfa663e/disable",
+				"method": "PUT",
+				"header": [],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "解冻用户",
+			"request": {
+				"url": "http://localhost:8080/api/v1/users/3f8296f6-7efd-4698-a3fa-62554dfa663e/enable",
+				"method": "PUT",
+				"header": [],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "新增角色",
+			"request": {
+				"url": "http://localhost:8080/api/v1/roles",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"name\": \"sale\",\r\n  \"operations\": [\r\n    \"000d2f0a-ee31-1b85-7b458e5a026f14c8\",\"006756f9-7196-1309-c3bf30f338955d12\"\r\n  ],\r\n  \"pages\": [\r\n    \"04f5e76f-0960-ed7d-7bdb53cebf25c36c\",\"05b3da87-09df-6c6c-4a2596be14bcfa41\"\r\n  ]\r\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "获取角色列表",
+			"request": {
+				"url": {
+					"raw": "http://localhost:8080/api/v1/roles?status=2",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"roles"
+					],
+					"query": [
+						{
+							"key": "status",
+							"value": "2",
+							"equals": true,
+							"description": ""
+						}
+					],
+					"variable": []
+				},
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"description": "获取角色列表"
+			},
+			"response": []
+		},
+		{
+			"name": "获取角色详情",
+			"request": {
+				"url": "http://localhost:8080/api/v1/roles/b271a95b-237f-4275-9eb2-474777e99bd8",
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "修改角色",
+			"request": {
+				"url": "http://localhost:8080/api/v1/roles/b271a95b-237f-4275-9eb2-474777e99bd8",
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"name\": \"admin\",\r\n  \"operations\": [\r\n    \"0085311e-9b93-fe4f-f052dc03a77f596d\",\"00f8321d-28da-8810-0bc16988306bb1e8\"\r\n  ],\r\n  \"pages\": [\r\n    \"00181987-4f30-5fdf-ccf89f68a762290d\",\"00e361fb-fd75-0b29-9e6a57a6aa9d0740\"\r\n  ]\r\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "修改角色权限以外的信息",
+			"request": {
+				"url": "http://localhost:8080/api/v1/roles/b271a95b-237f-4275-9eb2-474777e99bd8/info",
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"name\": \"sale\"\r\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "作废角色",
+			"request": {
+				"url": "http://localhost:8080/api/v1/roles/b271a95b-237f-4275-9eb2-474777e99bd8/abandon",
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "获取当前用户可访问的菜单项",
+			"request": {
+				"url": "http://localhost:8080/api/v1/users/me/pages",
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "获取指定页当前用户的权限",
+			"request": {
+				"url": "http://localhost:8080/api/v1/users/me/pages/77cd3df3-3e15-3470-5e15-204e84092683",
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "获取page列表",
+			"request": {
+				"url": {
+					"raw": "http://localhost:8080/api/v1/pages?maxLevel=2",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"pages"
+					],
+					"query": [
+						{
+							"key": "maxLevel",
+							"value": "2",
+							"equals": true,
+							"description": ""
+						}
+					],
+					"variable": []
+				},
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "获取page详情",
+			"request": {
+				"url": "http://localhost:8080/api/v1/pages/85896f9e-2201-f5b0-063f-6ca5f6c01129",
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "api访问权限校验",
+			"request": {
+				"url": "http://localhost:8080/api/v1/auth",
+				"method": "POST",
+				"header": [
+					{
+						"key": "X-Original-Method",
+						"value": "GET",
+						"description": ""
+					},
+					{
+						"key": "X-Original-URI",
+						"value": "/users",
+						"description": ""
+					}
+				],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		}
+	]
+}
