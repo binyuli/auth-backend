@@ -62,8 +62,8 @@ public class PageServiceImpl implements PageService {
   @Override
   public List<PageDTO> getMenuByByExample(String userId, String enterpriseId) {
     List<Page> pages = getAllPages(userId, enterpriseId);
-    List<Operation> operationsOrig = getAllOperations(enterpriseId);
-    return buildPageTree(pages, operationsOrig, false, null);
+    //List<Operation> operationsOrig = getAllOperations(enterpriseId);
+    return buildPageTree(pages, null, false, null);
   }
 
   private List<PageDTO> buildPageTree(List<Page> pages,
