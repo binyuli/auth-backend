@@ -744,6 +744,66 @@ public class UserExample {
       addCriterion("Status not between", value1, value2, "status");
       return (Criteria) this;
     }
+
+    public Criteria andRowVersionIsNull() {
+      addCriterion("Row_Version is null");
+      return (Criteria) this;
+    }
+
+    public Criteria andRowVersionIsNotNull() {
+      addCriterion("Row_Version is not null");
+      return (Criteria) this;
+    }
+
+    public Criteria andRowVersionEqualTo(Date value) {
+      addCriterion("Row_Version =", value, "rowVersion");
+      return (Criteria) this;
+    }
+
+    public Criteria andRowVersionNotEqualTo(Date value) {
+      addCriterion("Row_Version <>", value, "rowVersion");
+      return (Criteria) this;
+    }
+
+    public Criteria andRowVersionGreaterThan(Date value) {
+      addCriterion("Row_Version >", value, "rowVersion");
+      return (Criteria) this;
+    }
+
+    public Criteria andRowVersionGreaterThanOrEqualTo(Date value) {
+      addCriterion("Row_Version >=", value, "rowVersion");
+      return (Criteria) this;
+    }
+
+    public Criteria andRowVersionLessThan(Date value) {
+      addCriterion("Row_Version <", value, "rowVersion");
+      return (Criteria) this;
+    }
+
+    public Criteria andRowVersionLessThanOrEqualTo(Date value) {
+      addCriterion("Row_Version <=", value, "rowVersion");
+      return (Criteria) this;
+    }
+
+    public Criteria andRowVersionIn(List<Date> values) {
+      addCriterion("Row_Version in", values, "rowVersion");
+      return (Criteria) this;
+    }
+
+    public Criteria andRowVersionNotIn(List<Date> values) {
+      addCriterion("Row_Version not in", values, "rowVersion");
+      return (Criteria) this;
+    }
+
+    public Criteria andRowVersionBetween(Date value1, Date value2) {
+      addCriterion("Row_Version between", value1, value2, "rowVersion");
+      return (Criteria) this;
+    }
+
+    public Criteria andRowVersionNotBetween(Date value1, Date value2) {
+      addCriterion("Row_Version not between", value1, value2, "rowVersion");
+      return (Criteria) this;
+    }
   }
 
   /**
