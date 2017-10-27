@@ -29,10 +29,8 @@ public class PageServiceImpl implements PageService {
   private static final Integer rootLevel = 0;
 
   @Override
-  public List<String> getOperationsByPage(String pageId) {
-    OperationExample operationExample = new OperationExample();
-    operationExample.createCriteria().andPageIdEqualTo(pageId);
-    List<Operation> operations = operationMapper.selectByExample(operationExample);
+  public List<String> getOperationsByPage(String userId, String pageId) {
+    List<Operation> operations = operationMapper.getOperationByUserPage(userId, pageId);
     return operations.stream().map(e -> e.getCode()).collect(Collectors.toList());
   }
 

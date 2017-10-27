@@ -5,7 +5,7 @@ import bz.sunlight.dto.PageDTO;
 import java.util.List;
 
 public interface PageService {
-  public List<String> getOperationsByPage(String pageId);
+  public List<String> getOperationsByPage(String userId, String pageId);
 
   public List<PageDTO> getMenuByByExample(String userId, String enterpriseId);
 

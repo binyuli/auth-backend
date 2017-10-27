@@ -9,4 +9,6 @@ import java.util.List;
 
 public interface OperationMapper extends BaseMapper<Operation, OperationExample, String> {
   List<Operation> getOperationByRole(@Param("roleId") String roleId);
+
+  List<Operation> getOperationByUserPage(@Param("userId") String userId, @Param("pageId") String pageId);
 }

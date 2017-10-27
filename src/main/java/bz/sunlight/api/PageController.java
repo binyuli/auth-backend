@@ -44,7 +44,8 @@ public class PageController extends BaseContext {
    */
   @GetMapping(value = "/users/me/pages/{id}")
   public ResponseEntity<ResultInfo> getOperationsByPage(@PathVariable String id) {
-    return ResponseEntity.status(HttpStatus.OK).body(buildResultInfo(null, pageService.getOperationsByPage(id)));
+    return ResponseEntity.status(HttpStatus.OK).body(buildResultInfo(null,
+        pageService.getOperationsByPage(getLoginUser().getId(), id)));
   }
 
   /**

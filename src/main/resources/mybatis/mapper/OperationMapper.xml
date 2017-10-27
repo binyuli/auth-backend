@@ -283,4 +283,20 @@
     <select id="getOperationByRole" resultMap="BaseResultMap">
         SELECT o.* from permission p,operation o where p.Related_Id = o.Id and p.Role_Id = #{roleId}
     </select>
+
+    <select id="getOperationByUserPage" resultMap="BaseResultMap">
+        SELECT o.*
+        FROM user_role ur,permission per,operation o
+        WHERE ur.Role_Id = per.Role_Id
+        AND o.Id = per.Related_Id
+        AND per.Type = 2
+        <if test="pageId != null">
+          AND o.Page_Id = #{pageId}
+        </if>
+        <if test="userId != null">
+          AND ur.User_Id = #{userId}
+        </if>
+        ORDER BY Code
+    </select>
+
 </mapper>
