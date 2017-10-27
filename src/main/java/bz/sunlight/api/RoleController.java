@@ -42,7 +42,8 @@ public class RoleController extends BaseContext {
    */
   @GetMapping(value = "/roles")
   public ResponseEntity<ResultInfo> getRoles(@RequestParam(value = "status") Integer status) {
-    List<RoleDTO> roles = roleService.getRoles(status);
+    String enterpriseId = getLoginUser().getEnterpriseId();
+    List<RoleDTO> roles = roleService.getRoles(status,enterpriseId);
     return ResponseEntity.status(HttpStatus.OK).body(buildResultInfo(null, roleMapStruct.dtoToVOList(roles)));
   }
 
@@ -63,7 +64,7 @@ public class RoleController extends BaseContext {
    *
    * @param id.
    * @param editRoleDTO.
-   * @return void
+   * @return void.
    */
   @PutMapping(value = "/roles/{id}")
   public ResponseEntity<Void> edit(@PathVariable String id, @RequestBody SaveRoleDTO editRoleDTO) {
@@ -75,7 +76,7 @@ public class RoleController extends BaseContext {
    * 作废角色.
    *
    * @param id.
-   * @return void
+   * @return void.
    */
   @GetMapping(value = "/roles/{id}/abandon")
   public ResponseEntity<Void> abandon(@PathVariable String id) {
@@ -88,7 +89,7 @@ public class RoleController extends BaseContext {
    *
    * @param id.
    * @param map.
-   * @return v
+   * @return void.
    */
   @PutMapping(value = "/roles/{id}/info")
   public ResponseEntity<Void> info(@PathVariable String id, @RequestBody Map map) {

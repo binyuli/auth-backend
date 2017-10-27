@@ -7,7 +7,7 @@ import bz.sunlight.dto.SaveRoleDTO;
 import java.util.List;
 
 public interface RoleService {
-  public List<RoleDTO> getRoles(Integer status);
+  public List<RoleDTO> getRoles(Integer status,String enterpriseId);
 
   public void abandon(String id);
 
