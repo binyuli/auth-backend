@@ -334,6 +334,9 @@
             <if test="name != null and name != ''">
                 u.`Name` LIKE '%${name}%'
             </if>
+            <if test="enterpriseId != null and enterpriseId != ''">
+                AND u.Enterprise_Id = #{enterpriseId}
+            </if>
             <if test="status != null">
                 AND u.Status = #{status}
             </if>
@@ -353,6 +356,9 @@
         <where>
             <if test="name != null and name != ''">
                 u.`Name` LIKE '%${name}%'
+            </if>
+            <if test="enterpriseId != null and enterpriseId != ''">
+                AND u.Enterprise_Id = #{enterpriseId}
             </if>
             <if test="status != null">
                 AND u.Status = #{status}

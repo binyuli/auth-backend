@@ -9,6 +9,7 @@ public class UserSearchDTO {
   private List<String> roleId;
   private String sortField;
   private Boolean isDesc;
+  private String enterpriseId;
 
   private Integer pageSize;
   private Integer pageIndex;
@@ -44,6 +45,14 @@ public class UserSearchDTO {
 
   public void setRoleId(List<String> roleId) {
     this.roleId = roleId;
+  }
+
+  public String getEnterpriseId() {
+    return enterpriseId;
+  }
+
+  public void setEnterpriseId(String enterpriseId) {
+    this.enterpriseId = enterpriseId;
   }
 
   public Integer getPageSize() {

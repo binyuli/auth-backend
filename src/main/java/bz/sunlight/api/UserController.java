@@ -73,6 +73,8 @@ public class UserController extends BaseContext {
    */
   @GetMapping(value = "/users")
   public ResponseEntity<ResultInfo> getUsers(UserSearchDTO userSearchDTO) {
+    // 传入当前登录用户的企业Id
+    userSearchDTO.setEnterpriseId(getLoginUser().getEnterpriseId());
     ResultWithPagination<UserVO> usersResult = userService.getUsers(userSearchDTO);
     return ResponseEntity.status(HttpStatus.OK).body(buildResultInfo(null, usersResult));
   }
