@@ -95,7 +95,7 @@ public class PageServiceImpl implements PageService {
 
       pageList.add(pageDTO);
     }
-    return pageList;
+    return pageList.size() == 0 ? null : pageList;
   }
 
   /**
