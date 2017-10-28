@@ -75,35 +75,47 @@ public class UserServiceImpl implements UserService {
   @Transactional
   @Override
   public void disable(String id) {
-    User user = new User();
-    user.setStatus(BaseConstant.BASEDATA_STATUS_INVALID);
-    UserExample userExample = new UserExample();
-    userExample.createCriteria().andIdEqualTo(id);
-    userMapper.updateByExampleSelective(user, userExample);
+    updateUserStatus(id, BaseConstant.BASEDATA_STATUS_INVALID);
   }
 
   @Transactional
   @Override
   public void enable(String id) {
-    User user = new User();
-    user.setStatus(BaseConstant.BASEDATA_STATUS_VALID);
-    UserExample userExample = new UserExample();
-    userExample.createCriteria().andIdEqualTo(id);
-    userMapper.updateByExampleSelective(user, userExample);
+    updateUserStatus(id, BaseConstant.BASEDATA_STATUS_VALID);
+  }
+
+  private void updateUserStatus(String id, int status) {
+    User userOrig = userMapper.selectByPrimaryKey(id);
+    if (userOrig != null) {
+      User user = new User();
+      user.setStatus(status);
+      UserExample userExample = new UserExample();
+      userExample.createCriteria().andIdEqualTo(id).andRowVersionEqualTo(userOrig.getRowVersion());
+      int updateResult = userMapper.updateByExampleSelective(user, userExample);
+      if (updateResult == 0) {
+        throw new BusinessException("当前用户正在被其他操作修改");
+      }
+    }
   }
 
   @Transactional
   @Override
   public void edit(String id, SaveUserDTO userDTO) {
-    User user = userMapStruct.dtoToEntity(userDTO);
-    UserExample userExample = new UserExample();
-    userExample.createCriteria().andIdEqualTo(id);
-    userMapper.updateByExampleSelective(user, userExample);
+    User userOrig = userMapper.selectByPrimaryKey(id);
+    if (userOrig != null) {
+      User user = userMapStruct.dtoToEntity(userDTO);
+      UserExample userExample = new UserExample();
+      userExample.createCriteria().andIdEqualTo(id).andRowVersionEqualTo(userOrig.getRowVersion());
+      int updateResult = userMapper.updateByExampleSelective(user, userExample);
+      if (updateResult == 0) {
+        throw new BusinessException("当前用户正在被其他操作修改");
+      }
 
-    UserRoleExample userRoleExample = new UserRoleExample();
-    userRoleExample.createCriteria().andUserIdEqualTo(id);
-    userRoleMapper.deleteByExample(userRoleExample);
-    addeUser(userDTO, id);
+      UserRoleExample userRoleExample = new UserRoleExample();
+      userRoleExample.createCriteria().andUserIdEqualTo(id);
+      userRoleMapper.deleteByExample(userRoleExample);
+      addeUser(userDTO, id);
+    }
   }
 
   private void addeUser(SaveUserDTO userDTO, String userId) {

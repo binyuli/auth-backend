@@ -48,26 +48,35 @@ public class RoleServiceImpl implements RoleService {
   @Transactional
   @Override
   public void abandon(String id) {
-    Role role = new Role();
-    role.setStatus(BaseConstant.BASEDATA_STATUS_INVALID);
-    RoleExample roleExample = new RoleExample();
-    roleExample.createCriteria().andIdEqualTo(id);
-    roleMapper.updateByExampleSelective(role, roleExample);
+    Role roleOrig = roleMapper.selectByPrimaryKey(id);
+    if (roleOrig != null) {
+      Role role = new Role();
+      role.setStatus(BaseConstant.BASEDATA_STATUS_INVALID);
+      RoleExample roleExample = new RoleExample();
+      roleExample.createCriteria().andIdEqualTo(id).andRowVersionEqualTo(roleOrig.getRowVersion());
+      int updateResult = roleMapper.updateByExampleSelective(role, roleExample);
+      if (updateResult == 0) {
+        throw new BusinessException("当前角色正在被其他用户修改");
+      }
+    }
   }
 
   @Transactional
   @Override
   public void editRoleInfo(String id, String name) {
     Role roleOrig = roleMapper.selectByPrimaryKey(id);
-    if (!roleOrig.getName().equals(name)) {
+    if (roleOrig != null && !roleOrig.getName().equals(name)) {
       //角色名称 有变化则 检查重复并更新数据, 无变化则不做处理
       checkDuplicateRoleName(name);
+      Role role = new Role();
+      role.setName(name);
+      RoleExample roleExample = new RoleExample();
+      roleExample.createCriteria().andIdEqualTo(id).andRowVersionEqualTo(roleOrig.getRowVersion());
+      int updateResult = roleMapper.updateByExampleSelective(role, roleExample);
+      if (updateResult == 0) {
+        throw new BusinessException("当前角色正在被其他用户修改");
+      }
     }
-    Role role = new Role();
-    role.setName(name);
-    RoleExample roleExample = new RoleExample();
-    roleExample.createCriteria().andIdEqualTo(id);
-    roleMapper.updateByExampleSelective(role, roleExample);
   }
 
   @Transactional
@@ -91,24 +100,30 @@ public class RoleServiceImpl implements RoleService {
     }
   }
 
+  @Transactional
   @Override
   public void edit(String id, SaveRoleDTO roleDTO) {
     Role roleOrig = roleMapper.selectByPrimaryKey(id);
-    if (!roleOrig.getName().equals(roleDTO.getName())) {
-      //角色名称 有变化则 检查重复并更新数据, 无变化则不做处理
-      checkDuplicateRoleName(roleDTO.getName());
-      Role role = roleMapStruct.dtoToEntity(roleDTO);
-      RoleExample roleExample = new RoleExample();
-      roleExample.createCriteria().andIdEqualTo(id);
-      roleMapper.updateByExampleSelective(role, roleExample);
-    }
+    if (roleOrig != null) {
+      if (!roleOrig.getName().equals(roleDTO.getName())) {
+        //角色名称 有变化则 检查重复并更新数据, 无变化则不做处理
+        checkDuplicateRoleName(roleDTO.getName());
+        Role role = roleMapStruct.dtoToEntity(roleDTO);
+        RoleExample roleExample = new RoleExample();
+        roleExample.createCriteria().andIdEqualTo(id).andRowVersionEqualTo(roleOrig.getRowVersion());
+        int updateResult = roleMapper.updateByExampleSelective(role, roleExample);
+        if (updateResult == 0) {
+          throw new BusinessException("当前角色正在被其他用户修改");
+        }
+      }
 
-    //角色对应的page operation ,删除再插入新数据
-    PermissionExample permissionExample = new PermissionExample();
-    permissionExample.createCriteria().andRoleIdEqualTo(id)
-        .andTypeIn(Arrays.asList(BaseConstant.PERMISSION_TYPE_PAGE, BaseConstant.PERMISSION_TYPE_OPERATION));
-    permissionMapper.deleteByExample(permissionExample);
-    addPermission(roleDTO, id);
+      //角色对应的page operation ,删除再插入新数据
+      PermissionExample permissionExample = new PermissionExample();
+      permissionExample.createCriteria().andRoleIdEqualTo(id)
+          .andTypeIn(Arrays.asList(BaseConstant.PERMISSION_TYPE_PAGE, BaseConstant.PERMISSION_TYPE_OPERATION));
+      permissionMapper.deleteByExample(permissionExample);
+      addPermission(roleDTO, id);
+    }
   }
 
   private void addPermission(SaveRoleDTO roleDTO, String roleId) {
