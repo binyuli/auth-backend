@@ -2,46 +2,46 @@
 <configuration>
     <appender name="stdout" class="ch.qos.logback.core.ConsoleAppender">
         <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
-            <Pattern>%d{yyyy-MM-dd_HH:mm:ss.SSS} %-5level %logger{36} - %msg%n
-            </Pattern>
+            <pattern>%d{yyyy-MM-dd_HH:mm:ss.SSS} %-5level %logger{36} - %msg%n
+            </pattern>
         </encoder>
     </appender>
     <appender name="logfile"
               class="ch.qos.logback.core.rolling.RollingFileAppender">
         <springProfile name="dev">
-            <File>D://temp//auth.log</File>
+            <file>D://temp//auth.log</file>
         </springProfile>
         <springProfile name="test">
-            <File>D://temp//auth-test.log</File>
+            <file>D://temp//auth-test.log</file>
         </springProfile>
         <springProfile name="pro">
-            <File>D://temp//auth-pro.log</File>
+            <file>D://temp//auth-pro.log</file>
         </springProfile>
         <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
-            <Pattern>%d{yyyy-MM-dd_HH:mm:ss.SSS} [%thread] %-5level %logger{36} -
+            <pattern>%d{yyyy-MM-dd_HH:mm:ss.SSS} [%thread] %-5level %logger{36} -
                 %msg%n
-            </Pattern>
+            </pattern>
         </encoder>
 
         <rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
 
             <springProfile name="dev">
-                <FileNamePattern>D://temp//auth.log.%i.log.zip</FileNamePattern>
+                <fileNamePattern>D://temp//auth.log.%i.log.zip</fileNamePattern>
             </springProfile>
             <springProfile name="test">
-                <FileNamePattern>D://temp//auth-test.log.%i.log.zip</FileNamePattern>
+                <fileNamePattern>D://temp//auth-test.log.%i.log.zip</fileNamePattern>
             </springProfile>
             <springProfile name="pro">
-                <FileNamePattern>D://temp//auth-pro.log.%i.log.zip</FileNamePattern>
+                <fileNamePattern>D://temp//auth-pro.log.%i.log.zip</fileNamePattern>
             </springProfile>
 
-            <MinIndex>1</MinIndex>
-            <MaxIndex>10</MaxIndex>
+            <minIndex>1</minIndex>
+            <maxIndex>10</maxIndex>
         </rollingPolicy>
 
         <triggeringPolicy
                 class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
-            <MaxFileSize>100MB</MaxFileSize>
+            <maxFileSize>100MB</maxFileSize>
         </triggeringPolicy>
     </appender>
 

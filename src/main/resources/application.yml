@@ -8,10 +8,10 @@ spring:
       validation-query: SELECT 1
       time-between-eviction-runs-millis: 30000
   jackson:
-      default-property-inclusion: non_null
-      time-zone: Asia/Shanghai
-      serialization:
-        write-dates-as-timestamps: false
+    default-property-inclusion: non_null
+    time-zone: Asia/Shanghai
+    serialization:
+      write-dates-as-timestamps: false
 
 mybatis:
   mapper-locations: classpath*:mybatis/mapper/*.xml
