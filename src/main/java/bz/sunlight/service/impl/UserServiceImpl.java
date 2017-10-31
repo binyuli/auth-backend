@@ -26,6 +26,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -88,6 +89,7 @@ public class UserServiceImpl implements UserService {
     User userOrig = userMapper.selectByPrimaryKey(id);
     if (userOrig != null) {
       User user = new User();
+      user.setRowVersion(new Date());
       user.setStatus(status);
       UserExample userExample = new UserExample();
       userExample.createCriteria().andIdEqualTo(id).andRowVersionEqualTo(userOrig.getRowVersion());
@@ -104,21 +106,23 @@ public class UserServiceImpl implements UserService {
     User userOrig = userMapper.selectByPrimaryKey(id);
     if (userOrig != null) {
       User user = userMapStruct.dtoToEntity(userDTO);
+      user.setRowVersion(new Date());
       UserExample userExample = new UserExample();
       userExample.createCriteria().andIdEqualTo(id).andRowVersionEqualTo(userOrig.getRowVersion());
       int updateResult = userMapper.updateByExampleSelective(user, userExample);
       if (updateResult == 0) {
         throw new BusinessException("当前用户正在被其他操作修改");
+      } else {
+        handleRelation(userDTO, id);
       }
-
-      UserRoleExample userRoleExample = new UserRoleExample();
-      userRoleExample.createCriteria().andUserIdEqualTo(id);
-      userRoleMapper.deleteByExample(userRoleExample);
-      addeUser(userDTO, id);
     }
   }
 
-  private void addeUser(SaveUserDTO userDTO, String userId) {
+  private void handleRelation(SaveUserDTO userDTO, String userId) {
+    UserRoleExample userRoleExample = new UserRoleExample();
+    userRoleExample.createCriteria().andUserIdEqualTo(userId);
+    userRoleMapper.deleteByExample(userRoleExample);
+
     List<String> roles = userDTO.getRoles();
     if (roles != null && roles.size() > 0) {
       for (String role : roles) {
