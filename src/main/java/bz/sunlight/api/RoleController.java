@@ -1,5 +1,6 @@
 package bz.sunlight.api;
 
+import bz.sunlight.constant.BaseConstant;
 import bz.sunlight.dto.PageDTO;
 import bz.sunlight.dto.RoleDTO;
 import bz.sunlight.dto.SaveRoleDTO;
@@ -41,9 +42,12 @@ public class RoleController extends BaseContext {
    * @return resultInfo list
    */
   @GetMapping(value = "/roles")
-  public ResponseEntity<ResultInfo> getRoles(@RequestParam(value = "status") Integer status) {
+  public ResponseEntity<ResultInfo> getRoles(@RequestParam(value = "status", required = false) Integer status) {
+    if (status == null) {
+      status = BaseConstant.BASEDATA_STATUS_VALID;
+    }
     String enterpriseId = getLoginUser().getEnterpriseId();
-    List<RoleDTO> roles = roleService.getRoles(status,enterpriseId);
+    List<RoleDTO> roles = roleService.getRoles(status, enterpriseId);
     return ResponseEntity.status(HttpStatus.OK).body(buildResultInfo(null, roleMapStruct.dtoToVOList(roles)));
   }
 
