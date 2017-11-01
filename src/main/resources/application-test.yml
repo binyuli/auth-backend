@@ -3,15 +3,18 @@ spring:
     url: jdbc:mysql://${db.host:192.168.21.11}:${db.port:3306}/${db.name:auth}?useSSL=false&characterEncoding=utf8
     username: auth
     password: auth123
-    minIdle: 1
-    maxActive: 2
-    initialSize: 1
-    timeBetweenEvictionRunsMillis: 3000
-    minEvictableIdleTimeMillis: 300000
-    validationQuery: SELECT 1
-    testWhileIdle: true
-    testOnBorrow: false
-    testOnReturn: false
+    tomcat:
+      min-idle: 2
+      test-while-idle: true
+      test-on-borrow: true
+      validation-query: SELECT 1
+      time-between-eviction-runs-millis: 30000
+  jackson:
+    default-property-inclusion: non_null
+    time-zone: Asia/Shanghai
+    serialization:
+      write-dates-as-timestamps: false
 
-
-
+mybatis:
+  mapper-locations: classpath*:mybatis/mapper/*.xml
+  type-aliases-package: bz.sunlight.entity

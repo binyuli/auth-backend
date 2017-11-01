@@ -1,7 +1,9 @@
 spring:
-  profiles:
-    active: @profileActive@
-  tomcat:
+  datasource:
+    url: jdbc:mysql://${db.host:192.168.21.11}:${db.port:3306}/${db.name:auth}?useSSL=false&characterEncoding=utf8
+    username: auth
+    password: auth123
+    tomcat:
       min-idle: 2
       test-while-idle: true
       test-on-borrow: true
@@ -16,4 +18,3 @@ spring:
 mybatis:
   mapper-locations: classpath*:mybatis/mapper/*.xml
   type-aliases-package: bz.sunlight.entity
-
