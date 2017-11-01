@@ -1,10 +1,8 @@
 spring:
   datasource:
-    type: com.alibaba.druid.pool.DruidDataSource
     url: jdbc:mysql://${db.host:192.168.21.11}:${db.port:3306}/${db.name:auth}?useSSL=false&characterEncoding=utf8
     username: auth
     password: auth123
-    driver-class-name: com.mysql.jdbc.Driver
     minIdle: 1
     maxActive: 2
     initialSize: 1
