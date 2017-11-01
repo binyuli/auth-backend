@@ -8,7 +8,7 @@ spring:
       test-while-idle: true
       test-on-borrow: true
       validation-query: SELECT 1
-      time-between-eviction-runs-millis: 30000
+      time-between-eviction-runs-millis: 3000
   jackson:
     default-property-inclusion: non_null
     time-zone: Asia/Shanghai
