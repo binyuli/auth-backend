@@ -82,7 +82,7 @@ public class RoleController extends BaseContext {
    * @param id.
    * @return void.
    */
-  @GetMapping(value = "/roles/{id}/abandon")
+  @PutMapping(value = "/roles/{id}/abandon")
   public ResponseEntity<Void> abandon(@PathVariable String id) {
     roleService.abandon(id);
     return new ResponseEntity<Void>(HttpStatus.OK);
