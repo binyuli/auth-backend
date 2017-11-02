@@ -74,7 +74,7 @@ public class PageController extends BaseContext {
   @GetMapping(value = "/pages/{id}")
   public ResponseEntity<ResultInfo> getPages(@PathVariable String id) {
     List<PageDTO> pagesDTO = pageService.getPageDetailsByPageId(id,getLoginUser().getEnterpriseId());
-    List<PageDetailsVO> pagesDetailsVO = pageMapStruct.dtoToPageDetailsVOList(pagesDTO);
-    return ResponseEntity.status(HttpStatus.OK).body(buildResultInfo(null, pagesDetailsVO));
+    PageDetailsVO pageDetailsVO = pageMapStruct.dtoToPageDetailsVO(pagesDTO.get(0));
+    return ResponseEntity.status(HttpStatus.OK).body(buildResultInfo(null, pageDetailsVO));
   }
 }

@@ -32,4 +32,6 @@ public interface PageMapStruct {
   List<PageVO> dtoToPageVOList(List<PageDTO> pageDTOList);
 
   List<PageDetailsVO> dtoToPageDetailsVOList(List<PageDTO> pageDTOList);
+
+  PageDetailsVO dtoToPageDetailsVO(PageDTO pageDTO);
 }
