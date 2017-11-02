@@ -106,7 +106,10 @@ public class RoleServiceImpl implements RoleService {
   public void edit(String id, SaveRoleDTO roleDTO) {
     Role roleOrig = roleMapper.selectByPrimaryKey(id);
     if (roleOrig != null) {
-      checkDuplicateRoleName(roleDTO.getName());
+      // 用户名如果未修改则不进行重名排查
+      if (!roleDTO.getName().equals(roleOrig.getName())) {
+        checkDuplicateRoleName(roleDTO.getName());
+      }
       Role role = roleMapStruct.dtoToEntity(roleDTO);
       role.setRowVersion(new Date());
       RoleExample roleExample = new RoleExample();
