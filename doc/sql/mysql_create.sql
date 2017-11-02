@@ -1,167 +1,142 @@
 /*==============================================================*/
 /* DBMS name:      MySQL 5.0                                    */
-/* Created on:     2017/10/29 14:17:31                          */
+/* Created on:     2017/11/2 14:14:03                           */
 /*==============================================================*/
 
-/* 根据外键调整了顺序 */
-drop table if exists Operation_Api;
 
-drop table if exists User_Role;
+drop table if exists api;
 
-drop table if exists Page_Api;
+drop table if exists operation;
 
-drop table if exists Permission;
+drop table if exists operation_api;
 
-drop table if exists Operation;
+drop table if exists page;
 
-drop table if exists Page;
+drop table if exists page_api;
 
-drop table if exists Role;
+drop table if exists permission;
 
-drop table if exists Api;
+drop table if exists role;
 
-drop table if exists User;
+drop table if exists user;
+
+drop table if exists user_role;
 
 /*==============================================================*/
-/* Table: Api                                                   */
+/* Table: api                                                   */
 /*==============================================================*/
-create table Api
+create table api
 (
-   Id                   char(36) not null,
-   Name                 varchar(50) not null,
-   Http_Method          varchar(50) not null,
-   Url                  varchar(50) not null,
-   Enterprise_Id        char(36) not null,
-   primary key (Id)
+   id                   char(36) not null,
+   name                 varchar(50) not null,
+   http_method          varchar(50) not null,
+   url                  varchar(50) not null,
+   enterprise_id        char(36) not null,
+   primary key (id)
 );
 
 /*==============================================================*/
-/* Table: Operation                                             */
+/* Table: operation                                             */
 /*==============================================================*/
-create table Operation
+create table operation
 (
-   Id                   char(36) not null,
-   Code                 varchar(50) not null,
-   Name                 varchar(50) not null,
-   Page_Id              char(36) not null,
-   Enterprise_Id        char(36) not null,
-   primary key (Id)
+   id                   char(36) not null,
+   code                 varchar(50) not null,
+   name                 varchar(50) not null,
+   page_id              char(36) not null,
+   enterprise_id        char(36) not null,
+   primary key (id)
 );
 
 /*==============================================================*/
-/* Table: Operation_Api                                         */
+/* Table: operation_api                                         */
 /*==============================================================*/
-create table Operation_Api
+create table operation_api
 (
-   Operation_Id         char(36) not null,
-   Api_Id               char(36) not null,
-   primary key (Operation_Id, Api_Id)
+   operation_id         char(36) not null,
+   api_id               char(36) not null,
+   primary key (operation_id, api_id)
 );
 
 /*==============================================================*/
-/* Table: Page                                                  */
+/* Table: page                                                  */
 /*==============================================================*/
-create table Page
+create table page
 (
-   Id                   char(36) not null,
-   Name                 varchar(50) not null,
-   Url                  varchar(50),
-   Icon                 varchar(50),
-   Weight               int not null,
-   Level                int not null,
-   parent_Id            char(36),
-   Enterprise_Id        char(36) not null,
-   primary key (Id)
+   id                   char(36) not null,
+   name                 varchar(50) not null,
+   url                  varchar(50),
+   icon                 varchar(50),
+   weight               int not null,
+   level                int not null,
+   parent_id            char(36),
+   enterprise_id        char(36) not null,
+   primary key (id)
 );
 
 /*==============================================================*/
-/* Table: Page_Api                                              */
+/* Table: page_api                                              */
 /*==============================================================*/
-create table Page_Api
+create table page_api
 (
-   Page_Id              char(36) not null,
-   Api_Id               char(36) not null,
-   primary key (Api_Id, Page_Id)
+   page_id              char(36) not null,
+   api_id               char(36) not null,
+   primary key (api_id, page_id)
 );
 
 /*==============================================================*/
-/* Table: Permission                                            */
+/* Table: permission                                            */
 /*==============================================================*/
-create table Permission
+create table permission
 (
-   Role_Id              char(36) not null,
-   Related_Id           char(36) not null,
-   Type                 int not null comment '0: 页面;
+   role_id              char(36) not null,
+   related_id           char(36) not null,
+   type                 int not null comment '0: 页面;
             1: 业务操作;',
-   primary key (Role_Id, Related_Id)
+   primary key (role_id, related_id)
 );
 
 /*==============================================================*/
-/* Table: Role                                                  */
+/* Table: role                                                  */
 /*==============================================================*/
-create table Role
+create table role
 (
-   Id                   char(36) not null,
-   Name                 varchar(50) not null,
-   Create_Time          datetime,
-   Creator              varchar(50),
-   Enterprise_Id        char(36) not null,
-   Status               int comment '2:正常;
+   id                   char(36) not null,
+   name                 varchar(50) not null,
+   create_time          datetime,
+   creator              varchar(50),
+   enterprise_id        char(36) not null,
+   status               int comment '2:正常;
             0:作废;',
-   RowVersion           timestamp not null,
-   primary key (Id)
+   row_version          timestamp(6) not null,
+   primary key (id)
 );
 
 /*==============================================================*/
-/* Table: User                                                  */
+/* Table: user                                                  */
 /*==============================================================*/
-create table User
+create table user
 (
-   Id                   char(36) not null,
-   Name                 varchar(50) not null,
-   Username             varchar(50) not null,
-   Create_Time          datetime,
-   Creator              varchar(50),
-   Modify_Time          datetime,
-   Enterprise_Id        char(36) not null,
-   Status               int not null comment '2:正常;
+   id                   char(36) not null,
+   name                 varchar(50) not null,
+   username             varchar(50) not null,
+   create_time          datetime,
+   creator              varchar(50),
+   modify_time          datetime,
+   enterprise_id        char(36) not null,
+   status               int not null comment '2:正常;
             0:冻结/作废;',
-   RowVersion           timestamp not null,
-   primary key (Id)
+   row_version          timestamp(6) not null,
+   primary key (id)
 );
 
 /*==============================================================*/
-/* Table: User_Role                                             */
+/* Table: user_role                                             */
 /*==============================================================*/
-create table User_Role
+create table user_role
 (
-   User_Id              char(36) not null,
-   Role_Id              char(36) not null,
-   primary key (Role_Id, User_Id)
+   user_id              char(36) not null,
+   role_id              char(36) not null,
+   primary key (role_id, user_id)
 );
-
-alter table Operation add constraint FK_Relationship_10 foreign key (Page_Id)
-      references Page (Id) on delete restrict on update restrict;
-
-alter table Operation_Api add constraint FK_Relationship_5 foreign key (Operation_Id)
-      references Operation (Id) on delete restrict on update restrict;
-
-alter table Operation_Api add constraint FK_Relationship_6 foreign key (Api_Id)
-      references Api (Id) on delete restrict on update restrict;
-
-alter table Page_Api add constraint FK_Relationship_7 foreign key (Api_Id)
-      references Api (Id) on delete restrict on update restrict;
-
-alter table Page_Api add constraint FK_Relationship_8 foreign key (Page_Id)
-      references Page (Id) on delete restrict on update restrict;
-
-alter table Permission add constraint FK_Relationship_3 foreign key (Role_Id)
-      references Role (Id) on delete restrict on update restrict;
-
-alter table User_Role add constraint FK_Relationship_1 foreign key (Role_Id)
-      references Role (Id) on delete restrict on update restrict;
-
-alter table User_Role add constraint FK_Relationship_2 foreign key (User_Id)
-      references User (Id) on delete restrict on update restrict;
-
 
