@@ -15,6 +15,7 @@ import org.springframework.util.StopWatch;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -41,12 +42,18 @@ public class PageServiceImpl implements PageService {
     List<Operation> operations = operationMapper.getOperationByRole(roleId);
 
     // 由 role 直接关联的 page 作为叶子结点构造整棵树
-    List<Page> allPages = new ArrayList<>();
     List<Page> childPages = pageMapper.getPageByRole(roleId);
-    allPages.addAll(childPages);
-    allPages.addAll(getAncestorPages(childPages));
+    List<Page> allPages = getAllSortedPages(childPages);
 
     return buildPageTree(allPages, operations, true, null);
+  }
+
+  private List<Page> getAllSortedPages(List<Page> childPages) {
+    List<Page> allPages = new ArrayList<>();
+    allPages.addAll(childPages);
+    allPages.addAll(getAncestorPages(childPages));
+    allPages.sort(Comparator.comparing(Page::getLevel).thenComparing(Page::getWeight));
+    return allPages;
   }
 
   private List<Page> getAncestorPages(List<Page> childPages) {
@@ -195,10 +202,8 @@ public class PageServiceImpl implements PageService {
 
   private List<Page> getAllPages(String userId, String enterpriseId) {
     //TODO 加载所有页面 后续加缓存
-    List<Page> allPages = new ArrayList<>();
     List<Page> pages = pageMapper.getMenuByByExample(userId, enterpriseId);
-    allPages.addAll(pages);
-    allPages.addAll(getAncestorPages(pages));
+    List<Page> allPages = getAllSortedPages(pages);
     return allPages;
   }
 
