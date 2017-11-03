@@ -195,7 +195,11 @@ public class PageServiceImpl implements PageService {
 
   private List<Page> getAllPages(String userId, String enterpriseId) {
     //TODO 加载所有页面 后续加缓存
-    return pageMapper.getMenuByByExample(userId, enterpriseId);
+    List<Page> allPages = new ArrayList<>();
+    List<Page> pages = pageMapper.getMenuByByExample(userId, enterpriseId);
+    allPages.addAll(pages);
+    allPages.addAll(getAncestorPages(pages));
+    return allPages;
   }
 
   /**
