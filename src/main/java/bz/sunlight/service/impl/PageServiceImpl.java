@@ -49,6 +49,9 @@ public class PageServiceImpl implements PageService {
   }
 
   private List<Page> getAllSortedPages(List<Page> childPages) {
+    if (childPages.size() == 0) {
+      return childPages;
+    }
     List<Page> allPages = new ArrayList<>();
     allPages.addAll(childPages);
     allPages.addAll(getAncestorPages(childPages));
