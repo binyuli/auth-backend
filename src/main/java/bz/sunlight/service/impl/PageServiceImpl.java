@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StopWatch;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -38,8 +39,41 @@ public class PageServiceImpl implements PageService {
   public List<PageDTO> getPagesByRoleId(String roleId) {
     //TODO 考虑加缓存
     List<Operation> operations = operationMapper.getOperationByRole(roleId);
-    List<Page> pages = pageMapper.getPageByRole(roleId);
-    return buildPageTree(pages, operations, true, null);
+
+    // 由 role 直接关联的 page 作为叶子结点构造整棵树
+    List<Page> allPages = new ArrayList<>();
+    List<Page> childPages = pageMapper.getPageByRole(roleId);
+    allPages.addAll(childPages);
+    allPages.addAll(getAncestorPages(childPages));
+
+    return buildPageTree(allPages, operations, true, null);
+  }
+
+  private List<Page> getAncestorPages(List<Page> childPages) {
+    List<Page> ancestorPages = new ArrayList<>();
+    List<Integer> levels = new ArrayList<>();
+    for (Page page : childPages) {
+      levels.add(page.getLevel());
+    }
+    int maxLevel = Collections.max(levels);
+    List<Page> currentPages = childPages;
+    for (int i = 0; i < maxLevel; i++) {
+      List<Page> parentPages = getParentPages(currentPages);
+      ancestorPages.addAll(parentPages);
+      currentPages = parentPages;
+    }
+    return ancestorPages;
+  }
+
+  private List<Page> getParentPages(List<Page> currentPages) {
+    PageExample pageExample = new PageExample();
+    List<String> parentIds = new ArrayList<>();
+    for (Page page : currentPages) {
+      parentIds.add(page.getParentId());
+    }
+    pageExample.createCriteria().andIdIn(parentIds);
+    List<Page> parentPages = pageMapper.selectByExample(pageExample);
+    return parentPages;
   }
 
   @Override
