@@ -1,3 +1,13 @@
+-- clean auth
+TRUNCATE TABLE api;
+TRUNCATE TABLE operation;
+TRUNCATE TABLE operation_api;
+TRUNCATE TABLE page;
+TRUNCATE TABLE page_api;
+TRUNCATE TABLE permission;
+TRUNCATE TABLE role;
+TRUNCATE TABLE user;
+TRUNCATE TABLE user_role;
 -- ----------------------------
 -- Records of api
 -- ----------------------------
