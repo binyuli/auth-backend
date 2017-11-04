@@ -1,6 +1,7 @@
 package bz.sunlight.service.impl;
 
 import bz.sunlight.constant.BaseConstant;
+import bz.sunlight.dao.CommonMapper;
 import bz.sunlight.dao.RoleMapper;
 import bz.sunlight.dao.UserMapper;
 import bz.sunlight.dao.UserRoleMapper;
@@ -25,6 +26,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -42,6 +44,8 @@ public class UserServiceImpl implements UserService {
   private UserMapStruct userMapStruct;
   @Autowired
   private RoleMapper roleMapper;
+  @Autowired
+  private CommonMapper commonMapper;
 
   @Transactional
   @Override
@@ -89,7 +93,7 @@ public class UserServiceImpl implements UserService {
     User userOrig = userMapper.selectByPrimaryKey(id);
     if (userOrig != null) {
       User user = new User();
-      user.setRowVersion(new Date());
+      user.setRowVersion(commonMapper.now());
       user.setStatus(status);
       UserExample userExample = new UserExample();
       userExample.createCriteria().andIdEqualTo(id).andRowVersionEqualTo(userOrig.getRowVersion());
@@ -106,7 +110,7 @@ public class UserServiceImpl implements UserService {
     User userOrig = userMapper.selectByPrimaryKey(id);
     if (userOrig != null) {
       User user = userMapStruct.dtoToEntity(userDTO);
-      user.setRowVersion(new Date());
+      user.setRowVersion(commonMapper.now());
       UserExample userExample = new UserExample();
       userExample.createCriteria().andIdEqualTo(id).andRowVersionEqualTo(userOrig.getRowVersion());
       int updateResult = userMapper.updateByExampleSelective(user, userExample);
@@ -164,7 +168,7 @@ public class UserServiceImpl implements UserService {
     usersResult.setTotalPages(totalPages);
 
     // get users
-    userSearchDTO.setOffset(PageHelper.toOffset(userSearchDTO.getPageIndex(),userSearchDTO.getPageSize()));
+    userSearchDTO.setOffset(PageHelper.toOffset(userSearchDTO.getPageIndex(), userSearchDTO.getPageSize()));
     List<User> users = userMapper.selectByPagination(userSearchDTO);
 
     // inject roles

@@ -1,6 +1,7 @@
 package bz.sunlight.service.impl;
 
 import bz.sunlight.constant.BaseConstant;
+import bz.sunlight.dao.CommonMapper;
 import bz.sunlight.dao.PermissionMapper;
 import bz.sunlight.dao.RoleMapper;
 import bz.sunlight.dto.CommonDTO;
@@ -18,6 +19,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -31,6 +34,8 @@ public class RoleServiceImpl implements RoleService {
   private PermissionMapper permissionMapper;
   @Autowired
   private RoleMapStruct roleMapStruct;
+  @Autowired
+  private CommonMapper commonMapper;
 
   @Override
   public RoleDTO getRole(String id) {
@@ -111,7 +116,7 @@ public class RoleServiceImpl implements RoleService {
         checkDuplicateRoleName(roleDTO.getName());
       }
       Role role = roleMapStruct.dtoToEntity(roleDTO);
-      role.setRowVersion(new Date());
+      role.setRowVersion(commonMapper.now());
       RoleExample roleExample = new RoleExample();
       roleExample.createCriteria().andIdEqualTo(id).andRowVersionEqualTo(roleOrig.getRowVersion());
       int updateResult = roleMapper.updateByExampleSelective(role, roleExample);
