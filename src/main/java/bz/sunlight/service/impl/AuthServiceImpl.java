@@ -16,15 +16,18 @@ public class AuthServiceImpl implements AuthService {
   private ApiMapper apiMapper;
 
   @Override
-  public boolean isAccessible(String httpMethod, String url) {
+  public boolean isAccessible(String httpMethod, String url, String userId) {
     ApiExample example = new ApiExample();
     example.createCriteria().andHttpMethodEqualTo(httpMethod).andUrlEqualTo(url);
     List<Api> apiList = apiMapper.selectByExample(example);
     if (apiList.size() != 0) {
-      return true;
-    } else {
-      return false;
+      String apiId = apiList.get(0).getId();
+      long resultCount = apiMapper.countByOperationApi(userId, apiId) + apiMapper.countByPageApi(userId, apiId);
+      if (resultCount != 0) {
+        return true;
+      }
     }
+    return false;
   }
 
 }

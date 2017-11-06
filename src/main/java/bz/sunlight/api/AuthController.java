@@ -1,7 +1,6 @@
 package bz.sunlight.api;
 
 import bz.sunlight.service.AuthService;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping(value = "/api/v1")
-public class AuthController {
+public class AuthController extends BaseContext {
 
   @Autowired
   private AuthService authService;
@@ -25,8 +24,13 @@ public class AuthController {
   @PostMapping(value = "/auth")
   public ResponseEntity<Void> checkAccessAuthority(@RequestHeader(value = "X-Original-Method") String httpMethod,
                                                    @RequestHeader(value = "X-Original-URI") String url) {
-    if (authService.isAccessible(httpMethod, url)) {
-      return new ResponseEntity<>(HttpStatus.OK);
+    LoginUser loginUser = this.getLoginUser();
+    if (loginUser != null) {
+      if (authService.isAccessible(httpMethod, url, loginUser.getId())) {
+        return new ResponseEntity<>(HttpStatus.OK);
+      } else {
+        return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+      }
     } else {
       return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
     }

@@ -2,6 +2,6 @@ package bz.sunlight.service;
 
 public interface AuthService {
 
-  boolean isAccessible(String httpMethod, String url);
+  boolean isAccessible(String httpMethod, String url, String userId);
 
 }
