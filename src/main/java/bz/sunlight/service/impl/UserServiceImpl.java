@@ -203,7 +203,7 @@ public class UserServiceImpl implements UserService {
     List<Map<String, String>> roleMapList = new ArrayList<>();
     for (Role role : roleList) {
       Map<String, String> roleMap = new HashMap<>();
-      roleMap.put("Id", role.getId());
+      roleMap.put("id", role.getId());
       roleMap.put("name", role.getName());
       roleMapList.add(roleMap);
     }
