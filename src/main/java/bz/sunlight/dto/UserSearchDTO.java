@@ -49,6 +49,10 @@ public class UserSearchDTO {
     this.roleId = roleId;
   }
 
+  /**
+   * 按 collectionFormat: pipes 解析 roleId.
+   *
+   */
   public List<String> getRoleIds() {
     if (roleId != null) {
       String[] roleIdArray = roleId.split("\\|");
