@@ -4765,4 +4765,67 @@ INSERT INTO `user` VALUES ('786b676f-b424-11e7-b9e5-005056af50a8', 'hhhh', 'lby'
 -- ----------------------------
 INSERT INTO `user_role` VALUES ('786b676f-b424-11e7-b9e5-005056af50a8', 'b271a95b-237f-4275-9eb2-474777e99bd8');
 INSERT INTO `user_role` VALUES ('4d3b30d7-0e08-4ed9-bc98-315a3cd20399', 'ef3c8562-b424-11e7-b9e5-005056af50a8');
+
+
+
+
+-- 公告管理
+/*登录日志 上提一级*/
+UPDATE page set parent_id='d877a9de-8f3d-2d5e-8720-df6a02b3ff11',level=1 WHERE id='d1b77656-00ca-f186-3584-b65d189a6bc7';
+UPDATE page set parent_id='ad775eff-4589-daaf-a06a-21598bd6d778',level=1 WHERE id='b84bcbd5-c6e5-1961-e9f6-3a094d348e8b';
+UPDATE page set parent_id='5ff42206-72bc-7dd3-0c7d-0dee17bf915a',level=1 WHERE id='d95308ee-cc36-059b-ba85-c1c9e26c3cff';
+UPDATE page set parent_id='a40532c9-37e5-cb2c-2f2e-436f0c78cee2',level=1 WHERE id='76524398-aaa7-b841-9931-c4dfdde28784';
+UPDATE page set parent_id='d6bd25af-69a9-9f5b-68ef-fe0cde616656',level=1 WHERE id='6360a9cc-a769-f801-9ccf-833c06f544c3';
+UPDATE page set parent_id='8a115989-9605-589a-38d5-2b704d97af2f',level=1 WHERE id='338f7b1c-2dfb-b499-3888-237e375a8734';
+UPDATE page set parent_id='f079d31d-4e05-cf26-75bc-6304a86a7123',level=1 WHERE id='fa5990c1-290c-e34d-901a-9acd7db0d09b';
+
+/*增加层级*/
+SELECT * from page where id='338f7b1c-2dfb-b499-3888-237e375a8734';
+update page set url = null where id='a0badca9-6bdf-91e2-d507-39f6834ccd38';
+-- c735080a-c2ff-11e7-b9e5-005056af50a8
+INSERT page (id,name,url,weight,level,parent_id,enterprise_id)
+VALUES('c735080a-c2ff-11e7-b9e5-005056af50a8','公告申请','/ft12101',0,3,'a0badca9-6bdf-91e2-d507-39f6834ccd38','786b67b6-b424-11e7-b9e5-005056af50a8');
+UPDATE operation o set o.page_id = 'c735080a-c2ff-11e7-b9e5-005056af50a8' where o.page_id = 'a0badca9-6bdf-91e2-d507-39f6834ccd38';
+UPDATE permission p set p.related_id = 'c735080a-c2ff-11e7-b9e5-005056af50a8' where p.related_id = 'a0badca9-6bdf-91e2-d507-39f6834ccd38';
+
+
+INSERT page (id,name,url,weight,level,parent_id,enterprise_id)
+VALUES('f81887da-c39c-11e7-b9e5-005056af50a8','公告审核',null,1,3,'a0badca9-6bdf-91e2-d507-39f6834ccd38','786b67b6-b424-11e7-b9e5-005056af50a8');
+
+INSERT page (id,name,url,weight,level,parent_id,enterprise_id)
+VALUES('35a55b9f-c39e-11e7-b9e5-005056af50a8','公告初审','/ft1210101',0,4,'f81887da-c39c-11e7-b9e5-005056af50a8','786b67b6-b424-11e7-b9e5-005056af50a8');
+
+INSERT page (id,name,url,weight,level,parent_id,enterprise_id)
+VALUES('dafbf254-c39e-11e7-b9e5-005056af50a8','公告复审','/ft1210102',1,4,'f81887da-c39c-11e7-b9e5-005056af50a8','786b67b6-b424-11e7-b9e5-005056af50a8');
+
+
+
+INSERT permission (role_id,related_id,type) values('ef3c8562-b424-11e7-b9e5-005056af50a8','35a55b9f-c39e-11e7-b9e5-005056af50a8',1);
+INSERT permission (role_id,related_id,type) values('ef3c8562-b424-11e7-b9e5-005056af50a8','dafbf254-c39e-11e7-b9e5-005056af50a8',1);
+
+
+/*外呼管理*/
+INSERT page (id,name,url,weight,level,parent_id,enterprise_id)
+VALUES('5177ea97-c311-11e7-b9e5-005056af50a8','外呼管理',null,1,0,'d7de9656-6402-7e05-2581-21e16b3d8942','786b67b6-b424-11e7-b9e5-005056af50a8');
+INSERT page (id,name,url,weight,level,parent_id,enterprise_id)
+VALUES('a9544082-c311-11e7-b9e5-005056af50a8','外呼执行','/call',0,1,'5177ea97-c311-11e7-b9e5-005056af50a8','786b67b6-b424-11e7-b9e5-005056af50a8');
+INSERT page (id,name,url,weight,level,parent_id,enterprise_id)
+VALUES('ae9d909d-c311-11e7-b9e5-005056af50a8','外呼记录','/record',1,1,'5177ea97-c311-11e7-b9e5-005056af50a8','786b67b6-b424-11e7-b9e5-005056af50a8');
+
+-- ef3c8562-b424-11e7-b9e5-005056af50a8 admin role
+INSERT permission (role_id,related_id,type) values('ef3c8562-b424-11e7-b9e5-005056af50a8','a9544082-c311-11e7-b9e5-005056af50a8',1);
+INSERT permission (role_id,related_id,type) values('ef3c8562-b424-11e7-b9e5-005056af50a8','ae9d909d-c311-11e7-b9e5-005056af50a8',1);
+
+
+/*关联业务操作*/
+INSERT INTO `operation` VALUES ('c9f567aa-c313-11e7-b9e5-005056af50a8', 'CALL', '外呼', 
+'a9544082-c311-11e7-b9e5-005056af50a8', '786b67b6-b424-11e7-b9e5-005056af50a8');
+INSERT INTO `operation` VALUES ('369abd37-c314-11e7-b9e5-005056af50a8', 'EDIT', '编辑', 
+'ae9d909d-c311-11e7-b9e5-005056af50a8', '786b67b6-b424-11e7-b9e5-005056af50a8');
+
+
+INSERT permission (role_id,related_id,type) values('ef3c8562-b424-11e7-b9e5-005056af50a8','c9f567aa-c313-11e7-b9e5-005056af50a8',2);
+INSERT permission (role_id,related_id,type) values('ef3c8562-b424-11e7-b9e5-005056af50a8','369abd37-c314-11e7-b9e5-005056af50a8',2);
+
+
 SET FOREIGN_KEY_CHECKS=1;
