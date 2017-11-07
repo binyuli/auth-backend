@@ -1,12 +1,14 @@
 package bz.sunlight.dto;
 
+import java.util.Arrays;
 import java.util.List;
 
 public class UserSearchDTO {
 
   private String name;
   private Integer status;
-  private List<String> roleId;
+  private String roleId;
+  private List<String> roleIds;
   private String sortField;
   private Boolean isDesc;
   private String enterpriseId;
@@ -39,12 +41,20 @@ public class UserSearchDTO {
     this.status = status;
   }
 
-  public List<String> getRoleId() {
+  public String getRoleId() {
     return roleId;
   }
 
-  public void setRoleId(List<String> roleId) {
+  public void setRoleId(String roleId) {
     this.roleId = roleId;
+  }
+
+  public List<String> getRoleIds() {
+    if (roleId != null) {
+      String[] roleIdArray = roleId.split("\\|");
+      roleIds = Arrays.asList(roleIdArray);
+    }
+    return roleIds;
   }
 
   public String getEnterpriseId() {

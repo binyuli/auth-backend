@@ -356,7 +356,7 @@
             <if test="roleId != null">
                 AND u.Id IN (
                 SELECT DISTINCT user_id FROM user_role WHERE role_id IN
-                <foreach item="item" collection="roleId" separator="," open="(" close=")" index="">
+                <foreach item="item" collection="roleIds" separator="," open="(" close=")" index="">
                     #{item, jdbcType=VARCHAR}
                 </foreach>
                 )
@@ -382,7 +382,7 @@
             <if test="roleId != null">
                 AND u.Id IN (
                 SELECT DISTINCT user_id FROM user_role WHERE role_id IN
-                <foreach item="item" collection="roleId" separator="," open="(" close=")" index="">
+                <foreach item="item" collection="roleIds" separator="," open="(" close=")" index="">
                     #{item, jdbcType=VARCHAR}
                 </foreach>
                 )
