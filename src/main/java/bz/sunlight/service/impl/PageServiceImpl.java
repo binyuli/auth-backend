@@ -17,6 +17,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 import java.util.stream.Collectors;
 
 @Service
@@ -55,8 +57,15 @@ public class PageServiceImpl implements PageService {
     List<Page> allPages = new ArrayList<>();
     allPages.addAll(childPages);
     allPages.addAll(getAncestorPages(childPages));
-    allPages.sort(Comparator.comparing(Page::getLevel).thenComparing(Page::getWeight));
-    return allPages;
+    List<Page> noDuplePages = removeDuplicatedById(allPages);
+    noDuplePages.sort(Comparator.comparing(Page::getLevel).thenComparing(Page::getWeight));
+    return noDuplePages;
+  }
+
+  private List<Page> removeDuplicatedById(List<Page> persons) {
+    Set<Page> personSet = new TreeSet<>(Comparator.comparing(Page::getId));
+    personSet.addAll(persons);
+    return new ArrayList<>(personSet);
   }
 
   private List<Page> getAncestorPages(List<Page> childPages) {
