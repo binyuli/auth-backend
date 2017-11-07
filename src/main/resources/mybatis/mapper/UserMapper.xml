@@ -343,8 +343,6 @@
 
     <select id="countByRoles" parameterType="bz.sunlight.dto.UserSearchDTO" resultType="java.lang.Integer">
         SELECT COUNT(u.Id) FROM `user` u
-        LEFT JOIN user_role ur ON u.Id = ur.User_Id
-        LEFT JOIN role r ON ur.Role_Id = r.Id
         <where>
             <if test="name != null and name != ''">
                 u.`Name` LIKE '%${name}%'
@@ -356,18 +354,21 @@
                 AND u.Status = #{status}
             </if>
             <if test="roleId != null">
-                AND r.Id IN
+                AND u.Id IN (
+                SELECT DISTINCT user_id FROM user_role WHERE role_id IN
                 <foreach item="item" collection="roleId" separator="," open="(" close=")" index="">
                     #{item, jdbcType=VARCHAR}
                 </foreach>
+                )
             </if>
         </where>
     </select>
 
     <select id="selectByPagination" resultMap="BaseResultMap" parameterType="bz.sunlight.dto.UserSearchDTO">
-        SELECT u.* FROM `user` u
-        LEFT JOIN user_role ur ON u.Id = ur.User_Id
-        LEFT JOIN role r ON ur.Role_Id = r.Id
+        SELECT
+        u.*
+        FROM
+        `user` u
         <where>
             <if test="name != null and name != ''">
                 u.`Name` LIKE '%${name}%'
@@ -379,10 +380,12 @@
                 AND u.Status = #{status}
             </if>
             <if test="roleId != null">
-                AND r.Id IN
+                AND u.Id IN (
+                SELECT DISTINCT user_id FROM user_role WHERE role_id IN
                 <foreach item="item" collection="roleId" separator="," open="(" close=")" index="">
                     #{item, jdbcType=VARCHAR}
                 </foreach>
+                )
             </if>
         </where>
         <if test="sortField != null and sortField != ''">
