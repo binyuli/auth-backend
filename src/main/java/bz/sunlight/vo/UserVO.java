@@ -57,14 +57,14 @@ public class UserVO {
    * @return list
    */
   public List<String> getOptions() {
+    options = new ArrayList<>();
     if (this.status == BaseConstant.BASEDATA_STATUS_VALID) {
-      options = new ArrayList<String>();
       options.add(BaseConstant.USER_OPTION_EDITABLE);
-      options.add(BaseConstant.USER_OPTION_DISABLEORENABLE);
-      return options;
+      options.add(BaseConstant.USER_OPTION_DISABLE);
     } else {
-      return null;
+      options.add(BaseConstant.USER_OPTION_ENABLE);
     }
+    return options;
   }
 
   public List<Map<String, String>> getRoles() {

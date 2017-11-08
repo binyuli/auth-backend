@@ -10,7 +10,8 @@ public class BaseConstant {
 
   // 用户的操作
   public static final String USER_OPTION_EDITABLE = "editable";               // 是否可编辑
-  public static final String USER_OPTION_DISABLEORENABLE = "disableOrEnable"; // 是否可冻结或解冻
+  public static final String USER_OPTION_DISABLE = "disable";                 // 是否可冻结
+  public static final String USER_OPTION_ENABLE = "enable";                   // 是否可解冻
 
   //角色的操作
   public static final String ROLE_OPTION_EDITABLE = "editable"; // 可编辑
