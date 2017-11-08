@@ -26,9 +26,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -143,22 +141,25 @@ public class UserServiceImpl implements UserService {
     ResultWithPagination usersResult = new ResultWithPagination();
 
     // check page info
-    if (userSearchDTO.getPageSize() != null) {
+    if (userSearchDTO.getPageSize() != null && userSearchDTO.getPageSize() >= BaseConstant.MINIMUM_PAGE_SIZE) {
       usersResult.setPageSize(userSearchDTO.getPageSize());
-      if (userSearchDTO.getPageIndex() != null && userSearchDTO.getPageIndex() >= 1) {
-        usersResult.setPageIndex(userSearchDTO.getPageIndex());
-      } else {
-        usersResult.setPageIndex(1);
-      }
+    } else {
+      userSearchDTO.setPageSize(BaseConstant.DEFAULT_PAGE_SIZE);
+    }
+    if (userSearchDTO.getPageIndex() != null && userSearchDTO.getPageIndex() >= BaseConstant.MINIMUM_PAGE_INDEX) {
+      usersResult.setPageIndex(userSearchDTO.getPageIndex());
+    } else {
+      userSearchDTO.setPageIndex(BaseConstant.DEFAULT_PAGE_INDEX);
     }
 
     // check sort
-    if (StringUtils.isNotBlank(userSearchDTO.getSortField())) {
-      if (userSearchDTO.getIsDesc() != null && userSearchDTO.getIsDesc()) {
-        usersResult.setSort("DESC");
-      } else {
-        usersResult.setSort("ASC");
-      }
+    if (StringUtils.isBlank(userSearchDTO.getSortField())) {
+      userSearchDTO.setSortField(BaseConstant.DEFAULT_SORT_FIELD);
+    }
+    if (userSearchDTO.getIsDesc() != null && userSearchDTO.getIsDesc()) {
+      usersResult.setSort(BaseConstant.DESCENDING_SORT_TYPE);
+    } else {
+      usersResult.setSort(BaseConstant.ASCENDING_SORT_TYPE);
     }
 
     // get counts
@@ -168,7 +169,7 @@ public class UserServiceImpl implements UserService {
     usersResult.setTotalPages(totalPages);
 
     // get users
-    userSearchDTO.setOffset(PageHelper.toOffset(userSearchDTO.getPageIndex(), userSearchDTO.getPageSize()));
+    userSearchDTO.setOffset(PageHelper.toOffset(userSearchDTO.getPageIndex() + 1, userSearchDTO.getPageSize()));
     List<User> users = userMapper.selectByPagination(userSearchDTO);
 
     // inject roles

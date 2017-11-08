@@ -1,15 +1,17 @@
 package bz.sunlight.vo;
 
+import bz.sunlight.constant.BaseConstant;
+
 import java.util.List;
 
 public class ResultWithPagination<T> {
 
   private List<T> content;
-  private Integer pageIndex;
-  private Integer pageSize;
+  private Integer pageIndex       = BaseConstant.DEFAULT_PAGE_INDEX;
+  private Integer pageSize        = BaseConstant.DEFAULT_PAGE_SIZE;
   private Integer totalElements;
   private Integer totalPages;
-  private String sort;
+  private String sort             = BaseConstant.DEFAULT_SORT_TYPE;
 
   public List<T> getContent() {
     return content;
