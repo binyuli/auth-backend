@@ -1,6 +1,6 @@
 /*==============================================================*/
 /* DBMS name:      MySQL 5.0                                    */
-/* Created on:     2017/11/2 14:14:03                           */
+/* Created on:     2017/11/14 15:38:30                          */
 /*==============================================================*/
 
 
@@ -65,6 +65,8 @@ create table page
 (
    id                   char(36) not null,
    name                 varchar(50) not null,
+   pinyin               varchar(200),
+   initial              varchar(50),
    url                  varchar(50),
    icon                 varchar(50),
    weight               int not null,
