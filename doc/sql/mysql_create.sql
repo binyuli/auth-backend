@@ -121,7 +121,7 @@ create table user
 (
    id                   char(36) not null,
    name                 varchar(50) not null,
-   username             varchar(50) not null,
+   username             varchar(100) not null,
    create_time          datetime,
    creator              varchar(50),
    modify_time          datetime,
