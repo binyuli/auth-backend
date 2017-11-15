@@ -7,6 +7,8 @@ public class PageMenuDTO {
   private String id;
   private String icon;
   private String title;
+  private String pinyin;
+  private String initial;
   private String url;
   private List<PageMenuDTO> items;
 
@@ -60,5 +62,21 @@ public class PageMenuDTO {
 
   public void setItems(List<PageMenuDTO> items) {
     this.items = items;
+  }
+
+  public String getPinyin() {
+    return pinyin;
+  }
+
+  public void setPinyin(String pinyin) {
+    this.pinyin = pinyin;
+  }
+
+  public String getInitial() {
+    return initial;
+  }
+
+  public void setInitial(String initial) {
+    this.initial = initial;
   }
 }

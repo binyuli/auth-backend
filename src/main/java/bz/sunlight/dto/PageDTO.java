@@ -7,6 +7,8 @@ public class PageDTO {
   private String id;
   private String name;
   private String title; // menu 菜单名称为 title
+  private String pinyin;
+  private String initial;
   private String url;
   private String icon;
   private Integer weight;
@@ -119,5 +121,21 @@ public class PageDTO {
 
   public void setOperations(List<OperationDTO> operations) {
     this.operations = operations;
+  }
+
+  public String getPinyin() {
+    return pinyin;
+  }
+
+  public void setPinyin(String pinyin) {
+    this.pinyin = pinyin;
+  }
+
+  public String getInitial() {
+    return initial;
+  }
+
+  public void setInitial(String initial) {
+    this.initial = initial;
   }
 }
