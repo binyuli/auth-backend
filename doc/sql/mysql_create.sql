@@ -1,6 +1,6 @@
 /*==============================================================*/
 /* DBMS name:      MySQL 5.0                                    */
-/* Created on:     2017/11/14 15:38:30                          */
+/* Created on:     2017/11/15 17:26:40                          */
 /*==============================================================*/
 
 
@@ -64,6 +64,7 @@ create table operation_api
 create table page
 (
    id                   char(36) not null,
+   code                 varchar(50) not null,
    name                 varchar(50) not null,
    pinyin               varchar(200),
    initial              varchar(50),
