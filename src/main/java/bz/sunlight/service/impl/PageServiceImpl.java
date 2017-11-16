@@ -207,7 +207,8 @@ public class PageServiceImpl implements PageService {
   private List<Page> getPageByParentId(String parentId, List<Page> pages) {
     StopWatch stopWatch = new StopWatch();
     stopWatch.start("获取子节点数据");
-    List<Page> result = pages.stream().filter(p -> p.getParentId().equals(parentId)).collect(Collectors.toList());
+    List<Page> result = pages.stream().filter(p -> p.getParentId() != null && p.getParentId().equals(parentId))
+        .collect(Collectors.toList());
     // ASC
     if (result != null && result.size() > 0) {
       result.sort((p1, p2) -> p1.getWeight().compareTo(p2.getWeight()));
