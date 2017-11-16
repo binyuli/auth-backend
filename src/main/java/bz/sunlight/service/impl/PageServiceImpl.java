@@ -39,6 +39,17 @@ public class PageServiceImpl implements PageService {
   }
 
   @Override
+  public Page getPageByCode(String code) {
+    PageExample pageExample = new PageExample();
+    pageExample.createCriteria().andCodeEqualTo(code);
+    List<Page> pages = pageMapper.selectByExample(pageExample);
+    if (pages != null && pages.size() > 0) {
+      return pages.get(0);
+    }
+    return null;
+  }
+
+  @Override
   public List<PageDTO> getPagesByRoleId(String roleId) {
     //TODO 考虑加缓存
     List<Operation> operations = operationMapper.getOperationByRole(roleId);

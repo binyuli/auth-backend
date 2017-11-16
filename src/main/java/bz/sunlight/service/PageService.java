@@ -1,6 +1,7 @@
 package bz.sunlight.service;
 
 import bz.sunlight.dto.PageDTO;
+import bz.sunlight.entity.Page;
 
 import java.util.List;
 
@@ -20,4 +21,6 @@ public interface PageService {
   public List<PageDTO> getPageDetailsByPageId(String pageId, String enterpriseId);
 
   public List<PageDTO> getPagesByMaxLevel(Integer maxLevel,String enterpriseId);
+
+  public Page getPageByCode(String code);
 }

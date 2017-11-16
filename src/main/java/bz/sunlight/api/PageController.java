@@ -42,10 +42,11 @@ public class PageController extends BaseContext {
    * @param id.
    * @return ResultInfo
    */
-  @GetMapping(value = "/users/me/pages/{id}")
-  public ResponseEntity<ResultInfo> getOperationsByPage(@PathVariable String id) {
+  @GetMapping(value = "/users/me/pages/{code}")
+  public ResponseEntity<ResultInfo> getOperationsByPage(@PathVariable String code) {
+    Page page = pageService.getPageByCode(code);
     return ResponseEntity.status(HttpStatus.OK).body(buildResultInfo(null,
-        pageService.getOperationsByPage(getLoginUser().getId(), id)));
+        pageService.getOperationsByPage(getLoginUser().getId(), page.getId())));
   }
 
   /**
@@ -73,7 +74,7 @@ public class PageController extends BaseContext {
    */
   @GetMapping(value = "/pages/{id}")
   public ResponseEntity<ResultInfo> getPages(@PathVariable String id) {
-    List<PageDTO> pagesDTO = pageService.getPageDetailsByPageId(id,getLoginUser().getEnterpriseId());
+    List<PageDTO> pagesDTO = pageService.getPageDetailsByPageId(id, getLoginUser().getEnterpriseId());
     PageDetailsVO pageDetailsVO = pageMapStruct.dtoToPageDetailsVO(pagesDTO.get(0));
     return ResponseEntity.status(HttpStatus.OK).body(buildResultInfo(null, pageDetailsVO));
   }

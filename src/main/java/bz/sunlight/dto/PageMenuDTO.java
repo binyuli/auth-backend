@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PageMenuDTO {
-  private String id;
   private String icon;
   private String title;
   private String pinyin;
@@ -22,14 +21,6 @@ public class PageMenuDTO {
       items = new ArrayList<>();
     }
     items.add(pageMenuDTO);
-  }
-
-  public String getId() {
-    return id;
-  }
-
-  public void setId(String id) {
-    this.id = id;
   }
 
   public String getIcon() {
