@@ -14,24 +14,24 @@ TRUNCATE TABLE user_role;
 -- ----------------------------
 -- Records of api
 -- ----------------------------
-INSERT INTO `api` VALUES ('c28420e2-cbad-11e7-b9e5-005056af50a8', 'api访问权限校验', 'POST', '/auth', '786b67b6-b424-11e7-b9e5-005056af50a8');
-INSERT INTO `api` VALUES ('c2b14756-cbad-11e7-b9e5-005056af50a8', '获取当前登录用户的信息', 'GET', '/users/me', '786b67b6-b424-11e7-b9e5-005056af50a8');
-INSERT INTO `api` VALUES ('c2bf6c55-cbad-11e7-b9e5-005056af50a8', '获取当前用户可访问的菜单项', 'GET', '/users/me/pages', '786b67b6-b424-11e7-b9e5-005056af50a8');
-INSERT INTO `api` VALUES ('c2cea6ab-cbad-11e7-b9e5-005056af50a8', '获取指定页当前用户的权限', 'GET', '/users/me/pages/[0-9a-z-A-Z]+', '786b67b6-b424-11e7-b9e5-005056af50a8');
-INSERT INTO `api` VALUES ('c2d6fbf1-cbad-11e7-b9e5-005056af50a8', '根据条件查询用户信息', 'GET', '/users', '786b67b6-b424-11e7-b9e5-005056af50a8');
-INSERT INTO `api` VALUES ('c2e815c4-cbad-11e7-b9e5-005056af50a8', '新增用户', 'POST', '/users', '786b67b6-b424-11e7-b9e5-005056af50a8');
-INSERT INTO `api` VALUES ('c2ee3076-cbad-11e7-b9e5-005056af50a8', '用户详细信息', 'GET', '/users/[0-9a-z-A-Z]', '786b67b6-b424-11e7-b9e5-005056af50a8');
-INSERT INTO `api` VALUES ('c2f0d4c0-cbad-11e7-b9e5-005056af50a8', '修改', 'PUT', '/users/[0-9a-z-A-Z]+', '786b67b6-b424-11e7-b9e5-005056af50a8');
-INSERT INTO `api` VALUES ('c2f6ad0a-cbad-11e7-b9e5-005056af50a8', '冻结用户', 'PUT', '/users/{id}/[0-9a-z-A-Z]+/disable', '786b67b6-b424-11e7-b9e5-005056af50a8');
-INSERT INTO `api` VALUES ('c2fbf145-cbad-11e7-b9e5-005056af50a8', '解冻用户', 'PUT', '/users/[0-9a-z-A-Z]+/enable', '786b67b6-b424-11e7-b9e5-005056af50a8');
-INSERT INTO `api` VALUES ('c301934f-cbad-11e7-b9e5-005056af50a8', '获取角色列表', 'GET', '/roles', '786b67b6-b424-11e7-b9e5-005056af50a8');
-INSERT INTO `api` VALUES ('c305a057-cbad-11e7-b9e5-005056af50a8', '新增角色', 'POST', '/roles', '786b67b6-b424-11e7-b9e5-005056af50a8');
-INSERT INTO `api` VALUES ('c309bc8e-cbad-11e7-b9e5-005056af50a8', '修改角色', 'POST', '/roles/[0-9a-z-A-Z]+', '786b67b6-b424-11e7-b9e5-005056af50a8');
-INSERT INTO `api` VALUES ('c31026ee-cbad-11e7-b9e5-005056af50a8', '获取角色详情', 'GET', '/roles/[0-9a-z-A-Z]+', '786b67b6-b424-11e7-b9e5-005056af50a8');
-INSERT INTO `api` VALUES ('c3157a31-cbad-11e7-b9e5-005056af50a8', '修改角色权限以外的信息', 'PUT', '/roles/[0-9a-z-A-Z]+/info', '786b67b6-b424-11e7-b9e5-005056af50a8');
-INSERT INTO `api` VALUES ('c319cd5f-cbad-11e7-b9e5-005056af50a8', '作废角色', 'PUT', '/roles/[0-9a-z-A-Z]+/abandon', '786b67b6-b424-11e7-b9e5-005056af50a8');
-INSERT INTO `api` VALUES ('c31d2359-cbad-11e7-b9e5-005056af50a8', '获取page列表', 'GET', '/pages', '786b67b6-b424-11e7-b9e5-005056af50a8');
-INSERT INTO `api` VALUES ('c320d188-cbad-11e7-b9e5-005056af50a8', '获取page详情', 'GET', '/pages/[0-9a-z-A-Z]+', '786b67b6-b424-11e7-b9e5-005056af50a8');
+INSERT INTO `api` VALUES ('c28420e2-cbad-11e7-b9e5-005056af50a8', 'api访问权限校验', 'POST', '/api/v1/auth', '786b67b6-b424-11e7-b9e5-005056af50a8');
+INSERT INTO `api` VALUES ('c2b14756-cbad-11e7-b9e5-005056af50a8', '获取当前登录用户的信息', 'GET', '/api/v1/users/me', '786b67b6-b424-11e7-b9e5-005056af50a8');
+INSERT INTO `api` VALUES ('c2bf6c55-cbad-11e7-b9e5-005056af50a8', '获取当前用户可访问的菜单项', 'GET', '/api/v1/users/me/pages', '786b67b6-b424-11e7-b9e5-005056af50a8');
+INSERT INTO `api` VALUES ('c2cea6ab-cbad-11e7-b9e5-005056af50a8', '获取指定页当前用户的权限', 'GET', '/api/v1/users/me/pages/[0-9a-z-A-Z]+', '786b67b6-b424-11e7-b9e5-005056af50a8');
+INSERT INTO `api` VALUES ('c2d6fbf1-cbad-11e7-b9e5-005056af50a8', '根据条件查询用户信息', 'GET', '/api/v1/users', '786b67b6-b424-11e7-b9e5-005056af50a8');
+INSERT INTO `api` VALUES ('c2e815c4-cbad-11e7-b9e5-005056af50a8', '新增用户', 'POST', '/api/v1/users', '786b67b6-b424-11e7-b9e5-005056af50a8');
+INSERT INTO `api` VALUES ('c2ee3076-cbad-11e7-b9e5-005056af50a8', '用户详细信息', 'GET', '/api/v1/users/[0-9a-z-A-Z]+', '786b67b6-b424-11e7-b9e5-005056af50a8');
+INSERT INTO `api` VALUES ('c2f0d4c0-cbad-11e7-b9e5-005056af50a8', '修改', 'PUT', '/api/v1/users/[0-9a-z-A-Z]+', '786b67b6-b424-11e7-b9e5-005056af50a8');
+INSERT INTO `api` VALUES ('c2f6ad0a-cbad-11e7-b9e5-005056af50a8', '冻结用户', 'PUT', '/api/v1/users/{id}/[0-9a-z-A-Z]+/disable', '786b67b6-b424-11e7-b9e5-005056af50a8');
+INSERT INTO `api` VALUES ('c2fbf145-cbad-11e7-b9e5-005056af50a8', '解冻用户', 'PUT', '/api/v1/users/[0-9a-z-A-Z]+/enable', '786b67b6-b424-11e7-b9e5-005056af50a8');
+INSERT INTO `api` VALUES ('c301934f-cbad-11e7-b9e5-005056af50a8', '获取角色列表', 'GET', '/api/v1/roles', '786b67b6-b424-11e7-b9e5-005056af50a8');
+INSERT INTO `api` VALUES ('c305a057-cbad-11e7-b9e5-005056af50a8', '新增角色', 'POST', '/api/v1/roles', '786b67b6-b424-11e7-b9e5-005056af50a8');
+INSERT INTO `api` VALUES ('c309bc8e-cbad-11e7-b9e5-005056af50a8', '修改角色', 'POST', '/api/v1/roles/[0-9a-z-A-Z]+', '786b67b6-b424-11e7-b9e5-005056af50a8');
+INSERT INTO `api` VALUES ('c31026ee-cbad-11e7-b9e5-005056af50a8', '获取角色详情', 'GET', '/api/v1/roles/[0-9a-z-A-Z]+', '786b67b6-b424-11e7-b9e5-005056af50a8');
+INSERT INTO `api` VALUES ('c3157a31-cbad-11e7-b9e5-005056af50a8', '修改角色权限以外的信息', 'PUT', '/api/v1/roles/[0-9a-z-A-Z]+/info', '786b67b6-b424-11e7-b9e5-005056af50a8');
+INSERT INTO `api` VALUES ('c319cd5f-cbad-11e7-b9e5-005056af50a8', '作废角色', 'PUT', '/api/v1/roles/[0-9a-z-A-Z]+/abandon', '786b67b6-b424-11e7-b9e5-005056af50a8');
+INSERT INTO `api` VALUES ('c31d2359-cbad-11e7-b9e5-005056af50a8', '获取page列表', 'GET', '/api/v1/pages', '786b67b6-b424-11e7-b9e5-005056af50a8');
+INSERT INTO `api` VALUES ('c320d188-cbad-11e7-b9e5-005056af50a8', '获取page详情', 'GET', '/api/v1/pages/[0-9a-z-A-Z]+', '786b67b6-b424-11e7-b9e5-005056af50a8');
 
 
 -- ----------------------------
