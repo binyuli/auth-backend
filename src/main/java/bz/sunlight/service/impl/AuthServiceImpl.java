@@ -28,17 +28,21 @@ public class AuthorizationServiceImpl implements AuthorizationService {
 
   @Override
   public boolean isAuthorized(String httpMethod, String url, LoginUser user) {
-    StopWatch stopWatch = new StopWatch();
+    StopWatch stopWatch = new StopWatch("isAuthorized");
     stopWatch.start("get api");
     Api api = getApiByMehtodUrl(httpMethod, url, user);
     stopWatch.stop();
     System.out.println(stopWatch.prettyPrint());
     if (api != null) {
+      stopWatch.start("calcApiByUser");
       int resultCount = calcApiByUser(user.getId(), api.getId());
+      stopWatch.stop();
+      System.out.println(stopWatch.prettyPrint());
       if (resultCount != 0) {
         return true;
       }
     }
+
     return false;
   }
 
