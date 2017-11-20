@@ -1,10 +1,12 @@
 /*==============================================================*/
 /* DBMS name:      MySQL 5.0                                    */
-/* Created on:     2017/11/15 17:26:40                          */
+/* Created on:     2017/11/20 10:14:09                          */
 /*==============================================================*/
 
 
 drop table if exists api;
+
+drop table if exists enterprise;
 
 drop table if exists operation;
 
@@ -32,6 +34,16 @@ create table api
    http_method          varchar(50) not null,
    url                  varchar(50) not null,
    enterprise_id        char(36) not null,
+   primary key (id)
+);
+
+/*==============================================================*/
+/* Table: enterprise                                            */
+/*==============================================================*/
+create table enterprise
+(
+   id                   char(36) not null,
+   name                 varchar(50) not null,
    primary key (id)
 );
 
@@ -122,7 +134,8 @@ create table user
 (
    id                   char(36) not null,
    name                 varchar(50) not null,
-   username             varchar(100) not null,
+   open_id              varchar(100),
+   username             varchar(50) not null comment '用户名',
    create_time          datetime,
    creator              varchar(50),
    modify_time          datetime,
