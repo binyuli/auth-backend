@@ -8,6 +8,7 @@ TRUNCATE TABLE permission;
 TRUNCATE TABLE role;
 TRUNCATE TABLE user;
 TRUNCATE TABLE user_role;
+TRUNCATE TABLE enterprise;
 -- ----------------------------
 -- Records of api
 -- ----------------------------
@@ -11924,8 +11925,8 @@ INSERT INTO `role` VALUES ('ef3c8562-b424-11e7-b9e5-005056af50a8', 'admin', '201
 -- ----------------------------
 -- Records of user
 -- ----------------------------
-INSERT INTO `user` VALUES ('4d3b30d7-0e08-4ed9-bc98-315a3cd20399', '管理员', 'admin', '2017-10-22 16:24:26', '123', '2017-10-22 16:24:26', '786b67b6-b424-11e7-b9e5-005056af50a8', '2', '2017-11-15 09:01:46.644838');
-INSERT INTO `user` VALUES ('786b676f-b424-11e7-b9e5-005056af50a8', 'hhhh', 'lby', '2017-10-18 16:52:59', 'lby', '2017-10-18 16:52:59', '786b67b6-b424-11e7-b9e5-005056af50a8', '2', '2017-11-01 10:39:55.592000');
+INSERT INTO `user` VALUES ('4d3b30d7-0e08-4ed9-bc98-315a3cd20399', '管理员','@!74C0.56B2.6092.CEEE!0001!BFAD.AD95!0000!D367.37DB.A1BD.49E6', 'admin', '2017-10-22 16:24:26', '123', '2017-10-22 16:24:26', '786b67b6-b424-11e7-b9e5-005056af50a8', '2', '2017-11-15 09:01:46.644838');
+INSERT INTO `user` VALUES ('786b676f-b424-11e7-b9e5-005056af50a8', 'hhhh', '','lby', '2017-10-18 16:52:59', 'lby', '2017-10-18 16:52:59', '786b67b6-b424-11e7-b9e5-005056af50a8', '2', '2017-11-01 10:39:55.592000');
 
 
 -- ----------------------------
@@ -11933,3 +11934,10 @@ INSERT INTO `user` VALUES ('786b676f-b424-11e7-b9e5-005056af50a8', 'hhhh', 'lby'
 -- ----------------------------
 INSERT INTO `user_role` VALUES ('786b676f-b424-11e7-b9e5-005056af50a8', 'b271a95b-237f-4275-9eb2-474777e99bd8');
 INSERT INTO `user_role` VALUES ('4d3b30d7-0e08-4ed9-bc98-315a3cd20399', 'ef3c8562-b424-11e7-b9e5-005056af50a8');
+
+-- ----------------------------
+-- Records of enterprise
+-- ----------------------------
+
+INSERT INTO `enterprise` VALUES ('786b67b6-b424-11e7-b9e5-005056af50a8', '上海晨阑数据技术股份有限公司');
+
