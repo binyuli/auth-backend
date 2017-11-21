@@ -1,6 +1,6 @@
 package bz.sunlight.api;
 
-import bz.sunlight.service.AuthorizationService;
+import bz.sunlight.service.Authorization;
 import bz.sunlight.vo.LoginUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class AuthController extends BaseContext {
 
   @Autowired
-  private AuthorizationService authorizationService;
+  private Authorization authorizationService;
 
   /**
    * api访问权限校验.

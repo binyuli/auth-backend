@@ -1,23 +1,21 @@
 package bz.sunlight.service.impl;
 
-import bz.sunlight.api.BaseContext;
 import bz.sunlight.dao.ApiMapper;
 import bz.sunlight.entity.Api;
 import bz.sunlight.entity.ApiExample;
-import bz.sunlight.service.AuthorizationService;
+import bz.sunlight.service.Authorization;
 import bz.sunlight.vo.LoginUser;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StopWatch;
-import sun.rmi.runtime.Log;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 @Service
-public class AuthorizationServiceImpl implements AuthorizationService {
+public class AuthorizationServiceImpl implements Authorization {
 
 
   private ApiMapper apiMapper;
@@ -25,6 +23,11 @@ public class AuthorizationServiceImpl implements AuthorizationService {
   @Autowired
   public AuthorizationServiceImpl(ApiMapper apiMapper) {
     this.apiMapper = apiMapper;
+  }
+
+  @Override
+  public boolean isAuthorized(HttpServletRequest request, LoginUser user) {
+    return isAuthorized(request.getMethod(), request.getServletPath(), user);
   }
 
   @Override

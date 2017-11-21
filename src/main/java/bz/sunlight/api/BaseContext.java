@@ -15,7 +15,7 @@ public class BaseContext {
    *
    * @return loginUser
    */
-  public LoginUser getLoginUser() {
+  public static LoginUser getLoginUser() {
     //TODO 当前默认admin用户，待认证授权完成后调整为从系统框架获得当前用户
     LoginUser loginUser = new LoginUser();
     loginUser.setId("4d3b30d7-0e08-4ed9-bc98-315a3cd20399");
