@@ -15,7 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 /**
- * 身份验证与权限检查的默认实现
+ * 身份验证与权限检查的默认实现.
  */
 @Component
 public class DefaultAuthorizationFilter extends GenericFilterBean {
@@ -31,12 +31,12 @@ public class DefaultAuthorizationFilter extends GenericFilterBean {
       throws IOException, ServletException {
     HttpServletRequest httpRequest = (HttpServletRequest) request;
     HttpServletResponse httpResponse = (HttpServletResponse) response;
-//    // 如未能获得当前用户，则返回 HTTP 401
-//    String currentIdentity = authentication.getIdentity(httpRequest);
-//    if (currentIdentity == null) {
-//      httpResponse.sendError(HttpServletResponse.SC_UNAUTHORIZED);
-//      return;
-//    }
+    /*    // 如未能获得当前用户，则返回 HTTP 401
+    String currentIdentity = authentication.getIdentity(httpRequest);
+    if (currentIdentity == null) {
+      httpResponse.sendError(HttpServletResponse.SC_UNAUTHORIZED);
+      return;
+    }*/
 
     // 如当前用户不允许访问指定服务，则返回 HTTP 403
     if (authorization.isAuthorized(httpRequest, BaseContext.getLoginUser())) {

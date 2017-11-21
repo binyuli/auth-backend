@@ -6,7 +6,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 /**
- * 服务配置
+ * 服务配置.
  */
 @Configuration
 public class ApplicationConfiguration {
@@ -18,7 +18,7 @@ public class ApplicationConfiguration {
   }
 
   /**
-   * 仅针对 /api/ 路径下的资源进行身份验证与权限检查
+   * 仅针对 /api/ 路径下的资源进行身份验证与权限检查.
    *
    * @return Filter 默认实现
    */
