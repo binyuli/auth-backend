@@ -1,5 +1,6 @@
 package bz.sunlight.service.impl;
 
+import bz.sunlight.api.BaseContext;
 import bz.sunlight.dao.ApiMapper;
 import bz.sunlight.entity.Api;
 import bz.sunlight.entity.ApiExample;
