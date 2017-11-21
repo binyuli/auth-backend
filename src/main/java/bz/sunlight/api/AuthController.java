@@ -34,6 +34,10 @@ public class AuthController extends BaseContext {
     } else {
       return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
     }
+    if (authorizationService.isAuthorized(httpMethod, url, loginUser)) {
+      return ResponseEntity.ok().build();
+    }
+    return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
   }
 
 }

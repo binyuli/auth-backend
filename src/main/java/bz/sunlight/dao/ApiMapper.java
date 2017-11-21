@@ -7,8 +7,8 @@ import org.apache.ibatis.annotations.Param;
 
 public interface ApiMapper extends BaseMapper<Api, ApiExample, String> {
 
-  long countByOperationApi(@Param("userId") String userId, @Param("apiId") String apiId);
+  int countByOperationApi(@Param("userId") String userId, @Param("apiId") String apiId);
 
-  long countByPageApi(@Param("userId") String userId, @Param("apiId") String apiId);
+  int countByPageApi(@Param("userId") String userId, @Param("apiId") String apiId);
 
 }

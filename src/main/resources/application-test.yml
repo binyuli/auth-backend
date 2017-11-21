@@ -14,7 +14,10 @@ spring:
     time-zone: Asia/Shanghai
     serialization:
       write-dates-as-timestamps: false
-
+  cache:
+    cache-names: guava
+    caffeine:
+      spec: maximumSize=100000,expireAfterAccess=6h
 mybatis:
   mapper-locations: classpath*:mybatis/mapper/*.xml
   type-aliases-package: bz.sunlight.entity

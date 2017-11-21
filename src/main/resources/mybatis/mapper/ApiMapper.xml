@@ -279,7 +279,7 @@
         where Id = #{id,jdbcType=VARCHAR}
     </update>
 
-    <select id="countByOperationApi" resultType="java.lang.Long">
+    <select id="countByOperationApi" resultType="java.lang.Integer">
         SELECT COUNT(*) FROM
         operation_api oa,permission p,user_role ur
         WHERE oa.operation_id = p.related_id
@@ -288,7 +288,7 @@
         AND oa.api_id = #{apiId}
     </select>
 
-    <select id="countByPageApi" resultType="java.lang.Long">
+    <select id="countByPageApi" resultType="java.lang.Integer">
         SELECT COUNT(*) FROM
         page_api pa,permission p,user_role ur
         WHERE pa.page_id = p.related_id
