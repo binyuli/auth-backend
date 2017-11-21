@@ -21,6 +21,8 @@ public class BaseContext {
     loginUser.setId("4d3b30d7-0e08-4ed9-bc98-315a3cd20399");
     loginUser.setUsername("admin");
     loginUser.setEnterpriseId("786b67b6-b424-11e7-b9e5-005056af50a8");
+    loginUser.setName("管理员");
+    loginUser.setOpenId("@!74C0.56B2.6092.CEEE!0001!BFAD.AD95!0000!D367.37DB.A1BD.49E6");
     return loginUser;
   }
 

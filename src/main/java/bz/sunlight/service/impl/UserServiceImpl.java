@@ -2,6 +2,7 @@ package bz.sunlight.service.impl;
 
 import bz.sunlight.constant.BaseConstant;
 import bz.sunlight.dao.CommonMapper;
+import bz.sunlight.dao.EnterpriseMapper;
 import bz.sunlight.dao.RoleMapper;
 import bz.sunlight.dao.UserMapper;
 import bz.sunlight.dao.UserRoleMapper;
@@ -9,6 +10,8 @@ import bz.sunlight.dto.CommonDTO;
 import bz.sunlight.dto.SaveUserDTO;
 import bz.sunlight.dto.UserDTO;
 import bz.sunlight.dto.UserSearchDTO;
+import bz.sunlight.entity.Enterprise;
+import bz.sunlight.entity.EnterpriseExample;
 import bz.sunlight.entity.Role;
 import bz.sunlight.entity.User;
 import bz.sunlight.entity.UserExample;
@@ -19,6 +22,8 @@ import bz.sunlight.handler.PageHelper;
 import bz.sunlight.mapstruct.UserMapStruct;
 import bz.sunlight.service.UserService;
 import bz.sunlight.utils.BeanUtilsHelper;
+import bz.sunlight.vo.CurrentUserVO;
+import bz.sunlight.vo.LoginUser;
 import bz.sunlight.vo.ResultWithPagination;
 import bz.sunlight.vo.UserVO;
 import org.apache.commons.lang3.StringUtils;
@@ -31,19 +36,54 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 public class UserServiceImpl implements UserService {
-  @Autowired
   private UserMapper userMapper;
-  @Autowired
   private UserRoleMapper userRoleMapper;
-  @Autowired
   private UserMapStruct userMapStruct;
-  @Autowired
   private RoleMapper roleMapper;
-  @Autowired
   private CommonMapper commonMapper;
+  private EnterpriseMapper enterpriseMapper;
+
+  /**
+   * @param userMapper.
+   * @param userRoleMapper.
+   * @param userMapStruct.
+   * @param roleMapper.
+   * @param commonMapper.
+   * @param enterpriseMapper.
+   */
+  @Autowired
+  public UserServiceImpl(UserMapper userMapper, UserRoleMapper userRoleMapper, UserMapStruct userMapStruct,
+                         RoleMapper roleMapper, CommonMapper commonMapper, EnterpriseMapper enterpriseMapper) {
+    this.userMapper = userMapper;
+    this.userRoleMapper = userRoleMapper;
+    this.userMapStruct = userMapStruct;
+    this.roleMapper = roleMapper;
+    this.commonMapper = commonMapper;
+    this.enterpriseMapper = enterpriseMapper;
+  }
+
+  /**
+   * 此方法用来/users/me API调用.
+   * loginUsaer 用于后端记录当前用户.
+   * 两处结构不同,故分开处理.
+   *
+   * @param loginUser.
+   * @return CurrentUserVO
+   */
+  @Override
+  public CurrentUserVO getCurrentUser(LoginUser loginUser) {
+    CurrentUserVO currentUserVO = userMapStruct.loginUserToCurrent(loginUser);
+    Enterprise enterprise = enterpriseMapper.selectByPrimaryKey(loginUser.getEnterpriseId());
+    currentUserVO.setEnterpriseName(enterprise.getName());
+    List<Role> roles = roleMapper.selectByUserId(loginUser.getId());
+    List<String> roleNameList = roles.stream().map(role -> role.getName()).collect(Collectors.toList());
+    currentUserVO.setRoles(roleNameList);
+    return currentUserVO;
+  }
 
   @Transactional
   @Override

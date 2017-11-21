@@ -28,12 +28,13 @@ public class UserController extends BaseContext {
    */
   @PostMapping(value = "/users")
   public ResponseEntity<ResultInfo> add(@RequestBody SaveUserDTO userDTO) {
-    userService.save(userDTO,createCommonDTO());
+    userService.save(userDTO, createCommonDTO());
     return ResponseEntity.status(HttpStatus.CREATED).build();
   }
 
   /**
    * 冻结用户.
+   *
    * @param id.
    * @return void.
    */
@@ -45,6 +46,7 @@ public class UserController extends BaseContext {
 
   /**
    * 解冻用户.
+   *
    * @param id.
    * @return void.
    */
@@ -63,12 +65,13 @@ public class UserController extends BaseContext {
    */
   @PutMapping(value = "/users/{id}")
   public ResponseEntity<Void> edit(@PathVariable String id, @RequestBody SaveUserDTO editUserDTO) {
-    userService.edit(id,editUserDTO);
+    userService.edit(id, editUserDTO);
     return ResponseEntity.status(HttpStatus.OK).build();
   }
 
   /**
    * 根据条件查询用户信息.
+   *
    * @return userVO list.
    */
   @GetMapping(value = "/users")
@@ -88,6 +91,16 @@ public class UserController extends BaseContext {
   @GetMapping(value = "/users/{id}")
   public ResponseEntity<ResultInfo> getUserDetails(@PathVariable String id) {
     UserVO userVO = userService.getUser(id);
-    return ResponseEntity.status(HttpStatus.OK).body(buildResultInfo(null,userVO));
+    return ResponseEntity.status(HttpStatus.OK).body(buildResultInfo(null, userVO));
+  }
+
+  /**
+   * 获取当前登录用户的信息.
+   *
+   * @return ResultInfo
+   */
+  @GetMapping(value = "/users/me")
+  public ResponseEntity<ResultInfo> getCurrentUser() {
+    return ResponseEntity.status(HttpStatus.OK).body(buildResultInfo(null, userService.getCurrentUser(getLoginUser())));
   }
 }
