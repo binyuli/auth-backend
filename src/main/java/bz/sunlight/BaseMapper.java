@@ -6,7 +6,7 @@ import java.io.Serializable;
 import java.util.List;
 
 public interface BaseMapper<T, E, PrimaryKeyT extends Serializable> {
-  long countByExample(E example);
+  int countByExample(E example);
 
   int deleteByExample(E example);
 
