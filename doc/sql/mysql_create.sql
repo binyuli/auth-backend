@@ -1,6 +1,6 @@
 /*==============================================================*/
 /* DBMS name:      MySQL 5.0                                    */
-/* Created on:     2017/11/29 11:33:05                          */
+/* Created on:     2017/11/30 16:43:28                          */
 /*==============================================================*/
 
 
@@ -21,6 +21,8 @@ drop table if exists permission;
 drop table if exists role;
 
 drop table if exists user;
+
+drop table if exists user_credential;
 
 drop table if exists user_role;
 
@@ -43,6 +45,7 @@ create table api
 create table enterprise
 (
    id                   char(36) not null,
+   code                 varchar(50) not null,
    name                 varchar(50) not null,
    primary key (id)
 );
@@ -144,6 +147,21 @@ create table user
             0:冻结/作废;',
    row_version          timestamp(6) not null,
    primary key (id)
+);
+
+/*==============================================================*/
+/* Table: user_credential                                       */
+/*==============================================================*/
+create table user_credential
+(
+   user_id              char(36) not null,
+   username             varchar(50) not null,
+   password             varchar(50) not null,
+   enterprise_id        char(36) not null,
+   enterprise_code      varchar(50) not null,
+   status               int not null,
+   row_version          timestamp(6) not null,
+   primary key (user_id)
 );
 
 /*==============================================================*/
