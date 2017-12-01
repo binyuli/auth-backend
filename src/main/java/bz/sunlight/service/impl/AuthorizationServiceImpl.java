@@ -1,8 +1,10 @@
 package bz.sunlight.service.impl;
 
 import bz.sunlight.dao.ApiMapper;
+import bz.sunlight.dao.UserMapper;
 import bz.sunlight.entity.Api;
 import bz.sunlight.entity.ApiExample;
+import bz.sunlight.entity.User;
 import bz.sunlight.service.Authorization;
 import bz.sunlight.vo.LoginUser;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,27 +21,30 @@ public class AuthorizationServiceImpl implements Authorization {
 
 
   private ApiMapper apiMapper;
+  private UserMapper userMapper;
 
   @Autowired
-  public AuthorizationServiceImpl(ApiMapper apiMapper) {
+  public AuthorizationServiceImpl(ApiMapper apiMapper, UserMapper userMapper) {
     this.apiMapper = apiMapper;
+    this.userMapper = userMapper;
   }
 
   @Override
-  public boolean isAuthorized(HttpServletRequest request, LoginUser user) {
-    return isAuthorized(request.getMethod(), request.getServletPath(), user);
+  public boolean isAuthorized(HttpServletRequest request, String userId) {
+    return isAuthorized(request.getMethod(), request.getServletPath(), userId);
   }
 
   @Override
-  public boolean isAuthorized(String httpMethod, String url, LoginUser user) {
+  public boolean isAuthorized(String httpMethod, String url, String userId) {
     StopWatch stopWatch = new StopWatch("isAuthorized");
     stopWatch.start("get api");
-    Api api = getApiByMehtodUrl(httpMethod, url, user);
+    User userInfo = userMapper.selectByPrimaryKey(userId);
+    Api api = getApiByMehtodUrl(httpMethod, url, userInfo.getEnterpriseId());
     stopWatch.stop();
     System.out.println(stopWatch.prettyPrint());
     if (api != null) {
       stopWatch.start("calcApiByUser");
-      int resultCount = calcApiByUser(user.getId(), api.getId());
+      int resultCount = calcApiByUser(userInfo.getId(), api.getId());
       stopWatch.stop();
       System.out.println(stopWatch.prettyPrint());
       if (resultCount != 0) {
@@ -50,10 +55,10 @@ public class AuthorizationServiceImpl implements Authorization {
     return false;
   }
 
-  private Api getApiByMehtodUrl(String httpMethod, String url, LoginUser loginUser) {
+  private Api getApiByMehtodUrl(String httpMethod, String url, String enterpriseId) {
     ApiExample example = new ApiExample();
     //TODO Method 大小写区分
-    example.createCriteria().andHttpMethodEqualTo(httpMethod).andEnterpriseIdEqualTo(loginUser.getEnterpriseId());
+    example.createCriteria().andHttpMethodEqualTo(httpMethod).andEnterpriseIdEqualTo(enterpriseId);
     List<Api> apis = apiMapper.selectByExample(example);
     List<Api> results = apis.stream().filter(api -> Pattern.matches(api.getUrl(), url)).collect(Collectors.toList());
     if (results != null && results.size() > 0) {
@@ -65,12 +70,11 @@ public class AuthorizationServiceImpl implements Authorization {
   /**
    * 根据用户 api id 关联查询统计数量.
    *
-   * @param userId.
-   * @param apiId.
+   * @param userId
+   * @param apiId
    * @return 用户与API的
    */
   private int calcApiByUser(String userId, String apiId) {
     return apiMapper.countByOperationApi(userId, apiId) + apiMapper.countByPageApi(userId, apiId);
   }
-
 }

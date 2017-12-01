@@ -22,5 +22,7 @@ public interface UserService {
 
   ResultWithPagination<UserVO> getUsers(UserSearchDTO userSearchDTO);
 
-  public CurrentUserVO getCurrentUser(LoginUser loginUser);
+  public String getCurrentUserEnterpriseId(String userId);
+
+  public CurrentUserVO getCurrentUser(String userId);
 }

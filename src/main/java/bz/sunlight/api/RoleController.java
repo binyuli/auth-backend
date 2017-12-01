@@ -54,7 +54,7 @@ public class RoleController extends BaseContext {
   /**
    * 新增角色.
    *
-   * @param saveRoleDTO.
+   * @param saveRoleDTO
    * @return void
    */
   @PostMapping(value = "/roles")
@@ -66,8 +66,8 @@ public class RoleController extends BaseContext {
   /**
    * 修改角色.
    *
-   * @param id.
-   * @param editRoleDTO.
+   * @param id
+   * @param editRoleDTO
    * @return void.
    */
   @PutMapping(value = "/roles/{id}")
@@ -79,7 +79,7 @@ public class RoleController extends BaseContext {
   /**
    * 作废角色.
    *
-   * @param id.
+   * @param id
    * @return void.
    */
   @PutMapping(value = "/roles/{id}/abandon")
@@ -91,8 +91,8 @@ public class RoleController extends BaseContext {
   /**
    * 修改角色权限以外的信息.
    *
-   * @param id.
-   * @param map.
+   * @param id
+   * @param map
    * @return void.
    */
   @PutMapping(value = "/roles/{id}/info")
@@ -104,7 +104,7 @@ public class RoleController extends BaseContext {
   /**
    * 获取角色详情
    *
-   * @param id.
+   * @param id
    * @return ResultInfo
    */
   @GetMapping(value = "/roles/{id}")

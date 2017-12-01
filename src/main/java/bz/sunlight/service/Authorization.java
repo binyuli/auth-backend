@@ -6,7 +6,7 @@ import javax.servlet.http.HttpServletRequest;
 
 public interface Authorization {
 
-  boolean isAuthorized(String httpMethod, String url, LoginUser user);
+  boolean isAuthorized(String httpMethod, String url, String userId);
 
-  boolean isAuthorized(HttpServletRequest request, LoginUser user);
+  boolean isAuthorized(HttpServletRequest request, String userId);
 }

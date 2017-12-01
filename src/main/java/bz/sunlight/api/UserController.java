@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -35,8 +36,8 @@ public class UserController extends BaseContext {
   /**
    * 冻结用户.
    *
-   * @param id.
-   * @return void.
+   * @param id
+   * @return void
    */
   @PutMapping(value = "/users/{id}/disable")
   public ResponseEntity<Void> disable(@PathVariable String id) {
@@ -47,7 +48,7 @@ public class UserController extends BaseContext {
   /**
    * 解冻用户.
    *
-   * @param id.
+   * @param id
    * @return void.
    */
   @PutMapping(value = "/users/{id}/enable")
@@ -59,8 +60,8 @@ public class UserController extends BaseContext {
   /**
    * 修改用户.
    *
-   * @param id.
-   * @param editUserDTO.
+   * @param id
+   * @param editUserDTO
    * @return void
    */
   @PutMapping(value = "/users/{id}")
@@ -85,7 +86,7 @@ public class UserController extends BaseContext {
   /**
    * 获取用户详细信息.
    *
-   * @param id.
+   * @param id
    * @return ResultInfo.
    */
   @GetMapping(value = "/users/{id}")
@@ -100,7 +101,7 @@ public class UserController extends BaseContext {
    * @return ResultInfo
    */
   @GetMapping(value = "/users/me")
-  public ResponseEntity<ResultInfo> getCurrentUser() {
-    return ResponseEntity.status(HttpStatus.OK).body(buildResultInfo(null, userService.getCurrentUser(getLoginUser())));
+  public ResponseEntity<ResultInfo> getCurrentUser(@RequestHeader(value = "X-USER-ID") String userId) {
+    return ResponseEntity.status(HttpStatus.OK).body(buildResultInfo(null, userService.getCurrentUser(userId)));
   }
 }

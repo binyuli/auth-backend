@@ -11,7 +11,6 @@ import bz.sunlight.dto.SaveUserDTO;
 import bz.sunlight.dto.UserDTO;
 import bz.sunlight.dto.UserSearchDTO;
 import bz.sunlight.entity.Enterprise;
-import bz.sunlight.entity.EnterpriseExample;
 import bz.sunlight.entity.Role;
 import bz.sunlight.entity.User;
 import bz.sunlight.entity.UserExample;
@@ -23,7 +22,6 @@ import bz.sunlight.mapstruct.UserMapStruct;
 import bz.sunlight.service.UserService;
 import bz.sunlight.utils.BeanUtilsHelper;
 import bz.sunlight.vo.CurrentUserVO;
-import bz.sunlight.vo.LoginUser;
 import bz.sunlight.vo.ResultWithPagination;
 import bz.sunlight.vo.UserVO;
 import org.apache.commons.lang3.StringUtils;
@@ -48,12 +46,12 @@ public class UserServiceImpl implements UserService {
   private EnterpriseMapper enterpriseMapper;
 
   /**
-   * @param userMapper.
-   * @param userRoleMapper.
-   * @param userMapStruct.
-   * @param roleMapper.
-   * @param commonMapper.
-   * @param enterpriseMapper.
+   * @param userMapper
+   * @param userRoleMapper
+   * @param userMapStruct
+   * @param roleMapper
+   * @param commonMapper
+   * @param enterpriseMapper
    */
   @Autowired
   public UserServiceImpl(UserMapper userMapper, UserRoleMapper userRoleMapper, UserMapStruct userMapStruct,
@@ -71,15 +69,19 @@ public class UserServiceImpl implements UserService {
    * loginUsaer 用于后端记录当前用户.
    * 两处结构不同,故分开处理.
    *
-   * @param loginUser.
+   * @param userId
    * @return CurrentUserVO
    */
   @Override
-  public CurrentUserVO getCurrentUser(LoginUser loginUser) {
-    CurrentUserVO currentUserVO = userMapStruct.loginUserToCurrent(loginUser);
-    Enterprise enterprise = enterpriseMapper.selectByPrimaryKey(loginUser.getEnterpriseId());
+  public CurrentUserVO getCurrentUser(String userId) {
+    User user = userMapper.selectByPrimaryKey(userId);
+    CurrentUserVO currentUserVO = new CurrentUserVO();
+    currentUserVO.setId(user.getId());
+    currentUserVO.setName(user.getName());
+    currentUserVO.setUsername(user.getUsername());
+    Enterprise enterprise = enterpriseMapper.selectByPrimaryKey(user.getEnterpriseId());
     currentUserVO.setEnterpriseName(enterprise.getName());
-    List<Role> roles = roleMapper.selectByUserId(loginUser.getId());
+    List<Role> roles = roleMapper.selectByUserId(user.getId());
     List<String> roleNameList = roles.stream().map(role -> role.getName()).collect(Collectors.toList());
     currentUserVO.setRoles(roleNameList);
     return currentUserVO;
@@ -222,6 +224,20 @@ public class UserServiceImpl implements UserService {
     usersResult.setContent(userVOList);
 
     return usersResult;
+  }
+
+  /**
+   * 获取指定用户所属企业
+   * @param userId
+   * @return
+   */
+  @Override
+  public String getCurrentUserEnterpriseId(String userId) {
+    User user = userMapper.selectByPrimaryKey(userId);
+    if (user == null) {
+      return null;
+    }
+    return user.getEnterpriseId();
   }
 
   @Override

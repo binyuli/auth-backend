@@ -39,7 +39,7 @@ public class PageController extends BaseContext {
   /**
    * 获取指定页当前用户的权限.
    *
-   * @param id.
+   * @param id
    * @return ResultInfo
    */
   @GetMapping(value = "/users/me/pages/{code}")
@@ -52,7 +52,7 @@ public class PageController extends BaseContext {
   /**
    * 获取page列表.
    *
-   * @param maxLevel.
+   * @param maxLevel
    * @return resultInfo
    */
   @GetMapping(value = "/pages")
@@ -69,7 +69,7 @@ public class PageController extends BaseContext {
   /**
    * 获取page详情.
    *
-   * @param id.
+   * @param id
    * @return ResultInfo
    */
   @GetMapping(value = "/pages/{id}")
