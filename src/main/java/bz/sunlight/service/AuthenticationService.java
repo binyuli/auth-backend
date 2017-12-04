@@ -3,11 +3,11 @@ package bz.sunlight.service;
 import bz.sunlight.entity.UserCredential;
 
 /**
- * 身份验证服务
+ * 身份验证服务.
  */
 public interface AuthenticationService {
   /**
-   * 登录
+   * 登录.
    *
    * @param enterpriseCode 企业编号
    * @param username       用户名

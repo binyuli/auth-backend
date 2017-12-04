@@ -6,8 +6,8 @@ import bz.sunlight.entity.UserCredential;
 import bz.sunlight.exception.BusinessException;
 import bz.sunlight.service.AuthenticationService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.stereotype.Service;
 
 @Service
 public class AuthenticationServiceImpl implements AuthenticationService {
@@ -27,7 +27,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     if (userCredential.getStatus() == BaseConstant.BASEDATA_STATUS_INVALID) {
       throw new BusinessException("", String.format("用户已冻结！ %s, %s", enterpriseCode, username));
     }
-    BCryptPasswordEncoder passwordEncoder =new BCryptPasswordEncoder(12);
+    BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder(12);
     if (!passwordEncoder.matches(password, userCredential.getPassword())) {
       throw new BusinessException("", String.format("登录密码不正确！ %s, %s", enterpriseCode, username));
     }

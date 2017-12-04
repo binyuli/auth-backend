@@ -42,7 +42,7 @@ public class PageController extends BaseContext {
   /**
    * 获取指定页当前用户的权限.
    *
-   * @param code
+   * @param code 页面编号
    * @return ResultInfo
    */
   @GetMapping(value = "/users/me/pages/{code}")
@@ -55,11 +55,12 @@ public class PageController extends BaseContext {
   /**
    * 获取page列表.
    *
-   * @param maxLevel
+   * @param maxLevel 最大层数
    * @return resultInfo
    */
   @GetMapping(value = "/pages")
-  public ResponseEntity<ResultInfo> getPages(@RequestParam(value = "maxLevel", required = false) Integer maxLevel, HttpServletRequest request) {
+  public ResponseEntity<ResultInfo> getPages(@RequestParam(value = "maxLevel", required = false) Integer maxLevel,
+                                             HttpServletRequest request) {
     //方便计算返回结构中的 itemCount 或 operationCount
     if (maxLevel != null) {
       maxLevel += 1;
@@ -72,7 +73,7 @@ public class PageController extends BaseContext {
   /**
    * 获取page详情.
    *
-   * @param id
+   * @param id 页面Id
    * @return ResultInfo
    */
   @GetMapping(value = "/pages/{id}")

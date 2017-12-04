@@ -38,7 +38,7 @@ public class UserController extends BaseContext {
   /**
    * 冻结用户.
    *
-   * @param id
+   * @param id 用户Id
    * @return void
    */
   @PutMapping(value = "/users/{id}/disable")
@@ -50,8 +50,8 @@ public class UserController extends BaseContext {
   /**
    * 解冻用户.
    *
-   * @param id
-   * @return void.
+   * @param id 用户Id
+   * @return void
    */
   @PutMapping(value = "/users/{id}/enable")
   public ResponseEntity<Void> enable(@PathVariable String id) {
@@ -62,8 +62,8 @@ public class UserController extends BaseContext {
   /**
    * 修改用户.
    *
-   * @param id
-   * @param editUserDTO
+   * @param id 用户Id
+   * @param editUserDTO 用户信息
    * @return void
    */
   @PutMapping(value = "/users/{id}")
@@ -75,7 +75,9 @@ public class UserController extends BaseContext {
   /**
    * 根据条件查询用户信息.
    *
-   * @return userVO list.
+   * @param userSearchDTO 查询条件
+   * @param request request对象
+   * @return userVO list
    */
   @GetMapping(value = "/users")
   public ResponseEntity<ResultInfo> getUsers(UserSearchDTO userSearchDTO, HttpServletRequest request) {
@@ -88,7 +90,7 @@ public class UserController extends BaseContext {
   /**
    * 获取用户详细信息.
    *
-   * @param id
+   * @param id 用户Id
    * @return ResultInfo.
    */
   @GetMapping(value = "/users/{id}")
@@ -100,6 +102,7 @@ public class UserController extends BaseContext {
   /**
    * 获取当前登录用户的信息.
    *
+   * @param userId 用户Id
    * @return ResultInfo
    */
   @GetMapping(value = "/users/me")

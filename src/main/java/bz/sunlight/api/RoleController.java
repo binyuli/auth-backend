@@ -43,7 +43,8 @@ public class RoleController extends BaseContext {
    * @return resultInfo list
    */
   @GetMapping(value = "/roles")
-  public ResponseEntity<ResultInfo> getRoles(@RequestParam(value = "status", required = false) Integer status, HttpServletRequest request) {
+  public ResponseEntity<ResultInfo> getRoles(@RequestParam(value = "status", required = false) Integer status,
+                                             HttpServletRequest request) {
     if (status == null) {
       status = BaseConstant.BASEDATA_STATUS_VALID;
     }
@@ -55,7 +56,7 @@ public class RoleController extends BaseContext {
   /**
    * 新增角色.
    *
-   * @param saveRoleDTO
+   * @param saveRoleDTO 角色信息
    * @return void
    */
   @PostMapping(value = "/roles")
@@ -67,9 +68,9 @@ public class RoleController extends BaseContext {
   /**
    * 修改角色.
    *
-   * @param id
-   * @param editRoleDTO
-   * @return void.
+   * @param id 角色Id
+   * @param editRoleDTO  角色信息
+   * @return void
    */
   @PutMapping(value = "/roles/{id}")
   public ResponseEntity<Void> edit(@PathVariable String id, @RequestBody SaveRoleDTO editRoleDTO) {
@@ -80,8 +81,8 @@ public class RoleController extends BaseContext {
   /**
    * 作废角色.
    *
-   * @param id
-   * @return void.
+   * @param id 角色Id
+   * @return void
    */
   @PutMapping(value = "/roles/{id}/abandon")
   public ResponseEntity<Void> abandon(@PathVariable String id) {
@@ -92,8 +93,8 @@ public class RoleController extends BaseContext {
   /**
    * 修改角色权限以外的信息.
    *
-   * @param id
-   * @param map
+   * @param id  角色Id
+   * @param map 角色信息
    * @return void.
    */
   @PutMapping(value = "/roles/{id}/info")
@@ -103,9 +104,9 @@ public class RoleController extends BaseContext {
   }
 
   /**
-   * 获取角色详情
+   * 获取角色详情.
    *
-   * @param id
+   * @param id 角色Id
    * @return ResultInfo
    */
   @GetMapping(value = "/roles/{id}")

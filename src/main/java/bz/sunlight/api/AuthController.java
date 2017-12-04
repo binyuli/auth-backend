@@ -35,7 +35,8 @@ public class AuthController {
    */
   @PostMapping(value = "/auth")
   public ResponseEntity<Void> isAuthorized(@RequestHeader(value = "X-Original-Method") String httpMethod,
-                                           @RequestHeader(value = "X-Original-URI") String url, HttpServletRequest request) {
+                                           @RequestHeader(value = "X-Original-URI") String url,
+                                           HttpServletRequest request) {
     HttpSession session = request.getSession();
     Object userId = session.getAttribute(OnlineManager.KEY_SYSTEM_SECURITY_CURRENT_USER_ID);
     if (userId == null) {
@@ -47,14 +48,33 @@ public class AuthController {
     return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
   }
 
+  /**
+   * 登录.
+   *
+   * @param user    登录用户信息
+   * @param request request对象
+   * @return ResponseEntity
+   * @throws Exception 异常
+   */
   @RequestMapping(method = RequestMethod.POST, value = "/user/login")
-  public ResponseEntity<Void> login(@RequestBody LoginUserDTO user, HttpServletRequest request) throws Exception {
-    UserCredential userCredential = authenticationService.login(user.getEnterpriseCode(), user.getUsername(), user.getPassword());
+  public ResponseEntity<Void> login(@RequestBody LoginUserDTO user,
+                                    HttpServletRequest request) throws Exception {
+    UserCredential userCredential = authenticationService.login(user.getEnterpriseCode(),
+        user.getUsername(),
+        user.getPassword()
+    );
     HttpSession session = request.getSession();
     session.setAttribute(OnlineManager.KEY_SYSTEM_SECURITY_CURRENT_USER_ID, userCredential.getUserId());
     return ResponseEntity.ok().build();
   }
 
+  /**
+   * 注销.
+   *
+   * @param request request对象
+   * @return ResponseEntity
+   * @throws Exception 异常
+   */
   @RequestMapping(method = RequestMethod.POST, value = "/user/logout")
   public ResponseEntity<Void> logout(HttpServletRequest request) throws Exception {
     try {

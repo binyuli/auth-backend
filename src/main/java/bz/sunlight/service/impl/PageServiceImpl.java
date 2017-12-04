@@ -164,11 +164,11 @@ public class PageServiceImpl implements PageService {
    * 递归查询节点数据到最后一层
    * 如果isOperations 为 true 则 operationsOrig 不能为空
    *
-   * @param currentPage.
-   * @param pagesOrig.
-   * @param operationsOrig.
-   * @param isOperations.
-   * @param maxLevel..
+   * @param currentPage 当前页
+   * @param pagesOrig .
+   * @param operationsOrig .
+   * @param isOperations .
+   * @param maxLevel 最大层数
    */
   private void recursion(PageDTO currentPage, List<Page> pagesOrig,
                          List<Operation> operationsOrig, boolean isOperations, Integer maxLevel) {
@@ -200,8 +200,8 @@ public class PageServiceImpl implements PageService {
   /**
    * 根据父节点获取子节点集合
    *
-   * @param parentId.
-   * @param pages.
+   * @param parentId 父节点Id
+   * @param pages .
    * @return list
    */
   private List<Page> getPageByParentId(String parentId, List<Page> pages) {
@@ -232,9 +232,9 @@ public class PageServiceImpl implements PageService {
   }
 
   /**
-   * 根据企业ID加载page
+   * 根据企业ID加载page.
    *
-   * @param enterpriseId.
+   * @param enterpriseId 企业Id
    * @return list page
    */
   public List<Page> getAllPages(String enterpriseId) {

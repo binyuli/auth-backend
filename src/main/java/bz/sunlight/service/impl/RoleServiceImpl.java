@@ -43,7 +43,7 @@ public class RoleServiceImpl implements RoleService {
   }
 
   @Override
-  public List<RoleDTO> getRoles(Integer status,String enterpriseId) {
+  public List<RoleDTO> getRoles(Integer status, String enterpriseId) {
     RoleExample roleExample = new RoleExample();
     roleExample.createCriteria().andStatusEqualTo(status).andEnterpriseIdEqualTo(enterpriseId);
     List<Role> roles = roleMapper.selectByExample(roleExample);

@@ -46,12 +46,12 @@ public class UserServiceImpl implements UserService {
   private EnterpriseMapper enterpriseMapper;
 
   /**
-   * @param userMapper
-   * @param userRoleMapper
-   * @param userMapStruct
-   * @param roleMapper
-   * @param commonMapper
-   * @param enterpriseMapper
+   * @param userMapper .
+   * @param userRoleMapper .
+   * @param userMapStruct .
+   * @param roleMapper .
+   * @param commonMapper .
+   * @param enterpriseMapper .
    */
   @Autowired
   public UserServiceImpl(UserMapper userMapper, UserRoleMapper userRoleMapper, UserMapStruct userMapStruct,
@@ -69,7 +69,7 @@ public class UserServiceImpl implements UserService {
    * loginUsaer 用于后端记录当前用户.
    * 两处结构不同,故分开处理.
    *
-   * @param userId
+   * @param userId .
    * @return CurrentUserVO
    */
   @Override
@@ -229,8 +229,8 @@ public class UserServiceImpl implements UserService {
   /**
    * 获取指定用户信息
    *
-   * @param userId
-   * @return
+   * @param userId .
+   * @return User
    */
   @Override
   public User getUserById(String userId) {

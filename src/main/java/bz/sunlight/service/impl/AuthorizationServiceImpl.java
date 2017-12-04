@@ -70,8 +70,8 @@ public class AuthorizationServiceImpl implements Authorization {
   /**
    * 根据用户 api id 关联查询统计数量.
    *
-   * @param userId
-   * @param apiId
+   * @param userId 用户Id
+   * @param apiId api的Id
    * @return 用户与API的
    */
   private int calcApiByUser(String userId, String apiId) {
