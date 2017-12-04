@@ -1,11 +1,18 @@
 package bz.sunlight.api;
 
 import bz.sunlight.dto.CommonDTO;
+import bz.sunlight.entity.User;
+import bz.sunlight.service.UserService;
 import bz.sunlight.vo.LoginUser;
+import org.springframework.beans.factory.annotation.Autowired;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
 
 public class BaseContext {
+  @Autowired
+  private  UserService userService;
+
   protected ResultInfo buildResultInfo(String message, Object payload) {
     return new ResultInfo(message, payload);
   }
@@ -15,14 +22,22 @@ public class BaseContext {
    *
    * @return loginUser
    */
-  public static LoginUser getLoginUser() {
+  public LoginUser getLoginUser(HttpServletRequest request) {
+    String userId = request.getHeader("X-USER-ID");
+    if (userId == null) {
+      return null;
+    }
+    User user = this.userService.getUserById(userId);
+    if (user == null) {
+      return null;
+    }
     //TODO 当前默认admin用户，待认证授权完成后调整为从系统框架获得当前用户
     LoginUser loginUser = new LoginUser();
-    loginUser.setId("4d3b30d7-0e08-4ed9-bc98-315a3cd20399");
-    loginUser.setUsername("admin");
-    loginUser.setEnterpriseId("786b67b6-b424-11e7-b9e5-005056af50a8");
-    loginUser.setName("管理员");
-    loginUser.setOpenId("@!74C0.56B2.6092.CEEE!0001!BFAD.AD95!0000!D367.37DB.A1BD.49E6");
+    loginUser.setId(user.getId());
+    loginUser.setUsername(user.getUsername());
+    loginUser.setEnterpriseId(user.getEnterpriseId());
+    loginUser.setName(user.getName());
+    loginUser.setOpenId(user.getOpenId());
     return loginUser;
   }
 
@@ -31,8 +46,8 @@ public class BaseContext {
    *
    * @return CommonDTO
    */
-  public CommonDTO createCommonDTO() {
-    LoginUser loginUser = getLoginUser();
+  public CommonDTO createCommonDTO(HttpServletRequest request) {
+    LoginUser loginUser = getLoginUser(request);
     Date now = new Date();
     CommonDTO commonDTO = new CommonDTO();
     commonDTO.setCreateTime(now);

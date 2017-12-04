@@ -227,17 +227,15 @@ public class UserServiceImpl implements UserService {
   }
 
   /**
-   * 获取指定用户所属企业
+   * 获取指定用户信息
+   *
    * @param userId
    * @return
    */
   @Override
-  public String getCurrentUserEnterpriseId(String userId) {
+  public User getUserById(String userId) {
     User user = userMapper.selectByPrimaryKey(userId);
-    if (user == null) {
-      return null;
-    }
-    return user.getEnterpriseId();
+    return user;
   }
 
   @Override

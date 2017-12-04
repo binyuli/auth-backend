@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
+
 @RestController
 @RequestMapping(value = "/api/v1")
 public class UserController extends BaseContext {
@@ -28,8 +30,8 @@ public class UserController extends BaseContext {
    * 新增用户.
    */
   @PostMapping(value = "/users")
-  public ResponseEntity<ResultInfo> add(@RequestBody SaveUserDTO userDTO) {
-    userService.save(userDTO, createCommonDTO());
+  public ResponseEntity<ResultInfo> add(@RequestBody SaveUserDTO userDTO,HttpServletRequest request) {
+    userService.save(userDTO, createCommonDTO(request));
     return ResponseEntity.status(HttpStatus.CREATED).build();
   }
 
@@ -76,9 +78,9 @@ public class UserController extends BaseContext {
    * @return userVO list.
    */
   @GetMapping(value = "/users")
-  public ResponseEntity<ResultInfo> getUsers(UserSearchDTO userSearchDTO) {
+  public ResponseEntity<ResultInfo> getUsers(UserSearchDTO userSearchDTO, HttpServletRequest request) {
     // 传入当前登录用户的企业Id
-    userSearchDTO.setEnterpriseId(getLoginUser().getEnterpriseId());
+    userSearchDTO.setEnterpriseId(getLoginUser(request).getEnterpriseId());
     ResultWithPagination<UserVO> usersResult = userService.getUsers(userSearchDTO);
     return ResponseEntity.status(HttpStatus.OK).body(buildResultInfo(null, usersResult));
   }

@@ -4,6 +4,7 @@ import bz.sunlight.dto.PageDTO;
 import bz.sunlight.entity.Page;
 import bz.sunlight.mapstruct.PageMapStruct;
 import bz.sunlight.service.PageService;
+import bz.sunlight.vo.LoginUser;
 import bz.sunlight.vo.PageDetailsVO;
 import bz.sunlight.vo.PageVO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @RestController
@@ -31,22 +33,23 @@ public class PageController extends BaseContext {
    * @return string
    */
   @RequestMapping("/users/me/pages")
-  public ResponseEntity<ResultInfo> getMenuByUser() {
-    List<PageDTO> pages = pageService.getMenuByByExample(getLoginUser().getId(), getLoginUser().getEnterpriseId());
+  public ResponseEntity<ResultInfo> getMenuByUser(HttpServletRequest request) {
+    LoginUser user = getLoginUser(request);
+    List<PageDTO> pages = pageService.getMenuByByExample(user.getId(), user.getEnterpriseId());
     return ResponseEntity.status(HttpStatus.OK).body(buildResultInfo(null, pageMapStruct.pageDTOToMenu(pages)));
   }
 
   /**
    * 获取指定页当前用户的权限.
    *
-   * @param id
+   * @param code
    * @return ResultInfo
    */
   @GetMapping(value = "/users/me/pages/{code}")
-  public ResponseEntity<ResultInfo> getOperationsByPage(@PathVariable String code) {
+  public ResponseEntity<ResultInfo> getOperationsByPage(@PathVariable String code, HttpServletRequest request) {
     Page page = pageService.getPageByCode(code);
     return ResponseEntity.status(HttpStatus.OK).body(buildResultInfo(null,
-        pageService.getOperationsByPage(getLoginUser().getId(), page.getId())));
+        pageService.getOperationsByPage(getLoginUser(request).getId(), page.getId())));
   }
 
   /**
@@ -56,12 +59,12 @@ public class PageController extends BaseContext {
    * @return resultInfo
    */
   @GetMapping(value = "/pages")
-  public ResponseEntity<ResultInfo> getPages(@RequestParam(value = "maxLevel", required = false) Integer maxLevel) {
+  public ResponseEntity<ResultInfo> getPages(@RequestParam(value = "maxLevel", required = false) Integer maxLevel, HttpServletRequest request) {
     //方便计算返回结构中的 itemCount 或 operationCount
     if (maxLevel != null) {
       maxLevel += 1;
     }
-    List<PageDTO> pagesDTO = pageService.getPagesByMaxLevel(maxLevel, getLoginUser().getEnterpriseId());
+    List<PageDTO> pagesDTO = pageService.getPagesByMaxLevel(maxLevel, getLoginUser(request).getEnterpriseId());
     List<PageVO> pagesVO = pageMapStruct.dtoToPageVOList(pagesDTO);
     return ResponseEntity.status(HttpStatus.OK).body(buildResultInfo(null, pagesVO));
   }
@@ -73,8 +76,8 @@ public class PageController extends BaseContext {
    * @return ResultInfo
    */
   @GetMapping(value = "/pages/{id}")
-  public ResponseEntity<ResultInfo> getPages(@PathVariable String id) {
-    List<PageDTO> pagesDTO = pageService.getPageDetailsByPageId(id, getLoginUser().getEnterpriseId());
+  public ResponseEntity<ResultInfo> getPages(@PathVariable String id, HttpServletRequest request) {
+    List<PageDTO> pagesDTO = pageService.getPageDetailsByPageId(id, getLoginUser(request).getEnterpriseId());
     PageDetailsVO pageDetailsVO = pageMapStruct.dtoToPageDetailsVO(pagesDTO.get(0));
     return ResponseEntity.status(HttpStatus.OK).body(buildResultInfo(null, pageDetailsVO));
   }

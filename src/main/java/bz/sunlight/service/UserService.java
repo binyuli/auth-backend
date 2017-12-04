@@ -3,6 +3,7 @@ package bz.sunlight.service;
 import bz.sunlight.dto.CommonDTO;
 import bz.sunlight.dto.SaveUserDTO;
 import bz.sunlight.dto.UserSearchDTO;
+import bz.sunlight.entity.User;
 import bz.sunlight.vo.CurrentUserVO;
 import bz.sunlight.vo.LoginUser;
 import bz.sunlight.vo.ResultWithPagination;
@@ -22,7 +23,7 @@ public interface UserService {
 
   ResultWithPagination<UserVO> getUsers(UserSearchDTO userSearchDTO);
 
-  public String getCurrentUserEnterpriseId(String userId);
+  public User getUserById(String userId);
 
   public CurrentUserVO getCurrentUser(String userId);
 }

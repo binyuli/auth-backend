@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Map;
 
@@ -42,11 +43,11 @@ public class RoleController extends BaseContext {
    * @return resultInfo list
    */
   @GetMapping(value = "/roles")
-  public ResponseEntity<ResultInfo> getRoles(@RequestParam(value = "status", required = false) Integer status) {
+  public ResponseEntity<ResultInfo> getRoles(@RequestParam(value = "status", required = false) Integer status, HttpServletRequest request) {
     if (status == null) {
       status = BaseConstant.BASEDATA_STATUS_VALID;
     }
-    String enterpriseId = getLoginUser().getEnterpriseId();
+    String enterpriseId = getLoginUser(request).getEnterpriseId();
     List<RoleDTO> roles = roleService.getRoles(status, enterpriseId);
     return ResponseEntity.status(HttpStatus.OK).body(buildResultInfo(null, roleMapStruct.dtoToVOList(roles)));
   }
@@ -58,8 +59,8 @@ public class RoleController extends BaseContext {
    * @return void
    */
   @PostMapping(value = "/roles")
-  public ResponseEntity<Void> add(@RequestBody SaveRoleDTO saveRoleDTO) {
-    roleService.save(saveRoleDTO, createCommonDTO());
+  public ResponseEntity<Void> add(@RequestBody SaveRoleDTO saveRoleDTO, HttpServletRequest request) {
+    roleService.save(saveRoleDTO, createCommonDTO(request));
     return ResponseEntity.status(HttpStatus.CREATED).build();
   }
 
