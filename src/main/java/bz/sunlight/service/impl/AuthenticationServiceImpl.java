@@ -12,12 +12,10 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 @Service
 public class AuthenticationServiceImpl implements AuthenticationService {
   private UserCredentialMapper userCredentialMapper;
-  private BCryptPasswordEncoder passwordEncoder;
 
   @Autowired
-  public AuthenticationServiceImpl(UserCredentialMapper userCredentialMapper, BCryptPasswordEncoder passwordEncoder) {
+  public AuthenticationServiceImpl(UserCredentialMapper userCredentialMapper) {
     this.userCredentialMapper = userCredentialMapper;
-    this.passwordEncoder = passwordEncoder;
   }
 
   @Override
@@ -29,8 +27,9 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     if (userCredential.getStatus() == BaseConstant.BASEDATA_STATUS_INVALID) {
       throw new BusinessException("", String.format("用户已冻结！ %s, %s", enterpriseCode, username));
     }
+    BCryptPasswordEncoder passwordEncoder =new BCryptPasswordEncoder(12);
     if (!passwordEncoder.matches(password, userCredential.getPassword())) {
-      throw new BusinessException("", String.format("登录密码不正确！ %s, %s,", enterpriseCode, username));
+      throw new BusinessException("", String.format("登录密码不正确！ %s, %s", enterpriseCode, username));
     }
     return userCredential;
   }
