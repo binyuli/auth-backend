@@ -1,6 +1,6 @@
 /*==============================================================*/
 /* DBMS name:      MySQL 5.0                                    */
-/* Created on:     2017/11/30 16:43:28                          */
+/* Created on:     2017/12/4 16:45:03                           */
 /*==============================================================*/
 
 
@@ -34,7 +34,7 @@ create table api
    id                   char(36) not null,
    name                 varchar(50) not null,
    http_method          varchar(50) not null,
-   url                  varchar(50) not null,
+   url                  varchar(100) not null,
    enterprise_id        char(36) not null,
    primary key (id)
 );

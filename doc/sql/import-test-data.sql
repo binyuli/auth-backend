@@ -11939,5 +11939,10 @@ INSERT INTO `user_role` VALUES ('4d3b30d7-0e08-4ed9-bc98-315a3cd20399', 'ef3c856
 -- Records of enterprise
 -- ----------------------------
 
-INSERT INTO `enterprise` VALUES ('786b67b6-b424-11e7-b9e5-005056af50a8', '上海晨阑数据技术股份有限公司');
+INSERT INTO `enterprise` VALUES ('786b67b6-b424-11e7-b9e5-005056af50a8', 'sunlight', '上海晨阑数据技术股份有限公司');
 
+
+-- ----------------------------
+-- Records of user_credential
+-- ----------------------------
+INSERT INTO `user_credential` VALUES ('4d3b30d7-0e08-4ed9-bc98-315a3cd20399',	'admin', '$12$VNRaXbwnzdKUoh.8q4AmE.5tPdPPdeZPuwexPcTw3I20NnraVtMTm', '786b67b6-b424-11e7-b9e5-005056af50a8', 'sunlight', 2,	'2017-12-04 11:32:10.187651')
