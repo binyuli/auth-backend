@@ -156,7 +156,7 @@ create table user_credential
 (
    user_id              char(36) not null,
    username             varchar(50) not null,
-   password             varchar(50) not null,
+   password             varchar(100) not null,
    enterprise_id        char(36) not null,
    enterprise_code      varchar(50) not null,
    status               int not null,
