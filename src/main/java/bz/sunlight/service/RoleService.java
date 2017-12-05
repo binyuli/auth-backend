@@ -7,16 +7,16 @@ import bz.sunlight.dto.SaveRoleDTO;
 import java.util.List;
 
 public interface RoleService {
-  public List<RoleDTO> getRoles(Integer status,String enterpriseId);
+  List<RoleDTO> getRoles(Integer status, String enterpriseId);
 
-  public void abandon(String id);
+  void abandon(String id);
 
-  public void editRoleInfo(String id, String name);
+  void editRoleInfo(String id, String name);
 
-  public void save(SaveRoleDTO roleDTO, CommonDTO commonDTO);
+  void save(SaveRoleDTO roleDTO, CommonDTO commonDTO);
 
-  public void edit(String id, SaveRoleDTO roleDTO);
+  void edit(String id, SaveRoleDTO roleDTO);
 
-  public RoleDTO getRole(String id);
+  RoleDTO getRole(String id);
 
 }

@@ -6,21 +6,21 @@ import bz.sunlight.entity.Page;
 import java.util.List;
 
 public interface PageService {
-  public List<String> getOperationsByPage(String userId, String pageId);
+  List<String> getOperationsByPage(String userId, String pageId);
 
-  public List<PageDTO> getMenuByByExample(String userId, String enterpriseId);
+  List<PageDTO> getMenuByByExample(String userId, String enterpriseId);
 
   /**
-   * 获取角色详情API调用
+   * 获取角色详情API调用.
    *
-   * @param roleId.
+   * @param roleId 角色Id
    * @return List PageDTO
    */
-  public List<PageDTO> getPagesByRoleId(String roleId);
+  List<PageDTO> getPagesByRoleId(String roleId);
 
-  public List<PageDTO> getPageDetailsByPageId(String pageId, String enterpriseId);
+  List<PageDTO> getPageDetailsByPageId(String pageId, String enterpriseId);
 
-  public List<PageDTO> getPagesByMaxLevel(Integer maxLevel,String enterpriseId);
+  List<PageDTO> getPagesByMaxLevel(Integer maxLevel, String enterpriseId);
 
-  public Page getPageByCode(String code);
+  Page getPageByCode(String code);
 }

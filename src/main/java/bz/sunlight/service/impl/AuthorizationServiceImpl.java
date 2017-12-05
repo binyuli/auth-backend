@@ -6,12 +6,10 @@ import bz.sunlight.entity.Api;
 import bz.sunlight.entity.ApiExample;
 import bz.sunlight.entity.User;
 import bz.sunlight.service.Authorization;
-import bz.sunlight.vo.LoginUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StopWatch;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -27,11 +25,6 @@ public class AuthorizationServiceImpl implements Authorization {
   public AuthorizationServiceImpl(ApiMapper apiMapper, UserMapper userMapper) {
     this.apiMapper = apiMapper;
     this.userMapper = userMapper;
-  }
-
-  @Override
-  public boolean isAuthorized(HttpServletRequest request, String userId) {
-    return isAuthorized(request.getMethod(), request.getServletPath(), userId);
   }
 
   @Override
@@ -71,7 +64,7 @@ public class AuthorizationServiceImpl implements Authorization {
    * 根据用户 api id 关联查询统计数量.
    *
    * @param userId 用户Id
-   * @param apiId api的Id
+   * @param apiId  api的Id
    * @return 用户与API的
    */
   private int calcApiByUser(String userId, String apiId) {
