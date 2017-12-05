@@ -22,14 +22,14 @@ public class AuthenticationServiceImpl implements AuthenticationService {
   public UserCredential login(String enterpriseCode, String username, String password) {
     UserCredential userCredential = userCredentialMapper.findByEnterpriseCodeAndUsername(enterpriseCode, username);
     if (userCredential == null) {
-      throw new BusinessException("", String.format("企业或账号不存在！ %s, %s", enterpriseCode, username));
+      throw new BusinessException("", "企业或用户名不存在！");
     }
     if (userCredential.getStatus() == BaseConstant.BASEDATA_STATUS_INVALID) {
-      throw new BusinessException("", String.format("用户已冻结！ %s, %s", enterpriseCode, username));
+      throw new BusinessException("", "用户已冻结！");
     }
     BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder(12);
     if (!passwordEncoder.matches(password, userCredential.getPassword())) {
-      throw new BusinessException("", String.format("登录密码不正确！ %s, %s", enterpriseCode, username));
+      throw new BusinessException("", "登录密码不正确！");
     }
     return userCredential;
   }

@@ -4,10 +4,12 @@ import bz.sunlight.constant.BaseConstant;
 import bz.sunlight.dto.PageDTO;
 import bz.sunlight.dto.RoleDTO;
 import bz.sunlight.dto.SaveRoleDTO;
+import bz.sunlight.entity.User;
 import bz.sunlight.mapstruct.PageMapStruct;
 import bz.sunlight.mapstruct.RoleMapStruct;
 import bz.sunlight.service.PageService;
 import bz.sunlight.service.RoleService;
+import bz.sunlight.service.UserService;
 import bz.sunlight.vo.RoleVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,11 +19,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Map;
 
@@ -36,6 +38,8 @@ public class RoleController extends BaseContext {
   private PageMapStruct pageMapStruct;
   @Autowired
   private PageService pageService;
+  @Autowired
+  private UserService userService;
 
   /**
    * 获取角色列表.
@@ -44,11 +48,12 @@ public class RoleController extends BaseContext {
    */
   @GetMapping(value = "/roles")
   public ResponseEntity<ResultInfo> getRoles(@RequestParam(value = "status", required = false) Integer status,
-                                             HttpServletRequest request) {
+                                             @RequestHeader("X-USER-ID") String userId) {
     if (status == null) {
       status = BaseConstant.BASEDATA_STATUS_VALID;
     }
-    String enterpriseId = getLoginUser(request).getEnterpriseId();
+    User user = userService.getUserById(userId);
+    String enterpriseId = user.getEnterpriseId();
     List<RoleDTO> roles = roleService.getRoles(status, enterpriseId);
     return ResponseEntity.status(HttpStatus.OK).body(buildResultInfo(null, roleMapStruct.dtoToVOList(roles)));
   }
@@ -60,8 +65,8 @@ public class RoleController extends BaseContext {
    * @return void
    */
   @PostMapping(value = "/roles")
-  public ResponseEntity<Void> add(@RequestBody SaveRoleDTO saveRoleDTO, HttpServletRequest request) {
-    roleService.save(saveRoleDTO, createCommonDTO(request));
+  public ResponseEntity<Void> add(@RequestBody SaveRoleDTO saveRoleDTO, @RequestHeader("X-USER-ID") String userId) {
+    roleService.save(saveRoleDTO, createCommonDTO(userId));
     return ResponseEntity.status(HttpStatus.CREATED).build();
   }
 

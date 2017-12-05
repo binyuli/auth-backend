@@ -4,6 +4,7 @@ import bz.sunlight.constant.BaseConstant;
 import bz.sunlight.dao.CommonMapper;
 import bz.sunlight.dao.EnterpriseMapper;
 import bz.sunlight.dao.RoleMapper;
+import bz.sunlight.dao.UserCredentialMapper;
 import bz.sunlight.dao.UserMapper;
 import bz.sunlight.dao.UserRoleMapper;
 import bz.sunlight.dto.CommonDTO;
@@ -13,6 +14,7 @@ import bz.sunlight.dto.UserSearchDTO;
 import bz.sunlight.entity.Enterprise;
 import bz.sunlight.entity.Role;
 import bz.sunlight.entity.User;
+import bz.sunlight.entity.UserCredential;
 import bz.sunlight.entity.UserExample;
 import bz.sunlight.entity.UserRole;
 import bz.sunlight.entity.UserRoleExample;
@@ -26,6 +28,7 @@ import bz.sunlight.vo.ResultWithPagination;
 import bz.sunlight.vo.UserVO;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -44,24 +47,27 @@ public class UserServiceImpl implements UserService {
   private RoleMapper roleMapper;
   private CommonMapper commonMapper;
   private EnterpriseMapper enterpriseMapper;
+  private UserCredentialMapper userCredentialMapper;
 
   /**
-   * @param userMapper .
-   * @param userRoleMapper .
-   * @param userMapStruct .
-   * @param roleMapper .
-   * @param commonMapper .
+   * @param userMapper       .
+   * @param userRoleMapper   .
+   * @param userMapStruct    .
+   * @param roleMapper       .
+   * @param commonMapper     .
    * @param enterpriseMapper .
    */
   @Autowired
   public UserServiceImpl(UserMapper userMapper, UserRoleMapper userRoleMapper, UserMapStruct userMapStruct,
-                         RoleMapper roleMapper, CommonMapper commonMapper, EnterpriseMapper enterpriseMapper) {
+                         RoleMapper roleMapper, CommonMapper commonMapper, EnterpriseMapper enterpriseMapper,
+                         UserCredentialMapper userCredentialMapper) {
     this.userMapper = userMapper;
     this.userRoleMapper = userRoleMapper;
     this.userMapStruct = userMapStruct;
     this.roleMapper = roleMapper;
     this.commonMapper = commonMapper;
     this.enterpriseMapper = enterpriseMapper;
+    this.userCredentialMapper = userCredentialMapper;
   }
 
   /**
@@ -108,13 +114,27 @@ public class UserServiceImpl implements UserService {
     user.setId(UUID.randomUUID().toString());
     user.setStatus(BaseConstant.BASEDATA_STATUS_VALID);
     userMapper.insert(user);
+    // 添加用户角色信息
     List<String> roles = userDTO.getRoles();
-    for (String roleId : roles) {
-      UserRole userRole = new UserRole();
-      userRole.setRoleId(roleId);
-      userRole.setUserId(user.getId());
-      userRoleMapper.insert(userRole);
+    if (roles != null) {
+      for (String roleId : roles) {
+        UserRole userRole = new UserRole();
+        userRole.setRoleId(roleId);
+        userRole.setUserId(user.getId());
+        userRoleMapper.insert(userRole);
+      }
     }
+    // 添加用户登录信息
+    BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder(12);
+    UserCredential userCredential = new UserCredential();
+    userCredential.setUserId(user.getId());
+    userCredential.setUsername(user.getUsername());
+    userCredential.setPassword(passwordEncoder.encode(userDTO.getPassword()));
+    userCredential.setEnterpriseId(user.getEnterpriseId());
+    Enterprise enterprise = enterpriseMapper.selectByPrimaryKey(user.getEnterpriseId());
+    userCredential.setEnterpriseCode(enterprise.getCode());
+    userCredential.setStatus(BaseConstant.BASEDATA_STATUS_VALID);
+    userCredentialMapper.insert(userCredential);
   }
 
   @Transactional

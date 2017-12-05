@@ -2,6 +2,7 @@ package bz.sunlight.api;
 
 import bz.sunlight.dto.SaveUserDTO;
 import bz.sunlight.dto.UserSearchDTO;
+import bz.sunlight.entity.User;
 import bz.sunlight.service.UserService;
 import bz.sunlight.vo.ResultWithPagination;
 import bz.sunlight.vo.UserVO;
@@ -17,8 +18,6 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.servlet.http.HttpServletRequest;
-
 @RestController
 @RequestMapping(value = "/api/v1")
 public class UserController extends BaseContext {
@@ -30,8 +29,8 @@ public class UserController extends BaseContext {
    * 新增用户.
    */
   @PostMapping(value = "/users")
-  public ResponseEntity<ResultInfo> add(@RequestBody SaveUserDTO userDTO,HttpServletRequest request) {
-    userService.save(userDTO, createCommonDTO(request));
+  public ResponseEntity<ResultInfo> add(@RequestBody SaveUserDTO userDTO, @RequestHeader("X-USER-ID") String userId) {
+    userService.save(userDTO, createCommonDTO(userId));
     return ResponseEntity.status(HttpStatus.CREATED).build();
   }
 
@@ -62,7 +61,7 @@ public class UserController extends BaseContext {
   /**
    * 修改用户.
    *
-   * @param id 用户Id
+   * @param id          用户Id
    * @param editUserDTO 用户信息
    * @return void
    */
@@ -76,13 +75,13 @@ public class UserController extends BaseContext {
    * 根据条件查询用户信息.
    *
    * @param userSearchDTO 查询条件
-   * @param request request对象
    * @return userVO list
    */
   @GetMapping(value = "/users")
-  public ResponseEntity<ResultInfo> getUsers(UserSearchDTO userSearchDTO, HttpServletRequest request) {
+  public ResponseEntity<ResultInfo> getUsers(UserSearchDTO userSearchDTO, @RequestHeader("X-USER-ID") String userId) {
+    User user = userService.getUserById(userId);
     // 传入当前登录用户的企业Id
-    userSearchDTO.setEnterpriseId(getLoginUser(request).getEnterpriseId());
+    userSearchDTO.setEnterpriseId(user.getEnterpriseId());
     ResultWithPagination<UserVO> usersResult = userService.getUsers(userSearchDTO);
     return ResponseEntity.status(HttpStatus.OK).body(buildResultInfo(null, usersResult));
   }
