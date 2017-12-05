@@ -11945,4 +11945,4 @@ INSERT INTO `enterprise` VALUES ('786b67b6-b424-11e7-b9e5-005056af50a8', 'sunlig
 -- ----------------------------
 -- Records of user_credential
 -- ----------------------------
-INSERT INTO `user_credential` VALUES ('4d3b30d7-0e08-4ed9-bc98-315a3cd20399',	'admin', '$12$VNRaXbwnzdKUoh.8q4AmE.5tPdPPdeZPuwexPcTw3I20NnraVtMTm', '786b67b6-b424-11e7-b9e5-005056af50a8', 'sunlight', 2,	'2017-12-04 11:32:10.187651')
+INSERT INTO `user_credential` VALUES ('4d3b30d7-0e08-4ed9-bc98-315a3cd20399',	'admin', '$2a$12$uS/OQi9BqWIQ7HDrU.xiwuVC2X.W0fiWh1g8MmIwPkAfloIJ1tTY2', '786b67b6-b424-11e7-b9e5-005056af50a8', 'sunlight', 2,	'2017-12-04 11:32:10.187651')
