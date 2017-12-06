@@ -8,7 +8,6 @@ import bz.sunlight.mapstruct.PageMapStruct;
 import bz.sunlight.mapstruct.RoleMapStruct;
 import bz.sunlight.service.PageService;
 import bz.sunlight.service.RoleService;
-import bz.sunlight.service.UserService;
 import bz.sunlight.vo.LoginUser;
 import bz.sunlight.vo.RoleVO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,8 +37,6 @@ public class RoleController extends BaseContext {
   private PageMapStruct pageMapStruct;
   @Autowired
   private PageService pageService;
-  @Autowired
-  private UserService userService;
 
   /**
    * 获取角色列表.
@@ -52,7 +49,7 @@ public class RoleController extends BaseContext {
     if (status == null) {
       status = BaseConstant.BASEDATA_STATUS_VALID;
     }
-    LoginUser user = userService.getUserById(userId);
+    LoginUser user = getLoginUser(userId);
     String enterpriseId = user.getEnterpriseId();
     List<RoleDTO> roles = roleService.getRoles(status, enterpriseId);
     return ResponseEntity.status(HttpStatus.OK).body(buildResultInfo(null, roleMapStruct.dtoToVOList(roles)));

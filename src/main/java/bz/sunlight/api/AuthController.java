@@ -6,7 +6,6 @@ import bz.sunlight.entity.UserCredential;
 import bz.sunlight.exception.BusinessException;
 import bz.sunlight.service.AuthenticationService;
 import bz.sunlight.service.Authorization;
-import bz.sunlight.service.UserService;
 import bz.sunlight.vo.LoginUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -23,14 +22,12 @@ import javax.servlet.http.HttpSession;
 
 @RestController
 @RequestMapping(value = "/api/v1")
-public class AuthController {
+public class AuthController extends BaseContext {
 
   @Autowired
   private Authorization authorizationService;
   @Autowired
   private AuthenticationService authenticationService;
-  @Autowired
-  private UserService userService;
 
   /**
    * api访问权限校验.
@@ -46,7 +43,7 @@ public class AuthController {
     if (userId == null) {
       return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
     }
-    LoginUser user = userService.getUserById(userId.toString());
+    LoginUser user = getLoginUser(userId.toString());
     if (authorizationService.isAuthorized(httpMethod, url, user.getId(), user.getEnterpriseId())) {
       return ResponseEntity.ok().header("X-USER-ID", userId.toString()).build();
     }

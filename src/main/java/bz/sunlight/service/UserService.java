@@ -24,5 +24,5 @@ public interface UserService {
 
   LoginUser getUserById(String userId);
 
-  CurrentUserVO getCurrentUser(String userId);
+  CurrentUserVO getCurrentUser(LoginUser user);
 }

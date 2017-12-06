@@ -106,6 +106,7 @@ public class UserController extends BaseContext {
    */
   @GetMapping(value = "/users/me")
   public ResponseEntity<ResultInfo> getCurrentUser(@RequestHeader(value = "X-USER-ID") String userId) {
-    return ResponseEntity.status(HttpStatus.OK).body(buildResultInfo(null, userService.getCurrentUser(userId)));
+    LoginUser user = getLoginUser(userId);
+    return ResponseEntity.status(HttpStatus.OK).body(buildResultInfo(null, userService.getCurrentUser(user)));
   }
 }

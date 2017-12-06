@@ -76,19 +76,15 @@ public class UserServiceImpl implements UserService {
    * loginUsaer 用于后端记录当前用户.
    * 两处结构不同,故分开处理.
    *
-   * @param userId .
+   * @param loginUser .
    * @return CurrentUserVO
    */
   @Override
-  public CurrentUserVO getCurrentUser(String userId) {
-    User user = userMapper.selectByPrimaryKey(userId);
-    CurrentUserVO currentUserVO = new CurrentUserVO();
-    currentUserVO.setId(user.getId());
-    currentUserVO.setName(user.getName());
-    currentUserVO.setUsername(user.getUsername());
-    Enterprise enterprise = enterpriseMapper.selectByPrimaryKey(user.getEnterpriseId());
+  public CurrentUserVO getCurrentUser(LoginUser loginUser) {
+    CurrentUserVO currentUserVO = userMapStruct.loginUserToCurrent(loginUser);
+    Enterprise enterprise = enterpriseMapper.selectByPrimaryKey(loginUser.getEnterpriseId());
     currentUserVO.setEnterpriseName(enterprise.getName());
-    List<Role> roles = roleMapper.selectByUserId(user.getId());
+    List<Role> roles = roleMapper.selectByUserId(loginUser.getId());
     List<String> roleNameList = roles.stream().map(role -> role.getName()).collect(Collectors.toList());
     currentUserVO.setRoles(roleNameList);
     return currentUserVO;

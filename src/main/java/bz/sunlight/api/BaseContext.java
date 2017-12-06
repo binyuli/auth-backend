@@ -9,10 +9,20 @@ import java.util.Date;
 
 public class BaseContext {
   @Autowired
-  private  UserService userService;
+  private UserService userService;
 
   protected ResultInfo buildResultInfo(String message, Object payload) {
     return new ResultInfo(message, payload);
+  }
+
+  /**
+   * 获取当前登录用户.
+   *
+   * @return loginUser
+   */
+  public LoginUser getLoginUser(String userId) {
+    LoginUser user = this.userService.getUserById(userId);
+    return user;
   }
 
   /**
@@ -21,7 +31,7 @@ public class BaseContext {
    * @return CommonDTO
    */
   public CommonDTO createCommonDTO(String userId) {
-    LoginUser user = userService.getUserById(userId);
+    LoginUser user = getLoginUser(userId);
     Date now = new Date();
     CommonDTO commonDTO = new CommonDTO();
     commonDTO.setCreateTime(now);
