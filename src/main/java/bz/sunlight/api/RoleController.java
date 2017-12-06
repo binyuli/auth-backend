@@ -4,12 +4,12 @@ import bz.sunlight.constant.BaseConstant;
 import bz.sunlight.dto.PageDTO;
 import bz.sunlight.dto.RoleDTO;
 import bz.sunlight.dto.SaveRoleDTO;
-import bz.sunlight.entity.User;
 import bz.sunlight.mapstruct.PageMapStruct;
 import bz.sunlight.mapstruct.RoleMapStruct;
 import bz.sunlight.service.PageService;
 import bz.sunlight.service.RoleService;
 import bz.sunlight.service.UserService;
+import bz.sunlight.vo.LoginUser;
 import bz.sunlight.vo.RoleVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -52,7 +52,7 @@ public class RoleController extends BaseContext {
     if (status == null) {
       status = BaseConstant.BASEDATA_STATUS_VALID;
     }
-    User user = userService.getUserById(userId);
+    LoginUser user = userService.getUserById(userId);
     String enterpriseId = user.getEnterpriseId();
     List<RoleDTO> roles = roleService.getRoles(status, enterpriseId);
     return ResponseEntity.status(HttpStatus.OK).body(buildResultInfo(null, roleMapStruct.dtoToVOList(roles)));

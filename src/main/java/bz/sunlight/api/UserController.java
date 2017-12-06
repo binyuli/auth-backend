@@ -2,8 +2,8 @@ package bz.sunlight.api;
 
 import bz.sunlight.dto.SaveUserDTO;
 import bz.sunlight.dto.UserSearchDTO;
-import bz.sunlight.entity.User;
 import bz.sunlight.service.UserService;
+import bz.sunlight.vo.LoginUser;
 import bz.sunlight.vo.ResultWithPagination;
 import bz.sunlight.vo.UserVO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -79,7 +79,7 @@ public class UserController extends BaseContext {
    */
   @GetMapping(value = "/users")
   public ResponseEntity<ResultInfo> getUsers(UserSearchDTO userSearchDTO, @RequestHeader("X-USER-ID") String userId) {
-    User user = userService.getUserById(userId);
+    LoginUser user = userService.getUserById(userId);
     // 传入当前登录用户的企业Id
     userSearchDTO.setEnterpriseId(user.getEnterpriseId());
     ResultWithPagination<UserVO> usersResult = userService.getUsers(userSearchDTO);

@@ -23,5 +23,7 @@ public interface UserMapStruct {
 
   UserDTO singleEntityToDTO(User user);
 
+  LoginUser singleEntityToVO(User user);
+
   CurrentUserVO loginUserToCurrent(LoginUser loginUser);
 }

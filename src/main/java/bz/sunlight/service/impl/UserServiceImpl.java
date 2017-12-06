@@ -24,6 +24,7 @@ import bz.sunlight.mapstruct.UserMapStruct;
 import bz.sunlight.service.UserService;
 import bz.sunlight.utils.BeanUtilsHelper;
 import bz.sunlight.vo.CurrentUserVO;
+import bz.sunlight.vo.LoginUser;
 import bz.sunlight.vo.ResultWithPagination;
 import bz.sunlight.vo.UserVO;
 import org.apache.commons.lang3.StringUtils;
@@ -253,9 +254,10 @@ public class UserServiceImpl implements UserService {
    * @return User
    */
   @Override
-  public User getUserById(String userId) {
+  public LoginUser getUserById(String userId) {
     User user = userMapper.selectByPrimaryKey(userId);
-    return user;
+
+    return userMapStruct.singleEntityToVO(user);
   }
 
   @Override

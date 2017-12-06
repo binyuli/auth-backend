@@ -1,10 +1,8 @@
 package bz.sunlight.service.impl;
 
 import bz.sunlight.dao.ApiMapper;
-import bz.sunlight.dao.UserMapper;
 import bz.sunlight.entity.Api;
 import bz.sunlight.entity.ApiExample;
-import bz.sunlight.entity.User;
 import bz.sunlight.service.Authorization;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,25 +17,22 @@ public class AuthorizationServiceImpl implements Authorization {
 
 
   private ApiMapper apiMapper;
-  private UserMapper userMapper;
 
   @Autowired
-  public AuthorizationServiceImpl(ApiMapper apiMapper, UserMapper userMapper) {
+  public AuthorizationServiceImpl(ApiMapper apiMapper) {
     this.apiMapper = apiMapper;
-    this.userMapper = userMapper;
   }
 
   @Override
-  public boolean isAuthorized(String httpMethod, String url, String userId) {
+  public boolean isAuthorized(String httpMethod, String url, String userId, String enterpriseId) {
     StopWatch stopWatch = new StopWatch("isAuthorized");
     stopWatch.start("get api");
-    User userInfo = userMapper.selectByPrimaryKey(userId);
-    Api api = getApiByMehtodUrl(httpMethod, url, userInfo.getEnterpriseId());
+    Api api = getApiByMehtodUrl(httpMethod, url, enterpriseId);
     stopWatch.stop();
     System.out.println(stopWatch.prettyPrint());
     if (api != null) {
       stopWatch.start("calcApiByUser");
-      int resultCount = calcApiByUser(userInfo.getId(), api.getId());
+      int resultCount = calcApiByUser(userId, api.getId());
       stopWatch.stop();
       System.out.println(stopWatch.prettyPrint());
       if (resultCount != 0) {

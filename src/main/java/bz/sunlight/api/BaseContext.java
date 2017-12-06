@@ -1,8 +1,8 @@
 package bz.sunlight.api;
 
 import bz.sunlight.dto.CommonDTO;
-import bz.sunlight.entity.User;
 import bz.sunlight.service.UserService;
+import bz.sunlight.vo.LoginUser;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Date;
@@ -21,7 +21,7 @@ public class BaseContext {
    * @return CommonDTO
    */
   public CommonDTO createCommonDTO(String userId) {
-    User user = userService.getUserById(userId);
+    LoginUser user = userService.getUserById(userId);
     Date now = new Date();
     CommonDTO commonDTO = new CommonDTO();
     commonDTO.setCreateTime(now);
