@@ -15,6 +15,7 @@ import bz.sunlight.entity.Enterprise;
 import bz.sunlight.entity.Role;
 import bz.sunlight.entity.User;
 import bz.sunlight.entity.UserCredential;
+import bz.sunlight.entity.UserCredentialExample;
 import bz.sunlight.entity.UserExample;
 import bz.sunlight.entity.UserRole;
 import bz.sunlight.entity.UserRoleExample;
@@ -138,12 +139,14 @@ public class UserServiceImpl implements UserService {
   @Override
   public void disable(String id) {
     updateUserStatus(id, BaseConstant.BASEDATA_STATUS_INVALID);
+    updateUserCredentialStatus(id, BaseConstant.BASEDATA_STATUS_INVALID);
   }
 
   @Transactional
   @Override
   public void enable(String id) {
     updateUserStatus(id, BaseConstant.BASEDATA_STATUS_VALID);
+    updateUserCredentialStatus(id, BaseConstant.BASEDATA_STATUS_VALID);
   }
 
   private void updateUserStatus(String id, int status) {
@@ -155,6 +158,21 @@ public class UserServiceImpl implements UserService {
       UserExample userExample = new UserExample();
       userExample.createCriteria().andIdEqualTo(id).andRowVersionEqualTo(userOrig.getRowVersion());
       int updateResult = userMapper.updateByExampleSelective(user, userExample);
+      if (updateResult == 0) {
+        throw new BusinessException("当前用户正在被其他操作修改");
+      }
+    }
+  }
+
+  private void updateUserCredentialStatus(String id, int status) {
+    UserCredential userOrig = userCredentialMapper.selectByPrimaryKey(id);
+    if (userOrig != null) {
+      UserCredential user = new UserCredential();
+      user.setRowVersion(commonMapper.now());
+      user.setStatus(status);
+      UserCredentialExample userExample = new UserCredentialExample();
+      userExample.createCriteria().andUserIdEqualTo(id).andRowVersionEqualTo(userOrig.getRowVersion());
+      int updateResult = userCredentialMapper.updateByExampleSelective(user, userExample);
       if (updateResult == 0) {
         throw new BusinessException("当前用户正在被其他操作修改");
       }
