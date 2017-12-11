@@ -1,6 +1,6 @@
 /*==============================================================*/
 /* DBMS name:      MySQL 5.0                                    */
-/* Created on:     2017/12/4 16:45:03                           */
+/* Created on:     2017/12/11 12:48:11                          */
 /*==============================================================*/
 
 
@@ -35,7 +35,6 @@ create table api
    name                 varchar(50) not null,
    http_method          varchar(50) not null,
    url                  varchar(100) not null,
-   enterprise_id        char(36) not null,
    primary key (id)
 );
 
@@ -59,7 +58,6 @@ create table operation
    code                 varchar(50) not null,
    name                 varchar(50) not null,
    page_id              char(36) not null,
-   enterprise_id        char(36) not null,
    primary key (id)
 );
 
@@ -88,7 +86,6 @@ create table page
    weight               int not null,
    level                int not null,
    parent_id            char(36),
-   enterprise_id        char(36) not null,
    primary key (id)
 );
 
