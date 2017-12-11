@@ -48,7 +48,11 @@ public class AuthorizationServiceImpl implements Authorization {
     //TODO Method 大小写区分
     example.createCriteria().andHttpMethodEqualTo(httpMethod).andEnterpriseIdEqualTo(enterpriseId);
     List<Api> apis = apiMapper.selectByExample(example);
-    List<Api> results = apis.stream().filter(api -> Pattern.matches(api.getUrl(), url)).collect(Collectors.toList());
+    List<Api> results = apis.stream().filter(api -> api.getUrl().equals(url)).collect(Collectors.toList());
+    if (results != null && results.size() > 0) {
+      return results.get(0);
+    }
+    results = apis.stream().filter(api -> Pattern.matches(api.getUrl(), url)).collect(Collectors.toList());
     if (results != null && results.size() > 0) {
       return results.get(0);
     }
