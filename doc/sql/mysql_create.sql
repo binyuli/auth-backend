@@ -1,6 +1,6 @@
 /*==============================================================*/
 /* DBMS name:      MySQL 5.0                                    */
-/* Created on:     2017/12/11 12:48:11                          */
+/* Created on:     2017/12/11 15:04:15                          */
 /*==============================================================*/
 
 
@@ -25,6 +25,8 @@ drop table if exists user;
 drop table if exists user_credential;
 
 drop table if exists user_role;
+
+drop table if exists white_list;
 
 /*==============================================================*/
 /* Table: api                                                   */
@@ -118,8 +120,12 @@ create table role
 (
    id                   char(36) not null,
    name                 varchar(50) not null,
-   create_time          datetime,
-   creator              varchar(50),
+   creator_id           char(36) not null,
+   creator_name         varchar(50) not null,
+   create_time          datetime not null,
+   modifier_id          char(36),
+   modifier_name        varchar(50),
+   modify_time          datetime,
    enterprise_id        char(36) not null,
    status               int comment '2:正常;
             0:作废;',
@@ -136,8 +142,11 @@ create table user
    name                 varchar(50) not null,
    open_id              varchar(100),
    username             varchar(50) not null comment '用户名',
-   create_time          datetime,
-   creator              varchar(50),
+   creator_id           char(36) not null,
+   creator_name         varchar(50) not null,
+   create_time          datetime not null,
+   modifier_id          char(36),
+   modifier_name        varchar(50),
    modify_time          datetime,
    enterprise_id        char(36) not null,
    status               int not null comment '2:正常;
@@ -169,5 +178,14 @@ create table user_role
    user_id              char(36) not null,
    role_id              char(36) not null,
    primary key (role_id, user_id)
+);
+
+/*==============================================================*/
+/* Table: white_list                                            */
+/*==============================================================*/
+create table white_list
+(
+   api_id               char(36) not null,
+   primary key (api_id)
 );
 
