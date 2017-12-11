@@ -35,9 +35,9 @@ public class AuthController extends BaseContext {
    * @return ResponseEntity
    */
   @RequestMapping(value = "/auth")
-  public ResponseEntity<Void> isAuthorized(@RequestHeader(value = "X-Original-URI") String url,
+  public ResponseEntity<Void> isAuthorized(@RequestHeader(value = "X-Original-Method") String httpMethod,
+                                           @RequestHeader(value = "X-Original-URI") String url,
                                            HttpServletRequest request) {
-    String httpMethod = request.getMethod();
     HttpSession session = request.getSession();
     Object userId = session.getAttribute(OnlineManager.KEY_SYSTEM_SECURITY_CURRENT_USER_ID);
     if (userId == null) {
