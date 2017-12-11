@@ -15,11 +15,13 @@ import bz.sunlight.exception.BusinessException;
 import bz.sunlight.mapstruct.RoleMapStruct;
 import bz.sunlight.service.RoleService;
 import bz.sunlight.utils.BeanUtilsHelper;
+import bz.sunlight.vo.LoginUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -50,11 +52,16 @@ public class RoleServiceImpl implements RoleService {
 
   @Transactional
   @Override
-  public void abandon(String id) {
+  public void abandon(String id, LoginUser user) {
     Role roleOrig = roleMapper.selectByPrimaryKey(id);
     if (roleOrig != null) {
       Role role = new Role();
       role.setStatus(BaseConstant.BASEDATA_STATUS_INVALID);
+      //更新修改人信息
+      role.setModifierId(user.getId());
+      role.setModifierName(user.getName());
+      Date now = new Date();
+      role.setModifyTime(now);
       RoleExample roleExample = new RoleExample();
       roleExample.createCriteria().andIdEqualTo(id).andRowVersionEqualTo(roleOrig.getRowVersion());
       int updateResult = roleMapper.updateByExampleSelective(role, roleExample);
@@ -66,13 +73,18 @@ public class RoleServiceImpl implements RoleService {
 
   @Transactional
   @Override
-  public void editRoleInfo(String id, String name) {
+  public void editRoleInfo(String id, String name, LoginUser user) {
     Role roleOrig = roleMapper.selectByPrimaryKey(id);
     if (roleOrig != null && !roleOrig.getName().equals(name)) {
       //角色名称 有变化则 检查重复并更新数据, 无变化则不做处理
       checkDuplicateRoleName(name);
       Role role = new Role();
       role.setName(name);
+      //更新修改人信息
+      role.setModifierId(user.getId());
+      role.setModifierName(user.getName());
+      Date now = new Date();
+      role.setModifyTime(now);
       RoleExample roleExample = new RoleExample();
       roleExample.createCriteria().andIdEqualTo(id).andRowVersionEqualTo(roleOrig.getRowVersion());
       int updateResult = roleMapper.updateByExampleSelective(role, roleExample);
@@ -84,12 +96,18 @@ public class RoleServiceImpl implements RoleService {
 
   @Transactional
   @Override
-  public void save(SaveRoleDTO roleDTO, CommonDTO commonDTO) {
+  public void save(SaveRoleDTO roleDTO, LoginUser user) {
     checkDuplicateRoleName(roleDTO.getName());
     Role role = roleMapStruct.dtoToEntity(roleDTO);
-    BeanUtilsHelper.copyPropertiesWithRuntimeException(role, commonDTO);
+    //BeanUtilsHelper.copyPropertiesWithRuntimeException(role, commonDTO);
     role.setStatus(BaseConstant.BASEDATA_STATUS_VALID);
     role.setId(UUID.randomUUID().toString());
+    //添加创建人信息
+    role.setCreatorId(user.getId());
+    role.setCreatorName(user.getName());
+    Date now = new Date();
+    role.setCreateTime(now);
+    role.setEnterpriseId(user.getEnterpriseId());
     roleMapper.insert(role);
     addPermission(roleDTO, role.getId());
   }
@@ -105,7 +123,7 @@ public class RoleServiceImpl implements RoleService {
 
   @Transactional
   @Override
-  public void edit(String id, SaveRoleDTO roleDTO) {
+  public void edit(String id, SaveRoleDTO roleDTO, LoginUser user) {
     Role roleOrig = roleMapper.selectByPrimaryKey(id);
     if (roleOrig != null) {
       // 用户名如果未修改则不进行重名排查
@@ -114,6 +132,11 @@ public class RoleServiceImpl implements RoleService {
       }
       Role role = roleMapStruct.dtoToEntity(roleDTO);
       role.setRowVersion(commonMapper.now());
+      //更新修改人信息
+      role.setModifierId(user.getId());
+      role.setModifierName(user.getName());
+      Date now = new Date();
+      role.setModifyTime(now);
       RoleExample roleExample = new RoleExample();
       roleExample.createCriteria().andIdEqualTo(id).andRowVersionEqualTo(roleOrig.getRowVersion());
       int updateResult = roleMapper.updateByExampleSelective(role, roleExample);

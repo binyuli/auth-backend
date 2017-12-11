@@ -63,20 +63,21 @@ public class RoleController extends BaseContext {
    */
   @PostMapping(value = "/roles")
   public ResponseEntity<Void> add(@RequestBody SaveRoleDTO saveRoleDTO, @RequestHeader("X-USER-ID") String userId) {
-    roleService.save(saveRoleDTO, createCommonDTO(userId));
+    roleService.save(saveRoleDTO, getLoginUser(userId));
     return ResponseEntity.status(HttpStatus.CREATED).build();
   }
 
   /**
    * 修改角色.
    *
-   * @param id 角色Id
-   * @param editRoleDTO  角色信息
+   * @param id          角色Id
+   * @param editRoleDTO 角色信息
    * @return void
    */
   @PutMapping(value = "/roles/{id}")
-  public ResponseEntity<Void> edit(@PathVariable String id, @RequestBody SaveRoleDTO editRoleDTO) {
-    roleService.edit(id, editRoleDTO);
+  public ResponseEntity<Void> edit(@PathVariable String id, @RequestBody SaveRoleDTO editRoleDTO,
+                                   @RequestHeader("X-USER-ID") String userId) {
+    roleService.edit(id, editRoleDTO, getLoginUser(userId));
     return ResponseEntity.status(HttpStatus.OK).build();
   }
 
@@ -87,8 +88,8 @@ public class RoleController extends BaseContext {
    * @return void
    */
   @PutMapping(value = "/roles/{id}/abandon")
-  public ResponseEntity<Void> abandon(@PathVariable String id) {
-    roleService.abandon(id);
+  public ResponseEntity<Void> abandon(@PathVariable String id, @RequestHeader("X-USER-ID") String userId) {
+    roleService.abandon(id, getLoginUser(userId));
     return new ResponseEntity<Void>(HttpStatus.OK);
   }
 
@@ -100,8 +101,9 @@ public class RoleController extends BaseContext {
    * @return void.
    */
   @PutMapping(value = "/roles/{id}/info")
-  public ResponseEntity<Void> info(@PathVariable String id, @RequestBody Map map) {
-    roleService.editRoleInfo(id, map.get("name").toString());
+  public ResponseEntity<Void> info(@PathVariable String id, @RequestBody Map map,
+                                   @RequestHeader("X-USER-ID") String userId) {
+    roleService.editRoleInfo(id, map.get("name").toString(), getLoginUser(userId));
     return new ResponseEntity<Void>(HttpStatus.OK);
   }
 

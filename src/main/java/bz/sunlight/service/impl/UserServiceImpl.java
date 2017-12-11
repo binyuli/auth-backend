@@ -7,7 +7,6 @@ import bz.sunlight.dao.RoleMapper;
 import bz.sunlight.dao.UserCredentialMapper;
 import bz.sunlight.dao.UserMapper;
 import bz.sunlight.dao.UserRoleMapper;
-import bz.sunlight.dto.CommonDTO;
 import bz.sunlight.dto.SaveUserDTO;
 import bz.sunlight.dto.UserDTO;
 import bz.sunlight.dto.UserSearchDTO;
@@ -33,8 +32,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import sun.rmi.runtime.Log;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -93,7 +94,7 @@ public class UserServiceImpl implements UserService {
 
   @Transactional
   @Override
-  public void save(SaveUserDTO userDTO, CommonDTO commonDTO) {
+  public void save(SaveUserDTO userDTO, LoginUser loginUser) {
 
     //验证用户名是否重复
     UserExample userExample = new UserExample();
@@ -108,9 +109,14 @@ public class UserServiceImpl implements UserService {
       user = userMapStruct.dtoToEntity(userDTO);
     }
     //填充公共信息 e.g 创建时间 创建人等
-    BeanUtilsHelper.copyPropertiesWithRuntimeException(user, commonDTO);
+    //BeanUtilsHelper.copyPropertiesWithRuntimeException(user, loginUser);
     user.setId(UUID.randomUUID().toString());
     user.setStatus(BaseConstant.BASEDATA_STATUS_VALID);
+    user.setCreatorId(loginUser.getId());
+    user.setCreatorName(loginUser.getName());
+    Date now = new Date();
+    user.setCreateTime(now);
+    user.setEnterpriseId(loginUser.getEnterpriseId());
     userMapper.insert(user);
     // 添加用户角色信息
     List<String> roles = userDTO.getRoles();
@@ -137,24 +143,29 @@ public class UserServiceImpl implements UserService {
 
   @Transactional
   @Override
-  public void disable(String id) {
-    updateUserStatus(id, BaseConstant.BASEDATA_STATUS_INVALID);
+  public void disable(String id, LoginUser loginUser) {
+    updateUserStatus(id, BaseConstant.BASEDATA_STATUS_INVALID, loginUser);
     updateUserCredentialStatus(id, BaseConstant.BASEDATA_STATUS_INVALID);
   }
 
   @Transactional
   @Override
-  public void enable(String id) {
-    updateUserStatus(id, BaseConstant.BASEDATA_STATUS_VALID);
+  public void enable(String id, LoginUser loginUser) {
+    updateUserStatus(id, BaseConstant.BASEDATA_STATUS_VALID, loginUser);
     updateUserCredentialStatus(id, BaseConstant.BASEDATA_STATUS_VALID);
   }
 
-  private void updateUserStatus(String id, int status) {
+  private void updateUserStatus(String id, int status, LoginUser loginUser) {
     User userOrig = userMapper.selectByPrimaryKey(id);
     if (userOrig != null) {
       User user = new User();
       user.setRowVersion(commonMapper.now());
       user.setStatus(status);
+      //更新修改人信息
+      user.setModifierId(loginUser.getId());
+      user.setModifierName(loginUser.getName());
+      Date now = new Date();
+      user.setModifyTime(now);
       UserExample userExample = new UserExample();
       userExample.createCriteria().andIdEqualTo(id).andRowVersionEqualTo(userOrig.getRowVersion());
       int updateResult = userMapper.updateByExampleSelective(user, userExample);
@@ -181,11 +192,16 @@ public class UserServiceImpl implements UserService {
 
   @Transactional
   @Override
-  public void edit(String id, SaveUserDTO userDTO) {
+  public void edit(String id, SaveUserDTO userDTO, LoginUser loginUser) {
     User userOrig = userMapper.selectByPrimaryKey(id);
     if (userOrig != null) {
       User user = userMapStruct.dtoToEntity(userDTO);
       user.setRowVersion(commonMapper.now());
+      //更新修改人信息
+      user.setModifierId(loginUser.getId());
+      user.setModifierName(loginUser.getName());
+      Date now = new Date();
+      user.setModifyTime(now);
       UserExample userExample = new UserExample();
       userExample.createCriteria().andIdEqualTo(id).andRowVersionEqualTo(userOrig.getRowVersion());
       int updateResult = userMapper.updateByExampleSelective(user, userExample);

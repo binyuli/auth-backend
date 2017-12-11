@@ -1,8 +1,10 @@
 package bz.sunlight.service.impl;
 
 import bz.sunlight.dao.ApiMapper;
+import bz.sunlight.dao.WhiteListMapper;
 import bz.sunlight.entity.Api;
 import bz.sunlight.entity.ApiExample;
+import bz.sunlight.entity.WhiteList;
 import bz.sunlight.service.Authorization;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,10 +19,12 @@ public class AuthorizationServiceImpl implements Authorization {
 
 
   private ApiMapper apiMapper;
+  private WhiteListMapper whiteListMapper;
 
   @Autowired
-  public AuthorizationServiceImpl(ApiMapper apiMapper) {
+  public AuthorizationServiceImpl(ApiMapper apiMapper, WhiteListMapper whiteListMapper) {
     this.apiMapper = apiMapper;
+    this.whiteListMapper = whiteListMapper;
   }
 
   @Override
@@ -31,6 +35,12 @@ public class AuthorizationServiceImpl implements Authorization {
     stopWatch.stop();
     System.out.println(stopWatch.prettyPrint());
     if (api != null) {
+      // 判断api是否在白名单中
+      WhiteList whiteList = whiteListMapper.selectByPrimaryKey(api.getId());
+      if (whiteList != null) {
+        return true;
+      }
+      // 否则，判断是否有权限
       stopWatch.start("calcApiByUser");
       int resultCount = calcApiByUser(userId, api.getId());
       stopWatch.stop();

@@ -1,6 +1,5 @@
 package bz.sunlight.service;
 
-import bz.sunlight.dto.CommonDTO;
 import bz.sunlight.dto.SaveUserDTO;
 import bz.sunlight.dto.UserSearchDTO;
 import bz.sunlight.vo.CurrentUserVO;
@@ -10,13 +9,13 @@ import bz.sunlight.vo.UserVO;
 
 public interface UserService {
 
-  void save(SaveUserDTO userDTO, CommonDTO commonDTO);
+  void save(SaveUserDTO userDTO, LoginUser loginUser);
 
-  void disable(String id);
+  void disable(String id, LoginUser loginUser);
 
-  void enable(String id);
+  void enable(String id, LoginUser loginUser);
 
-  void edit(String id, SaveUserDTO userDTO);
+  void edit(String id, SaveUserDTO userDTO, LoginUser loginUser);
 
   UserVO getUser(String id);
 

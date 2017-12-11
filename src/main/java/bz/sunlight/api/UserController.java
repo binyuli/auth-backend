@@ -30,7 +30,7 @@ public class UserController extends BaseContext {
    */
   @PostMapping(value = "/users")
   public ResponseEntity<ResultInfo> add(@RequestBody SaveUserDTO userDTO, @RequestHeader("X-USER-ID") String userId) {
-    userService.save(userDTO, createCommonDTO(userId));
+    userService.save(userDTO, getLoginUser(userId));
     return ResponseEntity.status(HttpStatus.CREATED).build();
   }
 
@@ -41,8 +41,8 @@ public class UserController extends BaseContext {
    * @return void
    */
   @PutMapping(value = "/users/{id}/disable")
-  public ResponseEntity<Void> disable(@PathVariable String id) {
-    userService.disable(id);
+  public ResponseEntity<Void> disable(@PathVariable String id, @RequestHeader("X-USER-ID") String userId) {
+    userService.disable(id, getLoginUser(userId));
     return new ResponseEntity<Void>(HttpStatus.OK);
   }
 
@@ -53,8 +53,8 @@ public class UserController extends BaseContext {
    * @return void
    */
   @PutMapping(value = "/users/{id}/enable")
-  public ResponseEntity<Void> enable(@PathVariable String id) {
-    userService.enable(id);
+  public ResponseEntity<Void> enable(@PathVariable String id, @RequestHeader("X-USER-ID") String userId) {
+    userService.enable(id, getLoginUser(userId));
     return new ResponseEntity<Void>(HttpStatus.OK);
   }
 
@@ -66,8 +66,9 @@ public class UserController extends BaseContext {
    * @return void
    */
   @PutMapping(value = "/users/{id}")
-  public ResponseEntity<Void> edit(@PathVariable String id, @RequestBody SaveUserDTO editUserDTO) {
-    userService.edit(id, editUserDTO);
+  public ResponseEntity<Void> edit(@PathVariable String id, @RequestBody SaveUserDTO editUserDTO,
+                                   @RequestHeader("X-USER-ID") String userId) {
+    userService.edit(id, editUserDTO, getLoginUser(userId));
     return ResponseEntity.status(HttpStatus.OK).build();
   }
 
