@@ -35,7 +35,7 @@ public class PageController extends BaseContext {
   @RequestMapping("/users/me/pages")
   public ResponseEntity<ResultInfo> getMenuByUser(@RequestHeader("X-USER-ID") String userId) {
     LoginUser user = getLoginUser(userId);
-    List<PageDTO> pages = pageService.getMenuByByExample(user.getId(), user.getEnterpriseId());
+    List<PageDTO> pages = pageService.getMenuByByExample(user.getId());
     return ResponseEntity.status(HttpStatus.OK).body(buildResultInfo(null, pageMapStruct.pageDTOToMenu(pages)));
   }
 
@@ -68,7 +68,7 @@ public class PageController extends BaseContext {
       maxLevel += 1;
     }
     LoginUser user = getLoginUser(userId);
-    List<PageDTO> pagesDTO = pageService.getPagesByMaxLevel(maxLevel, user.getEnterpriseId());
+    List<PageDTO> pagesDTO = pageService.getPagesByMaxLevel(maxLevel);
     List<PageVO> pagesVO = pageMapStruct.dtoToPageVOList(pagesDTO);
     return ResponseEntity.status(HttpStatus.OK).body(buildResultInfo(null, pagesVO));
   }
@@ -82,7 +82,7 @@ public class PageController extends BaseContext {
   @GetMapping(value = "/pages/{id}")
   public ResponseEntity<ResultInfo> getPages(@PathVariable String id, @RequestHeader("X-USER-ID") String userId) {
     LoginUser user = getLoginUser(userId);
-    List<PageDTO> pagesDTO = pageService.getPageDetailsByPageId(id, user.getEnterpriseId());
+    List<PageDTO> pagesDTO = pageService.getPageDetailsByPageId(id);
     PageDetailsVO pageDetailsVO = pageMapStruct.dtoToPageDetailsVO(pagesDTO.get(0));
     return ResponseEntity.status(HttpStatus.OK).body(buildResultInfo(null, pageDetailsVO));
   }

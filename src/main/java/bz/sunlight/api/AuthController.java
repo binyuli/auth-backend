@@ -43,8 +43,7 @@ public class AuthController extends BaseContext {
     if (userId == null) {
       return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
     }
-    LoginUser user = getLoginUser(userId.toString());
-    if (authorizationService.isAuthorized(httpMethod, url, user.getId(), user.getEnterpriseId())) {
+    if (authorizationService.isAuthorized(httpMethod, url, userId.toString())) {
       return ResponseEntity.ok().header("X-USER-ID", userId.toString()).build();
     }
     return ResponseEntity.status(HttpStatus.FORBIDDEN).build();

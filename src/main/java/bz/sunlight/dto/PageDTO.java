@@ -14,7 +14,6 @@ public class PageDTO {
   private Integer weight;
   private Integer level;
   private String parentId;
-  private String enterpriseId;
   private List<PageDTO> items;
   private List<OperationDTO> operations;
   private Integer maxLevel; //获取 page 列表 用于控制显示层级
@@ -22,7 +21,7 @@ public class PageDTO {
   /**
    * 添加节点集合.
    *
-   * @param pageDTO.
+   * @param pageDTO page
    */
   public void add(PageDTO pageDTO) {
     if (items == null) {
@@ -97,14 +96,6 @@ public class PageDTO {
 
   public void setParentId(String parentId) {
     this.parentId = parentId;
-  }
-
-  public String getEnterpriseId() {
-    return enterpriseId;
-  }
-
-  public void setEnterpriseId(String enterpriseId) {
-    this.enterpriseId = enterpriseId;
   }
 
   public List<PageDTO> getItems() {

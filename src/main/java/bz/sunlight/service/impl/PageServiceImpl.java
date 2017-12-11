@@ -107,23 +107,23 @@ public class PageServiceImpl implements PageService {
   }
 
   @Override
-  public List<PageDTO> getPageDetailsByPageId(String pageId, String enterpriseId) {
+  public List<PageDTO> getPageDetailsByPageId(String pageId) {
     Page page = pageMapper.selectByPrimaryKey(pageId);
-    List<Page> pages = getAllPages(enterpriseId);
-    List<Operation> operations = getAllOperations(enterpriseId);
+    List<Page> pages = getAllPages();
+    List<Operation> operations = getAllOperations();
     return buildPageTree(pages, operations, true, null, page);
   }
 
   @Override
-  public List<PageDTO> getPagesByMaxLevel(Integer maxLevel, String enterpriseId) {
-    List<Page> pages = getAllPages(enterpriseId);
-    List<Operation> operations = getAllOperations(enterpriseId);
+  public List<PageDTO> getPagesByMaxLevel(Integer maxLevel) {
+    List<Page> pages = getAllPages();
+    List<Operation> operations = getAllOperations();
     return buildPageTree(pages, operations, true, maxLevel);
   }
 
   @Override
-  public List<PageDTO> getMenuByByExample(String userId, String enterpriseId) {
-    List<Page> pages = getAllPages(userId, enterpriseId);
+  public List<PageDTO> getMenuByByExample(String userId) {
+    List<Page> pages = getAllPages(userId);
     //List<Operation> operationsOrig = getAllOperations(enterpriseId);
     return buildPageTree(pages, null, false, null);
   }
@@ -164,11 +164,11 @@ public class PageServiceImpl implements PageService {
    * 递归查询节点数据到最后一层
    * 如果isOperations 为 true 则 operationsOrig 不能为空
    *
-   * @param currentPage 当前页
-   * @param pagesOrig .
+   * @param currentPage    当前页
+   * @param pagesOrig      .
    * @param operationsOrig .
-   * @param isOperations .
-   * @param maxLevel 最大层数
+   * @param isOperations   .
+   * @param maxLevel       最大层数
    */
   private void recursion(PageDTO currentPage, List<Page> pagesOrig,
                          List<Operation> operationsOrig, boolean isOperations, Integer maxLevel) {
@@ -201,7 +201,7 @@ public class PageServiceImpl implements PageService {
    * 根据父节点获取子节点集合
    *
    * @param parentId 父节点Id
-   * @param pages .
+   * @param pages    .
    * @return list
    */
   private List<Page> getPageByParentId(String parentId, List<Page> pages) {
@@ -217,30 +217,35 @@ public class PageServiceImpl implements PageService {
     return result;
   }
 
-  private List<Operation> getAllOperations(String enterpriseId) {
+  private List<Operation> getAllOperations() {
     //TODO 加载所有业务操作 后续加缓存
     OperationExample operationExample = new OperationExample();
-    operationExample.createCriteria().andEnterpriseIdEqualTo(enterpriseId);
+    operationExample.createCriteria();
     return operationMapper.selectByExample(operationExample);
   }
 
-  private List<Page> getAllPages(String userId, String enterpriseId) {
+  /**
+   * 获取指定用户可访问的pages.
+   *
+   * @param userId 用户id
+   * @return List page
+   */
+  private List<Page> getAllPages(String userId) {
     //TODO 加载所有页面 后续加缓存
-    List<Page> pages = pageMapper.getMenuByByExample(userId, enterpriseId);
+    List<Page> pages = pageMapper.getMenuByByExample(userId);
     List<Page> allPages = getAllSortedPages(pages);
     return allPages;
   }
 
   /**
-   * 根据企业ID加载page.
+   * 获取所有page.
    *
-   * @param enterpriseId 企业Id
    * @return list page
    */
-  public List<Page> getAllPages(String enterpriseId) {
+  public List<Page> getAllPages() {
     //TODO 加载所有页面 后续加缓存
     PageExample pageExample = new PageExample();
-    pageExample.createCriteria().andEnterpriseIdEqualTo(enterpriseId);
+    pageExample.createCriteria();
     pageExample.setOrderByClause("level,Weight asc");
     return pageMapper.selectByExample(pageExample);
   }

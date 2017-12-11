@@ -24,10 +24,10 @@ public class AuthorizationServiceImpl implements Authorization {
   }
 
   @Override
-  public boolean isAuthorized(String httpMethod, String url, String userId, String enterpriseId) {
+  public boolean isAuthorized(String httpMethod, String url, String userId) {
     StopWatch stopWatch = new StopWatch("isAuthorized");
     stopWatch.start("get api");
-    Api api = getApiByMehtodUrl(httpMethod, url, enterpriseId);
+    Api api = getApiByMehtodUrl(httpMethod, url);
     stopWatch.stop();
     System.out.println(stopWatch.prettyPrint());
     if (api != null) {
@@ -43,10 +43,10 @@ public class AuthorizationServiceImpl implements Authorization {
     return false;
   }
 
-  private Api getApiByMehtodUrl(String httpMethod, String url, String enterpriseId) {
+  private Api getApiByMehtodUrl(String httpMethod, String url) {
     ApiExample example = new ApiExample();
     //TODO Method 大小写区分
-    example.createCriteria().andHttpMethodEqualTo(httpMethod).andEnterpriseIdEqualTo(enterpriseId);
+    example.createCriteria().andHttpMethodEqualTo(httpMethod);
     List<Api> apis = apiMapper.selectByExample(example);
     List<Api> results = apis.stream().filter(api -> api.getUrl().equals(url)).collect(Collectors.toList());
     if (results != null && results.size() > 0) {

@@ -8,7 +8,7 @@ import org.apache.ibatis.annotations.Param;
 import java.util.List;
 
 public interface PageMapper extends BaseMapper<Page, PageExample, String> {
-  public List<Page> getMenuByByExample(@Param("userId") String userId, @Param("enterpriseId") String enterpriseId);
+  List<Page> getMenuByByExample(@Param("userId") String userId);
 
-  public List<Page> getPageByRole(@Param("roleId") String roleId);
+  List<Page> getPageByRole(@Param("roleId") String roleId);
 }

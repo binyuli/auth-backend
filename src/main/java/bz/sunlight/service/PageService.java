@@ -8,7 +8,7 @@ import java.util.List;
 public interface PageService {
   List<String> getOperationsByPage(String userId, String pageId);
 
-  List<PageDTO> getMenuByByExample(String userId, String enterpriseId);
+  List<PageDTO> getMenuByByExample(String userId);
 
   /**
    * 获取角色详情API调用.
@@ -18,9 +18,9 @@ public interface PageService {
    */
   List<PageDTO> getPagesByRoleId(String roleId);
 
-  List<PageDTO> getPageDetailsByPageId(String pageId, String enterpriseId);
+  List<PageDTO> getPageDetailsByPageId(String pageId);
 
-  List<PageDTO> getPagesByMaxLevel(Integer maxLevel, String enterpriseId);
+  List<PageDTO> getPagesByMaxLevel(Integer maxLevel);
 
   Page getPageByCode(String code);
 }
