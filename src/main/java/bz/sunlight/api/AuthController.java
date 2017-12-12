@@ -55,7 +55,7 @@ public class AuthController extends BaseContext {
    * @return ResponseEntity
    * @throws Exception 异常
    */
-  @RequestMapping(method = RequestMethod.POST, value = "/user/login")
+  @RequestMapping(method = RequestMethod.POST, value = "/login")
   public ResponseEntity<Void> login(@RequestBody LoginUserDTO user,
                                     HttpServletRequest request) throws Exception {
     UserCredential userCredential = authenticationService.login(user.getEnterpriseCode(),
@@ -74,7 +74,7 @@ public class AuthController extends BaseContext {
    * @return ResponseEntity
    * @throws Exception 异常
    */
-  @RequestMapping(method = RequestMethod.POST, value = "/user/logout")
+  @RequestMapping(method = RequestMethod.POST, value = "/logout")
   public ResponseEntity<Void> logout(HttpServletRequest request) throws Exception {
     try {
       HttpSession session = request.getSession();
