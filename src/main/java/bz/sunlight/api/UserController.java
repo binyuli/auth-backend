@@ -80,7 +80,7 @@ public class UserController extends BaseContext {
    */
   @GetMapping(value = "/users")
   public ResponseEntity<ResultInfo> getUsers(UserSearchDTO userSearchDTO, @RequestHeader("X-USER-ID") String userId) {
-    LoginUser user = userService.getUserById(userId);
+    LoginUser user = getLoginUser(userId);
     // 传入当前登录用户的企业Id
     userSearchDTO.setEnterpriseId(user.getEnterpriseId());
     ResultWithPagination<UserVO> usersResult = userService.getUsers(userSearchDTO);

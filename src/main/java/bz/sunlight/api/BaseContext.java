@@ -1,11 +1,8 @@
 package bz.sunlight.api;
 
-import bz.sunlight.dto.CommonDTO;
 import bz.sunlight.service.UserService;
 import bz.sunlight.vo.LoginUser;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import java.util.Date;
 
 public class BaseContext {
   @Autowired
@@ -23,22 +20,6 @@ public class BaseContext {
   public LoginUser getLoginUser(String userId) {
     LoginUser user = this.userService.getUserById(userId);
     return user;
-  }
-
-  /**
-   * 无参构建通用对象.
-   *
-   * @return CommonDTO
-   */
-  public CommonDTO createCommonDTO(String userId) {
-    LoginUser user = getLoginUser(userId);
-    Date now = new Date();
-    CommonDTO commonDTO = new CommonDTO();
-    commonDTO.setCreateTime(now);
-    commonDTO.setCreator(user.getUsername());
-    commonDTO.setEnterpriseId(user.getEnterpriseId());
-    commonDTO.setModifyTime(now);
-    return commonDTO;
   }
 
   protected class ResultInfo {

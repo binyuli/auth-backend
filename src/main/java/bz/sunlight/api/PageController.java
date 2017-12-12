@@ -4,7 +4,6 @@ import bz.sunlight.dto.PageDTO;
 import bz.sunlight.entity.Page;
 import bz.sunlight.mapstruct.PageMapStruct;
 import bz.sunlight.service.PageService;
-import bz.sunlight.vo.LoginUser;
 import bz.sunlight.vo.PageDetailsVO;
 import bz.sunlight.vo.PageVO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,8 +33,7 @@ public class PageController extends BaseContext {
    */
   @RequestMapping("/users/me/pages")
   public ResponseEntity<ResultInfo> getMenuByUser(@RequestHeader("X-USER-ID") String userId) {
-    LoginUser user = getLoginUser(userId);
-    List<PageDTO> pages = pageService.getMenuByByExample(user.getId());
+    List<PageDTO> pages = pageService.getMenuByByExample(userId);
     return ResponseEntity.status(HttpStatus.OK).body(buildResultInfo(null, pageMapStruct.pageDTOToMenu(pages)));
   }
 
@@ -48,10 +46,9 @@ public class PageController extends BaseContext {
   @GetMapping(value = "/users/me/pages/{code}")
   public ResponseEntity<ResultInfo> getOperationsByPage(@PathVariable String code,
                                                         @RequestHeader("X-USER-ID") String userId) {
-    LoginUser user = getLoginUser(userId);
     Page page = pageService.getPageByCode(code);
     return ResponseEntity.status(HttpStatus.OK).body(buildResultInfo(null,
-        pageService.getOperationsByPage(user.getId(), page.getId())));
+        pageService.getOperationsByPage(userId, page.getId())));
   }
 
   /**
@@ -61,13 +58,11 @@ public class PageController extends BaseContext {
    * @return resultInfo
    */
   @GetMapping(value = "/pages")
-  public ResponseEntity<ResultInfo> getPages(@RequestParam(value = "maxLevel", required = false) Integer maxLevel,
-                                             @RequestHeader("X-USER-ID") String userId) {
+  public ResponseEntity<ResultInfo> getPages(@RequestParam(value = "maxLevel", required = false) Integer maxLevel) {
     //方便计算返回结构中的 itemCount 或 operationCount
     if (maxLevel != null) {
       maxLevel += 1;
     }
-    LoginUser user = getLoginUser(userId);
     List<PageDTO> pagesDTO = pageService.getPagesByMaxLevel(maxLevel);
     List<PageVO> pagesVO = pageMapStruct.dtoToPageVOList(pagesDTO);
     return ResponseEntity.status(HttpStatus.OK).body(buildResultInfo(null, pagesVO));
@@ -80,8 +75,7 @@ public class PageController extends BaseContext {
    * @return ResultInfo
    */
   @GetMapping(value = "/pages/{id}")
-  public ResponseEntity<ResultInfo> getPages(@PathVariable String id, @RequestHeader("X-USER-ID") String userId) {
-    LoginUser user = getLoginUser(userId);
+  public ResponseEntity<ResultInfo> getPages(@PathVariable String id) {
     List<PageDTO> pagesDTO = pageService.getPageDetailsByPageId(id);
     PageDetailsVO pageDetailsVO = pageMapStruct.dtoToPageDetailsVO(pagesDTO.get(0));
     return ResponseEntity.status(HttpStatus.OK).body(buildResultInfo(null, pageDetailsVO));
