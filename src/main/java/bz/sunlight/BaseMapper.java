@@ -4,6 +4,8 @@ import org.apache.ibatis.annotations.Param;
 
 import java.io.Serializable;
 import java.util.List;
+//todo: 目前通过generator 生成的mapper.xml 可能丢失 selectByPrimaryKey，updateByPrimaryKeySelective，updateByPrimaryKey方法
+// 缺失上述方法的 有 OperationApiMapper.xml, PageApiMapper.xml，UserRoleMapper.xml, WhiteListMapper.xml 使用的时候需注意以下
 
 public interface BaseMapper<T, E, PrimaryKeyT extends Serializable> {
   int countByExample(E example);
