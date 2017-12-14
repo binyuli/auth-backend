@@ -32,11 +32,12 @@ public class AuthController extends BaseContext {
    * api访问权限校验.
    *
    * @return ResponseEntity
+   * @throws Exception 异常
    */
   @RequestMapping(value = "/auth")
   public ResponseEntity<Void> isAuthorized(@RequestHeader(value = "X-Original-Method") String httpMethod,
                                            @RequestHeader(value = "X-Original-URI") String url,
-                                           HttpServletRequest request) {
+                                           HttpServletRequest request) throws Exception {
     String requestPath;
     try {
       URI test = new URI(url);
