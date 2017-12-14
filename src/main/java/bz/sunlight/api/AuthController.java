@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.net.URI;
 
 @RestController
 @RequestMapping(value = "/api/v1")
@@ -36,12 +37,19 @@ public class AuthController extends BaseContext {
   public ResponseEntity<Void> isAuthorized(@RequestHeader(value = "X-Original-Method") String httpMethod,
                                            @RequestHeader(value = "X-Original-URI") String url,
                                            HttpServletRequest request) {
+    String requestPath;
+    try {
+      URI test = new URI(url);
+      requestPath = test.getPath();
+    } catch (Exception ex) {
+      throw new BusinessException("不是有效的uri");
+    }
     HttpSession session = request.getSession();
     Object userId = session.getAttribute(OnlineManager.KEY_SYSTEM_SECURITY_CURRENT_USER_ID);
     if (userId == null) {
       return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
     }
-    if (authorizationService.isAuthorized(httpMethod, url, userId.toString())) {
+    if (authorizationService.isAuthorized(httpMethod, requestPath, userId.toString())) {
       return ResponseEntity.ok().header("X-USER-ID", userId.toString()).build();
     }
     return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
