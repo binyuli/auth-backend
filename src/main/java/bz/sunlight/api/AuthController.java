@@ -99,6 +99,7 @@ public class AuthController extends BaseContext {
     final int ttl = 60 * 60;
     String jwt = tokenService.createJwt(userCredential.getUserId(), ttl);
     final Cookie cookie = new Cookie(this.authCookie, jwt);
+    cookie.setPath("/");
     cookie.setHttpOnly(true);
     cookie.setMaxAge(ttl);
     response.addCookie(cookie);
