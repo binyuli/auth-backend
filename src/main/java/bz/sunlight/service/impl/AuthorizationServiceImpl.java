@@ -8,7 +8,6 @@ import bz.sunlight.entity.WhiteList;
 import bz.sunlight.service.Authorization;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StopWatch;
 
 import java.util.List;
 import java.util.regex.Pattern;
@@ -29,11 +28,7 @@ public class AuthorizationServiceImpl implements Authorization {
 
   @Override
   public boolean isAuthorized(String httpMethod, String url, String userId) {
-    StopWatch stopWatch = new StopWatch("isAuthorized");
-    stopWatch.start("get api");
     Api api = getApiByMehtodUrl(httpMethod, url);
-    stopWatch.stop();
-    System.out.println(stopWatch.prettyPrint());
     if (api != null) {
       // 判断api是否在白名单中
       WhiteList whiteList = whiteListMapper.selectByPrimaryKey(api.getId());
@@ -41,10 +36,7 @@ public class AuthorizationServiceImpl implements Authorization {
         return true;
       }
       // 否则，判断是否有权限
-      stopWatch.start("calcApiByUser");
       int resultCount = calcApiByUser(userId, api.getId());
-      stopWatch.stop();
-      System.out.println(stopWatch.prettyPrint());
       if (resultCount != 0) {
         return true;
       }
