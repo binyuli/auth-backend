@@ -20,7 +20,6 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.net.URI;
-import java.security.SignatureException;
 import java.util.Arrays;
 
 import static com.google.common.base.Strings.isNullOrEmpty;
@@ -38,15 +37,15 @@ public class AuthController extends BaseContext {
   private DefaultTokenService tokenService;
 
   /**
-   * api访问权限校验.
+   * 进行身份验证及权限校验.
+   * <p>全部通过则返回 200，并包含 X-USER-ID 自定义头部；身份验证失败则返回 401，权限校验失败则返回 403.</p>
    *
-   * @return ResponseEntity
-   * @throws Exception 异常
+   * @return Response
    */
   @RequestMapping(value = "/auth")
   public ResponseEntity<Void> isAuthorized(@RequestHeader(value = "X-Original-Method") String httpMethod,
                                            @RequestHeader(value = "X-Original-URI") String url,
-                                           HttpServletRequest request) throws Exception {
+                                           HttpServletRequest request) {
     String requestPath;
     try {
       URI test = new URI(url);
@@ -58,15 +57,15 @@ public class AuthController extends BaseContext {
     Cookie[] cookies = request.getCookies();
     if (cookies != null) {
       String token = Arrays.stream(cookies)
-                      .filter(c -> c.getName().equals(authCookie))
-                      .map(Cookie::getValue)
-                      .findFirst().orElse("");
+          .filter(c -> c.getName().equals(authCookie))
+          .map(Cookie::getValue)
+          .findFirst().orElse("");
 
       if (!isNullOrEmpty(token)) {
         Claims claims = tokenService.parseJwt(token);
         if (claims != null) {
           String userId = claims.getSubject();
-          
+
           if (!isNullOrEmpty(userId)) {
             if (authorizationService.isAuthorized(httpMethod, requestPath, userId)) {
               return ResponseEntity.ok().header("X-USER-ID", userId).build();
@@ -82,10 +81,11 @@ public class AuthController extends BaseContext {
   }
 
   /**
-   * 登录.
+   * 使用企业编号、用户名和密码登录，认证成功则在 Response 中包含身份凭据的 Cookie.
    *
-   * @param user 登录用户信息
-   * @return ResponseEntity
+   * @param user     认证信息
+   * @param response Response 对象
+   * @return Response
    */
   @RequestMapping(method = RequestMethod.POST, value = "/login")
   public ResponseEntity<Void> login(@RequestBody LoginUserDTO user, HttpServletResponse response) {
@@ -106,9 +106,10 @@ public class AuthController extends BaseContext {
   }
 
   /**
-   * 注销.
+   * 注销，注销成功则在 Response 中清除身份凭据的 Cookie.
    *
-   * @return ResponseEntity
+   * @param response Response 对象
+   * @return Response
    */
   @RequestMapping(method = RequestMethod.POST, value = "/logout")
   public ResponseEntity<Void> logout(HttpServletResponse response) {
@@ -121,7 +122,7 @@ public class AuthController extends BaseContext {
    * 生成身份凭据的 Cookie.
    *
    * @param value 身份凭据
-   * @param ttl 有效期，以秒为单位
+   * @param ttl   有效期，以秒为单位
    * @return Cookie 对象
    */
   private Cookie createAuthCookie(String value, int ttl) {

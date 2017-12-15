@@ -23,7 +23,7 @@ public final class DefaultTokenService {
   /**
    * 构造 JSON Web Token.
    *
-   * @param subject 认证主体
+   * @param subject    认证主体
    * @param ttlSeconds 有效期，以秒为单位
    * @return JWT 字符串
    * @throws SignatureException SigningKey 的算法不被支持
