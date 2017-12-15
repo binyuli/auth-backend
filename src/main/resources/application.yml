@@ -21,3 +21,9 @@ spring:
 mybatis:
   mapper-locations: classpath*:mybatis/mapper/*.xml
   type-aliases-package: bz.sunlight.entity
+
+security:
+  oauth2:
+    resource:
+      jwt:
+        key-value: i/t17RKjW1EESYsx1VRq56QsJV8gxoO4xUgXKZfrel0tW6fQOEKBVMd364ENSuVX2mHRuYU+4tmFkIW1ajPHiA==
