@@ -11,7 +11,7 @@ import javax.crypto.spec.SecretKeySpec;
 @Configuration
 public class ApplicationConfiguration {
   /**
-   * JWT 签名密钥
+   * JWT 签名密钥.
    */
   @Value("${security.oauth2.resource.jwt.key-value}")
   public String jwtKeyValue;
