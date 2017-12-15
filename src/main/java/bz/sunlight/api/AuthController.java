@@ -1,7 +1,6 @@
 package bz.sunlight.api;
 
 import bz.sunlight.auth.DefaultTokenService;
-import bz.sunlight.constant.OnlineManager;
 import bz.sunlight.dto.LoginUserDTO;
 import bz.sunlight.entity.UserCredential;
 import bz.sunlight.exception.BusinessException;
@@ -20,7 +19,6 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.net.URI;
 import java.security.SignatureException;
 import java.util.Arrays;
@@ -102,7 +100,7 @@ public class AuthController extends BaseContext {
     cookie.setPath("/");
     cookie.setHttpOnly(true);
     cookie.setMaxAge(ttl);
-    response.addCookie(cookie);
+    response.addCookie(createAuthCookie(jwt, ttl));
 
     return ResponseEntity.ok().build();
   }
@@ -110,19 +108,27 @@ public class AuthController extends BaseContext {
   /**
    * 注销.
    *
-   * @param request request对象
    * @return ResponseEntity
-   * @throws Exception 异常
    */
   @RequestMapping(method = RequestMethod.POST, value = "/logout")
-  public ResponseEntity<Void> logout(HttpServletRequest request) throws Exception {
-    try {
-      HttpSession session = request.getSession();
-      session.removeAttribute(OnlineManager.KEY_SYSTEM_SECURITY_CURRENT_USER_ID);
-      session.invalidate();
-    } catch (Exception e) {
-      throw new BusinessException("注销失败");
-    }
+  public ResponseEntity<Void> logout(HttpServletResponse response) {
+    response.addCookie(createAuthCookie("", -1));
+
     return ResponseEntity.ok().build();
+  }
+
+  /**
+   * 生成身份凭据的 Cookie.
+   *
+   * @param value 身份凭据
+   * @param ttl 有效期，以秒为单位
+   * @return Cookie 对象
+   */
+  private Cookie createAuthCookie(String value, int ttl) {
+    final Cookie cookie = new Cookie(this.authCookie, value);
+    cookie.setPath("/");
+    cookie.setHttpOnly(true);
+    cookie.setMaxAge(ttl);
+    return cookie;
   }
 }
