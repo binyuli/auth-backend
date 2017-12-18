@@ -48,7 +48,7 @@ before_script:
             </profiles>
             <activeProfiles>
               <activeProfile>corp-default</activeProfile>
-            </activeProfiles>             
+            </activeProfiles>
             <mirrors>
               <mirror>
                 <id>corp-maven</id>
@@ -62,6 +62,7 @@ stages:
   - test
   - build
   - deploy
+  - publish
 
 unit_test:
   stage: test
@@ -78,6 +79,15 @@ check_style:
   script:
     - mvn package -B
 
+develop_build:
+  <<: *build_template
+  only:
+    - develop
+  artifacts:
+    expire_in: 3 days
+    paths:
+      - target/*.jar
+
 master_build:
   <<: *build_template
   only:
@@ -88,15 +98,40 @@ master_build:
     paths:
       - target/*.jar
 
-build_image:
+.docker: &docker_template
   stage: deploy
   image: docker:latest
-  only:
-    - tags
-  script:    
+  script:
     - mkdir -p target/docker/
     - cp src/main/docker/* target/docker/
     - unzip -oq target/*.jar -d target/docker/
     - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN $CI_REGISTRY
-    - docker build -t $CI_REGISTRY_IMAGE:$CI_BUILD_TAG target/docker/
-    - docker push $CI_REGISTRY_IMAGE:$CI_BUILD_TAG
+    - docker build -t $TAG target/docker/
+    - docker push $TAG
+
+develop_docker:
+  <<: *docker_template
+  only:
+    - develop
+  variables:
+    TAG: $CI_REGISTRY_IMAGE/develop:$CI_COMMIT_SHA
+
+master_docker:
+  <<: *docker_template
+  only:
+    - tags
+  variables:
+    TAG: $CI_REGISTRY_IMAGE:$CI_BUILD_TAG
+
+update_kubernetes:
+  stage: publish
+  image: zerda/alpine-curl:3.6
+  only:
+    - develop
+  variables:
+    NAMESPACE: dms
+    DEPLOYMENT: access-management
+    CONTAINER: spring-boot-app
+    TAG: $CI_REGISTRY_IMAGE/develop:$CI_COMMIT_SHA
+  script:
+    - 'curl -v -H "Authorization: Bearer ${KUBERNETES_API_KEY}" -X PATCH "http://kubernetes.corp.sdt-int.com:5000/namespaces/${NAMESPACE}/deployments/${DEPLOYMENT}/containers/${CONTAINER}?image=${TAG}"'
