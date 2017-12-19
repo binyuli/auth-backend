@@ -53,7 +53,10 @@ public class AuthController extends BaseContext {
     } catch (Exception ex) {
       throw new BusinessException("不是有效的uri");
     }
-
+    // 去掉path最后的 /
+    if (requestPath.endsWith("/")) {
+      requestPath = requestPath.substring(0, requestPath.length() - 1);
+    }
     Cookie[] cookies = request.getCookies();
     if (cookies != null) {
       String token = Arrays.stream(cookies)
