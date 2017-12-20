@@ -12,6 +12,7 @@ spring:
       time-between-eviction-runs-millis: 10000
       min-evictable-idle-time-millis: 55000
       validation-interval: 34000
+      validation-query: SELECT 1
   jackson:
     default-property-inclusion: non_null
     time-zone: Asia/Shanghai
