@@ -2,7 +2,7 @@ spring:
   application:
     name: access-management
   datasource:
-    url: jdbc:${db.protocol:mysql}://${db.host:192.168.21.11}:${db.port:3306}/${db.name:auth}?useSSL=false&characterEncoding=utf8
+    url: jdbc:mysql://${db.host:192.168.21.11}:${db.port:3306}/${db.name:auth}?useSSL=false&characterEncoding=utf8
     username: auth
     password: auth123
     tomcat:
