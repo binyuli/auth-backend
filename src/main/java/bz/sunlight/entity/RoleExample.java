@@ -886,6 +886,66 @@ public class RoleExample {
       return (Criteria) this;
     }
 
+    public Criteria andReadOnlyIsNull() {
+      addCriterion("read_only is null");
+      return (Criteria) this;
+    }
+
+    public Criteria andReadOnlyIsNotNull() {
+      addCriterion("read_only is not null");
+      return (Criteria) this;
+    }
+
+    public Criteria andReadOnlyEqualTo(Boolean value) {
+      addCriterion("read_only =", value, "readOnly");
+      return (Criteria) this;
+    }
+
+    public Criteria andReadOnlyNotEqualTo(Boolean value) {
+      addCriterion("read_only <>", value, "readOnly");
+      return (Criteria) this;
+    }
+
+    public Criteria andReadOnlyGreaterThan(Boolean value) {
+      addCriterion("read_only >", value, "readOnly");
+      return (Criteria) this;
+    }
+
+    public Criteria andReadOnlyGreaterThanOrEqualTo(Boolean value) {
+      addCriterion("read_only >=", value, "readOnly");
+      return (Criteria) this;
+    }
+
+    public Criteria andReadOnlyLessThan(Boolean value) {
+      addCriterion("read_only <", value, "readOnly");
+      return (Criteria) this;
+    }
+
+    public Criteria andReadOnlyLessThanOrEqualTo(Boolean value) {
+      addCriterion("read_only <=", value, "readOnly");
+      return (Criteria) this;
+    }
+
+    public Criteria andReadOnlyIn(List<Boolean> values) {
+      addCriterion("read_only in", values, "readOnly");
+      return (Criteria) this;
+    }
+
+    public Criteria andReadOnlyNotIn(List<Boolean> values) {
+      addCriterion("read_only not in", values, "readOnly");
+      return (Criteria) this;
+    }
+
+    public Criteria andReadOnlyBetween(Boolean value1, Boolean value2) {
+      addCriterion("read_only between", value1, value2, "readOnly");
+      return (Criteria) this;
+    }
+
+    public Criteria andReadOnlyNotBetween(Boolean value1, Boolean value2) {
+      addCriterion("read_only not between", value1, value2, "readOnly");
+      return (Criteria) this;
+    }
+
     public Criteria andRowVersionIsNull() {
       addCriterion("row_version is null");
       return (Criteria) this;
