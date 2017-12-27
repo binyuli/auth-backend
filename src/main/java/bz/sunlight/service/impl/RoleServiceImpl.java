@@ -53,6 +53,9 @@ public class RoleServiceImpl implements RoleService {
   public void abandon(String id, LoginUser user) {
     Role roleOrig = roleMapper.selectByPrimaryKey(id);
     if (roleOrig != null) {
+      if (roleOrig.getReadOnly()) {
+        throw new BusinessException("该角色不允许编辑");
+      }
       Role role = new Role();
       role.setStatus(BaseConstant.BASEDATA_STATUS_INVALID);
       //更新修改人信息
@@ -73,7 +76,13 @@ public class RoleServiceImpl implements RoleService {
   @Override
   public void editRoleInfo(String id, String name, LoginUser user) {
     Role roleOrig = roleMapper.selectByPrimaryKey(id);
-    if (roleOrig != null && !roleOrig.getName().equals(name)) {
+    if (roleOrig != null) {
+      if (roleOrig.getReadOnly()) {
+        throw new BusinessException("该角色不允许编辑");
+      }
+      if (roleOrig.getName().equals(name)) {
+        return;
+      }
       //角色名称 有变化则 检查重复并更新数据, 无变化则不做处理
       checkDuplicateRoleName(name);
       Role role = new Role();
@@ -124,6 +133,9 @@ public class RoleServiceImpl implements RoleService {
   public void edit(String id, SaveRoleDTO roleDTO, LoginUser user) {
     Role roleOrig = roleMapper.selectByPrimaryKey(id);
     if (roleOrig != null) {
+      if (roleOrig.getReadOnly()) {
+        throw new BusinessException("该角色不允许编辑");
+      }
       // 用户名如果未修改则不进行重名排查
       if (!roleDTO.getName().equals(roleOrig.getName())) {
         checkDuplicateRoleName(roleDTO.getName());

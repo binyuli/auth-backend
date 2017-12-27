@@ -1,11 +1,10 @@
 package bz.sunlight.dto;
 
-import java.util.List;
-
 public class RoleDTO {
   private String id;
   private String name;
   private int status;
+  private Boolean readOnly;
 
   public int getStatus() {
     return status;
@@ -31,5 +30,11 @@ public class RoleDTO {
     this.name = name;
   }
 
+  public Boolean getReadOnly() {
+    return readOnly;
+  }
 
+  public void setReadOnly(Boolean readOnly) {
+    this.readOnly = readOnly;
+  }
 }

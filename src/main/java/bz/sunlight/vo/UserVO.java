@@ -12,6 +12,7 @@ public class UserVO {
   private String name;
   private String username;
   private int status;
+  private Boolean readOnly;
   private List<String> options;
   private List<Map<String, String>> roles;
 
@@ -57,12 +58,14 @@ public class UserVO {
    * @return list
    */
   public List<String> getOptions() {
-    options = new ArrayList<>();
-    if (this.status == BaseConstant.BASEDATA_STATUS_VALID) {
-      options.add(BaseConstant.USER_OPTION_EDITABLE);
-      options.add(BaseConstant.USER_OPTION_DISABLE);
-    } else {
-      options.add(BaseConstant.USER_OPTION_ENABLE);
+    options = new ArrayList<String>();
+    if (!this.readOnly) {
+      if (this.status == BaseConstant.BASEDATA_STATUS_VALID) {
+        options.add(BaseConstant.USER_OPTION_EDITABLE);
+        options.add(BaseConstant.USER_OPTION_DISABLE);
+      } else {
+        options.add(BaseConstant.USER_OPTION_ENABLE);
+      }
     }
     return options;
   }
@@ -73,5 +76,9 @@ public class UserVO {
 
   public void setRoles(List<Map<String, String>> roles) {
     this.roles = roles;
+  }
+
+  public void setReadOnly(Boolean readOnly) {
+    this.readOnly = readOnly;
   }
 }

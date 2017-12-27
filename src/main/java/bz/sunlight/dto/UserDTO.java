@@ -6,6 +6,7 @@ public class UserDTO {
   private String name;
   private String username;
   private int status;
+  private Boolean readOnly;
 
   public int getStatus() {
     return status;
@@ -37,5 +38,13 @@ public class UserDTO {
 
   public void setUsername(String username) {
     this.username = username;
+  }
+
+  public Boolean getReadOnly() {
+    return readOnly;
+  }
+
+  public void setReadOnly(Boolean readOnly) {
+    this.readOnly = readOnly;
   }
 }

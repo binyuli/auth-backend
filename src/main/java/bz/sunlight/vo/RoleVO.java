@@ -11,6 +11,7 @@ public class RoleVO {
   private String name;
   private List<String> options;
   private int status;
+  private Boolean readOnly;
   private List<PageRoleDTO> permissions;
 
   public List<PageRoleDTO> getPermissions() {
@@ -47,17 +48,19 @@ public class RoleVO {
    * @return list
    */
   public List<String> getOptions() {
-    if (this.status == BaseConstant.BASEDATA_STATUS_VALID) {
-      options = new ArrayList<String>();
+    options = new ArrayList<String>();
+    if (!this.readOnly && this.status == BaseConstant.BASEDATA_STATUS_VALID) {
       options.add(BaseConstant.ROLE_OPTION_EDITABLE);
       options.add(BaseConstant.ROLE_OPTION_ABANDONABLE);
-      return options;
-    } else {
-      return null;
     }
+    return options;
   }
 
   public void setOptions(List<String> options) {
     this.options = options;
+  }
+
+  public void setReadOnly(Boolean readonly) {
+    this.readOnly = readonly;
   }
 }

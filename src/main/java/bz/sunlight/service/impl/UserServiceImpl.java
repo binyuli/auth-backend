@@ -156,6 +156,9 @@ public class UserServiceImpl implements UserService {
   private void updateUserStatus(String id, int status, LoginUser loginUser) {
     User userOrig = userMapper.selectByPrimaryKey(id);
     if (userOrig != null) {
+      if (userOrig.getReadOnly()) {
+        throw new BusinessException("该用户不允许编辑");
+      }
       User user = new User();
       user.setRowVersion(commonMapper.now());
       user.setStatus(status);
@@ -193,6 +196,9 @@ public class UserServiceImpl implements UserService {
   public void edit(String id, SaveUserDTO userDTO, LoginUser loginUser) {
     User userOrig = userMapper.selectByPrimaryKey(id);
     if (userOrig != null) {
+      if (userOrig.getReadOnly()) {
+        throw new BusinessException("该用户不允许编辑");
+      }
       User user = userMapStruct.dtoToEntity(userDTO);
       user.setRowVersion(commonMapper.now());
       //更新修改人信息
