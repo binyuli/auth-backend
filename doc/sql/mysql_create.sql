@@ -1,6 +1,6 @@
 /*==============================================================*/
 /* DBMS name:      MySQL 5.0                                    */
-/* Created on:     2017/12/11 15:04:15                          */
+/* Created on:     2017/12/27 13:11:19                          */
 /*==============================================================*/
 
 
@@ -129,6 +129,7 @@ create table role
    enterprise_id        char(36) not null,
    status               int comment '2:正常;
             0:作废;',
+   read_only            bool not null default false comment '默认false',
    row_version          timestamp(6) not null,
    primary key (id)
 );
@@ -151,6 +152,7 @@ create table user
    enterprise_id        char(36) not null,
    status               int not null comment '2:正常;
             0:冻结/作废;',
+   read_only            bool not null default false comment '默认false',
    row_version          timestamp(6) not null,
    primary key (id)
 );
